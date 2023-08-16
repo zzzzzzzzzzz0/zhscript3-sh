@@ -1,0 +1,69 @@
+#!/usr/lib/zhscript2-rust/l --。
+赋予解以调用‘命令行加回调’、、
+	i、下代码
+		（
+		libgtksourceview-4-dev	libgtk-3-dev
+		libvte-2.91-dev			libgtk-3-dev
+		libwebkit2gtk-4.0-dev	libgtk-3-dev
+		）
+		调用‘命令行解析’、‘解’、i.1、i.2。
+	上代码、0、、
+	i.1、下代码
+		运行“apt.zs i libvte-2.91-dev libwebkit2gtk-4.0-dev g++ make”。
+	上代码、0、、
+	(i|rm).2(|a)、下代码
+		运行“apt.zs ‘参数1’ libgtksourceview-”分叉‘参数2’先
+			4。
+			a“3.0”。
+		了“-dev”。
+	上代码、r、、
+	(d|r)(|x)(|2)、、r、下代码
+		形参起做、作、造、。
+		赋予目录、项以.、
+		分叉‘做’先
+			r、d先
+				赋予以加载util/lsb-release.zs。显示‘’换行。
+			了。
+			r先
+				“d=release”分叉‘’先
+					18.04、20.04先“/../zhscript3-sh-‘’”了。
+				了“ ”
+			了。
+		了
+		分叉‘作’先
+			x先“clean”、1了。
+			分叉‘做’先
+				r先
+					“f=-O3 ”
+				了。
+				r、d先
+					分叉‘’先
+						18.04分叉‘造’先
+							2“gxx=g++-11”。
+							“gxx=g++-7 std=c++17”。
+						了。
+						20.04“std=c++17”。
+					了
+				了
+			了。
+		了。
+		赋予搜以调用‘dir.begin’、‘目录’、makefile、s。
+		循环先
+			赋予名以调用‘dir.next’、‘搜’。
+			如果不‘名’那么跳出。
+			赋予目录2以调用‘得目录名’、‘目录’/‘名’。
+			运行“make -C ‘目录2’ ‘项’”。
+		了。
+		调用‘dir.end’、‘搜’。
+	上代码、
+	cho、下代码
+		运行“sh -c 'sudo chown -R zzzzzzzzzzz:zzzzzzzzzzz /opt4/cache/c-release/zhscript3-sh*'”
+	上代码、0、、
+	(meld)(18\.04|20\.04|21\.10)(|u)、下原样
+		运行“‘参数1’ /opt4/cache/c-release/zhscript3-sh-‘参数2’ ”分叉‘参数3’先
+			“/opt2/y/zs2-r”。
+			u“/zzzzzzzzzzz4/usr/lib/zhscript2-rust”。
+		了
+	上原样、r、、
+	#、、h、。
+调用‘命令行解析’、‘解’、‘参数栈’。

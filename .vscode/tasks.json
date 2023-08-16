@@ -1,0 +1,78 @@
+{
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "b--gtkBsh-",
+            "command": "make",
+            "args": [
+                "-C", "${workspaceFolder}/gtkBsh"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": ["$gcc"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+        },
+        {
+            "type": "shell",
+            "label": "b--gtkBsh-vte",
+            "command": "make",
+            "args": [
+                "-C", "${workspaceFolder}/plugin/gtkBsh/vte"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": ["$gcc"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+        },
+        {
+            "type": "shell",
+            "label": "b--gtkBsh-webkit",
+            "command": "make",
+            "args": [
+                "-C", "${workspaceFolder}/plugin/gtkBsh/webkit"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": ["$gcc"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+        },
+        {
+            "type": "shell",
+            "label": "b--gtkBsh-src",
+            "command": "make",
+            "args": [
+                "-C", "${workspaceFolder}/plugin/gtkBsh/src"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": ["$gcc"],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+        },
+        {
+            "label": "b--gtkBsh",
+            "dependsOn": [
+                "b--gtkBsh-vte",
+                "b--gtkBsh-webkit",
+                "b--gtkBsh-src",
+                "b--gtkBsh-"
+            ]
+        }
+    ],
+    "version": "2.0.0"
+}

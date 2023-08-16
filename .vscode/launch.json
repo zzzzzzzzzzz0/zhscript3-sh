@@ -1,0 +1,331 @@
+{
+    // 使用 IntelliSense 了解相关属性。 
+    // 悬停以查看现有属性的描述。
+    // 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "name": "(gdb) gtkBsh help",
+            "type": "cppdbg",
+            "request": "launch",
+            "preLaunchTask": "b--gtkBsh",
+            "program": "${workspaceFolder}/target/debug/gtkBsh",
+            "args": [
+                //"-zhscript-help"
+                "-shell-help", "1"
+                //"-zhscript-src-is-code", "“-help”"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "为 gdb 启用整齐打印",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description":  "将反汇编风格设置为 Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]
+        }
+        ,
+        {
+            "name": "(gdb) gtkBsh/1", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "${workspaceFolder}/target/debug/gtkBsh", "args": [
+                //"-zhscript-d-path",
+                "-zhscript-d-bp-o-",
+                "test/gtkBsh/1.zhscript"
+            ], "stopAtEntry": false, "cwd": "${workspaceFolder}", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) koutu2", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "/opt2/opt/koutu2/ui.zs" //, "-h2-env"
+                , "-h2"
+                , "-h2-o", "0"
+                ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) koutu2 b", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/opt/koutu2/ui_zs-", "args": [
+                "-zhscript-l4.so_"
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) edit3", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "-zhscript-l4.so_1_", //"-zhscript-d-bp-o-",
+                "/opt2/opt/edit3/edit3.zs", "-tag", ")(", "-1"
+                , "-lp", "-宽高、1555、777、-移动、177、112"
+                ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) edit3 -h", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "/opt2/opt/edit3/edit3.zs", "-h"
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) edit3 -h2++", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "/opt2/opt/edit3/edit3.zs", "-1", "-h2++"
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) edit3 -h2+", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "/opt2/opt/edit3/edit3.zs", "-1", "-h2+", "-lp", "-宽高、1555、720、-移动、177、117"
+                //, "-h2-", "--1"
+                //, "-h2-open"
+                //, "-h2-cb"
+                //, "-h2-tree"
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) edit3 tmp", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "/opt2/opt/edit3/edit3.zs", "-1", "-m", "/tmp"
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) edit3 m", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "/opt2/opt/edit3/edit3.zs", "-1", "-m", "/home/tmp4"//, "-h2-tree"
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) edit3 b", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/opt/edit3/edit3_zs--", "args": [
+                "-zhscript-l4.so_", "-1"
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) nbplayer3", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "-zhscript-d-bp-tree4-",
+                "/opt2/opt/nbplayer3/p.zs", "-h2", "/_vid/天才白痴梦.flv", "-ap", "-sp", "/tmp/nbplayer3.sock"
+                , "音量", "0"
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) nbplayer3.c", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "/opt2/opt/nbplayer3/c.zs", "/ctl/pause"
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) nbplayer3/cu", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "/opt2/opt/nbplayer3/cu.zs", "1"
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) nbplayer3.2", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "/opt2/opt/nbplayer3/p2.zs", "-h2", "/_vid/天才白痴梦.flv", "-an"
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) movbrow4", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "/opt2/opt/movbrow4/ui.zs", //"-h2-get",
+                "/_vid", "-sd", "/zzzzzzzzzzz4/video-shot",
+                //"/zzzzzzzzzzz4/video", "/opt5/disk/wd2t/zzzzzzzzzzz4/opt/opt/video", "/opt5/disk/wd2t/zzzzzzzzzzz4/opt/opt/video2",
+                "-xp", "nbp3-cp", "/opt2/opt/nbplayer3/p.zs -cp /home/zzzzzzzzzzz/nbp3-xywh.zs ‘yh’‘视频’‘yh’" 
+
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) txtbrow2", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "/opt2/opt/txtbrow2/main.zs"
+                , "-h2"
+                //, "/_htm"
+                //, "/zzzzzzzzzzz4/book" 
+
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) ww-map", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "/zzzzzzzzzzz/sh/ww-map.zs"//, "1"
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) ww-baidu", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "/zzzzzzzzzzz/sh/ww-baidu.zs"
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) gifpng2", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "/zzzzzzzzzzz/sh/gifpng2.zs", "-nb", "-fs", "/zzzzzzzzzzz4/pic/her/免抠"
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) imtools", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "-zhscript-l4.so_", "/zzzzzzzzzzz/sh/imtools.zs", "-sd", "/tmp", "/home/zzzzzzzzzzz/桌面/_1.mp4"
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) pinyin", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "/zzzzzzzzzzz/sh/pinyin.zs"
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) ww-qidian", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "/zzzzzzzzzzz/sh/ww-qidian.zs"
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) zsp2-rust/z-r5a", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "/zzzzzzzzzzz4/zzzzzzzzzzz/github/zsp2-rust/z-r5a.zs"
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) test btn", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "/zzzzzzzzzzz4/home/zzzzzzzzzzz/test/rust-zs2/gtkBsh-btn.zs"
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) test doscmdx", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "-zhscript-l4.so_1_r",  "/zzzzzzzzzzz4/home/zzzzzzzzzzz/test/rust-zs2/doscmdx.zs"
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) test xiushi", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "/zzzzzzzzzzz4/home/zzzzzzzzzzz/test/rust-zs2/gtkBsh-xiushi1.zs"
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) test close2", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "-zhscript-l4.so_", "/zzzzzzzzzzz4/home/zzzzzzzzzzz/test/rust-zs2/gtkBsh-close2.zs", "2"
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) test vte-neirongb", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "/zzzzzzzzzzz4/home/zzzzzzzzzzz/test/rust-zs2/gtkBsh-vte-neirongb.zs"
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) test neww", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "/zzzzzzzzzzz4/home/zzzzzzzzzzz/test/rust-zs2/gtkBsh-neww.zs"
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) test forqv", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "/zzzzzzzzzzz4/home/zzzzzzzzzzz/test/rust-zs2/gtkBsh-forqv.zs"
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) test move-nb", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "/zzzzzzzzzzz4/home/zzzzzzzzzzz/test/rust-zs2/gtkBsh-move-nb.zs"
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) test swh", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "/zzzzzzzzzzz4/home/zzzzzzzzzzz/test/rust-zs2/gtkBsh-swh.zs", "1"
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) test cb", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "/zzzzzzzzzzz4/home/zzzzzzzzzzz/test/rust-zs2/gtkBsh-cb.zs"
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
+            "name": "(gdb) test ", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "-zhscript-l4.so_", "/zzzzzzzzzzz4/home/zzzzzzzzzzz/test/rust-zs2/gtkBsh-test.zs"
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+    ]
+
+}
