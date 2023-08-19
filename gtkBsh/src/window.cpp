@@ -95,6 +95,7 @@ class tuodong___ : public pub::tuodong___ {
         for(size_t i2 = from; i2 < args.size(); i2++) {
 			auto& s = args[i2];
 			if(s.empty()) continue;
+			bool b = true;
             for(size_t i = 0; i <= 3; i++) {
                 if(s == ss[i]) {
                     switch(i) {
@@ -115,9 +116,11 @@ class tuodong___ : public pub::tuodong___ {
                     }
 					from = i2;
                     ret = i;
+					b = false;
 					break;
                 }
             }
+			if(b) break;
         }
         return ret;
     }

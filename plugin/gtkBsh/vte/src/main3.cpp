@@ -144,6 +144,7 @@ class view___ : public plugin::view___ {
 			{"-搜", "S", 2},
 			{"-内容变", "$c", 1},
 			{"-内容变2", "$c2", 1},
+			{"-刷新", "r", 0},
 		}, args, from, [&](const std::string& tag, size_t i, size_t argc, int& ret2) {
 			switch(tag[0]) {
 			case 'w': pub_->add__(path__(), dunhao, add, env); break;
@@ -241,6 +242,7 @@ class view___ : public plugin::view___ {
 					break;
 				}
 				break;
+			case 'r': okopen__(); break;
 			}
 		});
 		if(ret2 != 0) return ret2;
