@@ -9,10 +9,12 @@
 		调用‘命令行解析’、‘解’、i.1、i.2。
 	上代码、0、、
 	i.1、下代码
-		运行“apt.zs i libvte-2.91-dev libwebkit2gtk-4.0-dev g++ make”。
+		运行“apt.zs i -y libvte-2.91-dev libwebkit2gtk-4.0-dev g++ make”。
 	上代码、0、、
 	(i|rm).2(|a)、下代码
-		运行“apt.zs ‘参数1’ libgtksourceview-”分叉‘参数2’先
+		运行“apt.zs ‘参数1’”分叉‘参数1’先
+			i“ -y”
+		了“ libgtksourceview-”分叉‘参数2’先
 			4。
 			a“3.0”。
 		了“-dev”。
