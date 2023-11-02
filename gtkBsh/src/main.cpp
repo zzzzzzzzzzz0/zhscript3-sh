@@ -1,5 +1,6 @@
 #include "window.h"
 #include "pub2.h"
+#include "slave.h"
 #include <gdk/gdkx.h>
 
 template<typename T>
@@ -291,6 +292,9 @@ class main___ : public main_plugin___ {
 			{"-页2", "j 2", 1, "后继也改"},
 			{"-簿", "b", 1},
 			{"-窗", "w", 1},
+			{"-被动者", "s", 3},
+			{"-命令被动者", "sc", 2},
+			{"-停止被动者", "sx", 1},
 			{"-单", "1", 0},
 			{"-试", "t1", 0, "有错不报而回0"},
 			{"-勉", "t2", 0, "有错算了"},
@@ -385,6 +389,29 @@ class main___ : public main_plugin___ {
 				if(!window)
 					throw "窗无觅 " + p[i];
 				break;
+			case 's': {
+				slave___* slave;
+				switch(tag[1]) {
+				case 'c':
+					slave = (slave___*)std::stoul(p[i + 1]);
+					slave->send__(p[i]);
+					break;
+				case 'x':
+					slave = (slave___*)std::stoul(p[i]);
+					slave->stop__();
+					break;
+				default:
+					slave = new slave___(thiz);
+					int err = slave->init__(p, i, g_main_context_default());
+					if(err) {
+						delete slave;
+						throw "错误" + std::to_string(err);
+					} else
+						thiz->add__(std::to_string((unsigned long)slave).c_str(), dunhao, add, env);
+					from = p.size();
+					break;
+				}
+				break; }
 			case '1':
 				is1 = true;
 				view_ = nullptr;
