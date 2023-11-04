@@ -582,8 +582,9 @@ int window___::for__(args___ p, size_t& from, bool restart, rust_add___ add, voi
 			else     gtk_window_unstick(hr2__());
 			break;
 		case 's': {
-			int w = std::stoi(p[i]);
-			int h = p[i + 1].empty() ? w : std::stoi(p[i + 1]);
+			const std::string &w1 = p[i], &h1 = p[i + 1];
+			int w = w1.empty() || w1[0] == '=' ? 0 : std::stoi(w1);
+			int h = h1.empty() || h1[0] == '=' ? 0 : std::stoi(h1);
 			if(w < 0 || h < 0) {
 				int sw, sh;
 				scrn_w_h__(sw, sh);
@@ -591,6 +592,22 @@ int window___::for__(args___ p, size_t& from, bool restart, rust_add___ add, voi
 					w += sw;
 				if(h < 0)
 					h += sh;
+			}
+			if(w == 0) {
+				w = h;
+				if(!w1.empty()) {
+					std::string w2 = w1.substr(1);
+					if(!w2.empty())
+						w += std::stoi(w2);
+				}
+			}
+			if(h == 0) {
+				h = w;
+				if(!h1.empty()) {
+					std::string h2 = h1.substr(1);
+					if(!h2.empty())
+						h += std::stoi(h2);
+				}
 			}
 			switch(tag[1]) {
 			default:  gtk_window_resize(hr2__(), w, h); break;
@@ -734,7 +751,7 @@ int window___::for2__(plugin::view___* view, args___ p, size_t& from, int fn2_re
 		{"-签后提示", "T3", 1},
 		{"-加钮", "b+", 1},
 		{"-追钮", "b++", 1},
-		{"-加钮-", "b|", 1},
+		{"-加钮-", "b|", 0},
 		{"-叠", "+", 1},
 		{"-字体", "f", 1},
 		{"-按键", "ek", 1},
@@ -766,69 +783,70 @@ int window___::for2__(plugin::view___* view, args___ p, size_t& from, int fn2_re
 				break;
 			}
 			break; }
-		case 'b':
-			switch(tag[1]) {
-			case '+': case '|': {
-				if(b_) {
-					b_ = false;
-					b2_ = !label_box_->buttons_.empty();
-				}
-				if(b2_ && tag[2] != '+')
-					break;
-				vec___ p2;
-				pub_->eval__(p[i].c_str(), &p2);
-				size_t from2 = 0;
-				std::string name;
-				pub_->clpars__({
-					{"-顶", "P^", 0},
-					{"-底", "Pv", 0},
-					{"-左", "P<", 0},
-					{"-右", "P>", 0},
-					{"-代码", "c", 1},
-					{"-名", "n", 1},
-				}, p2, from2, [&](const std::string& tag, size_t i, size_t argc, int& fn2_ret2) {
-					switch(tag[0]) {
-					case 'P': pos_ = tag[1]; break;
-					case 'c': code_ = p2[i]; break;
-					case 'n': name = p2[i]; break;
-					}
-				}); //图标是漏下
-				if(!name.empty()) {
-					bool has = false;
-					for(auto i : label_box_->buttons_) {
-						if(i->name_ == name) {
-							has = true;
-							break;
-						}
-					}
-					if(has) break;
-				}
-				GtkBox *box;
-				switch(pos_) {
-					case '^': box = label_box_->top_; break;
-					case 'v': box = label_box_->bottom_; break;
-					case '<': box = label_box_->left_; break;
-					 default: box = label_box_->right_; break;
-				}
-				switch(tag[1]) {
-					case '|': {
-						GtkWidget *btn1=gtk_separator_new(label_box_->vert_ ?
-							GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL);
-						gtk_box_pack_start (box, btn1, false, false, 7);
-						gtk_widget_show (btn1);
-						break; }
-					default: {
-						button___* btn = new button___(view, pub_);
-						label_box_->buttons_.push_back(btn);
-						btn->name_ = name;
-						if(name[0] != '-')
-							btn->code_ = code_;
-						btn->with__(box, p2, from2);
-						break; }
-				}
-				break; }
+		case 'b': {
+			if(b_) {
+				b_ = false;
+				b2_ = !label_box_->buttons_.empty();
 			}
-			break;
+			if(b2_ && tag[2] != '+')
+				break;
+			auto box = [&]() -> GtkBox * {
+				switch(pos_) {
+					case '^': return label_box_->top_;
+					case 'v': return label_box_->bottom_;
+					case '<': return label_box_->left_;
+				}
+				return label_box_->right_;
+			};
+			switch(tag[1]) {
+				case '|': {
+					GtkWidget *btn1=gtk_separator_new(label_box_->vert_ ?
+						GTK_ORIENTATION_HORIZONTAL : GTK_ORIENTATION_VERTICAL);
+					gtk_box_pack_start (box(), btn1, false, false, 7);
+					gtk_widget_show (btn1);
+					break; }
+				default: {
+					vec___ p2;
+					size_t from2 = 0;
+					std::string name;
+					switch(tag[1]) {
+					case '+': {
+						pub_->eval__(p[i].c_str(), &p2);
+						pub_->clpars__({
+							{"-顶", "P^", 0},
+							{"-底", "Pv", 0},
+							{"-左", "P<", 0},
+							{"-右", "P>", 0},
+							{"-代码", "c", 1},
+							{"-名", "n", 1},
+						}, p2, from2, [&](const std::string& tag, size_t i, size_t argc, int& fn2_ret2) {
+							switch(tag[0]) {
+							case 'P': pos_ = tag[1]; break;
+							case 'c': code_ = p2[i]; break;
+							case 'n': name = p2[i]; break;
+							}
+						}); //图标是漏下
+						if(!name.empty()) {
+							bool has = false;
+							for(auto i : label_box_->buttons_) {
+								if(i->name_ == name) {
+									has = true;
+									break;
+								}
+							}
+							if(has) break;
+						}
+						break; }
+					}
+					button___* btn = new button___(view, pub_);
+					label_box_->buttons_.push_back(btn);
+					btn->name_ = name;
+					if(name[0] != '-')
+						btn->code_ = code_;
+					btn->with__(box(), p2, from2);
+					break; }
+			}
+			break; }
 		case '+':
 			view->is_die_ = l4_.true_(p[i].c_str());
 			break;
