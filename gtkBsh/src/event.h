@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <gtk/gtk.h>
+#include <gdk/gdkkeysyms-compat.h>
 
 namespace pub {
 
@@ -15,16 +16,18 @@ class event___ {
         p.push_back(std::to_string(event->y));
         return thiz->jieshi__(&p, TRUE);
     }
+    static void state__(std::string& state, GdkEventKey *event, guint u, GdkModifierType mt) {
+        if((event->state & mt)) {
+            std::string s = gdk_keyval_name(u);
+            state += s.substr(0, s.find('_'));
+        }
+    }
     static gboolean key__(GtkWidget *widget, GdkEventKey *event, event___* thiz) {
         std::string state;
-        if((event->state & GDK_SUPER_MASK))
-            state += "Super";
-        if((event->state & GDK_SHIFT_MASK))
-            state += "Shift";
-        if((event->state & GDK_CONTROL_MASK))
-            state += "Control";
-        if((event->state & GDK_MOD1_MASK))
-            state += "Alt";
+        state__(state, event, GDK_Super_L, GDK_SUPER_MASK);
+        state__(state, event, GDK_Shift_L, GDK_SHIFT_MASK);
+        state__(state, event, GDK_Control_L, GDK_CONTROL_MASK);
+        state__(state, event, GDK_Alt_L, GDK_MOD1_MASK);
         std::vector<std::string> p;
         p.push_back(gdk_keyval_name(event->keyval));
         p.push_back(state);
@@ -83,8 +86,6 @@ class tuodong___ {
             thiz->in_ = true;
             thiz->x_ = event->x;
             thiz->y_ = event->y;
-            thiz->cursor_ = gdk_cursor_new(GDK_FLEUR);
-            gdk_window_set_cursor(thiz->hr3__(), thiz->cursor_);
             return true;
         }
         return false;
@@ -93,9 +94,11 @@ class tuodong___ {
         if(thiz->pause_) return false;
         if(thiz->in_) {
             thiz->in_ = false;
-            gdk_cursor_unref(thiz->cursor_);
-            thiz->cursor_ = nullptr;
-            gdk_window_set_cursor(thiz->hr3__(), thiz->cursor_);
+            if(thiz->cursor_) {
+                gdk_cursor_unref(thiz->cursor_);
+                thiz->cursor_ = nullptr;
+                gdk_window_set_cursor(thiz->hr3__(), thiz->cursor_);
+            }
             return true;
         }
         return false;
@@ -103,8 +106,12 @@ class tuodong___ {
     static gboolean mn__(GtkWidget *widget, GdkEventButton *event, tuodong___* thiz) {
         if(thiz->pause_) return false;
         if(thiz->in_) {
+            if(!thiz->cursor_) {
+                thiz->cursor_ = gdk_cursor_new(GDK_FLEUR);
+                gdk_window_set_cursor(thiz->hr3__(), thiz->cursor_);
+            }
             int x, y;
-			gtk_window_get_position(thiz->hr2__(), &x, &y);
+            gtk_window_get_position(thiz->hr2__(), &x, &y);
             x += event->x - thiz->x_;
             y += event->y - thiz->y_;
             gtk_window_move(thiz->hr2__(), x, y);
