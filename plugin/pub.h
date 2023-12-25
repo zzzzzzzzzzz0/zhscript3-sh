@@ -2,7 +2,7 @@
 #include "../pub/tag.h"
 #include "../pub/widget.h"
 #include "../pub/type.h"
-#include </zzzzzzzzzzz/github/zhscript/gjke4/rust.h>
+#include "../../zhscript/gjke4/rust.h"
 
 namespace plugin {
 
@@ -80,7 +80,7 @@ class pub___ {
 	virtual int fanqiechaodan__(view___*, const std::string&, rets___ ret = nullptr, argc___ argc = 0, argv___ argv = nullptr, void* env = nullptr) = 0;
 	virtual int fanqiechaodan2__(view___*, const std::string&, args___, rets___ ret = nullptr, void* env = nullptr) = 0;
 	virtual int fanqiechaodan3__(view___*, vec___&, rets___ ret = nullptr, void* env = nullptr) = 0;
-	virtual int fanqiechaodan4__(view___*, args___, rets___ ret = nullptr, void* env = nullptr) = 0;
+	//virtual int fanqiechaodan4__(view___*, args___, rets___ ret = nullptr, void* env = nullptr) = 0;
 	virtual void std__(view___*, vec___&) = 0;
 	virtual void add__(const char* s, bool& dunhao, rust_add___ add, void* env) = 0;
 
