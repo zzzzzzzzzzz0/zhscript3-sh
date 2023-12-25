@@ -34,7 +34,7 @@ class label_box___ {
     public:
     GtkWidget *box1_ = nullptr;
     GtkBox *right_ = nullptr, *right2_ = nullptr, *left_ = nullptr, *bottom_ = nullptr, *top_ = nullptr;
-	GtkLabel *label_ = nullptr, *label2_ = nullptr, *label3_ = nullptr;
+	GtkLabel *label_ = nullptr, *label2_ = nullptr, *label3_ = nullptr, *label4_ = nullptr;
 	int has_close_ = 0;
     GtkAlign top_align_, bottom_align_;
     bool vert_;
@@ -45,10 +45,11 @@ class label_box___ {
             vert_(vert),
             top_align_(top_align),
             bottom_align_(bottom_align) {
-        GtkWidget *label1,  *label2_1,  *label3_1;
+        GtkWidget *label1, *label2_1, *label3_1, *label4_1;
         label_new__(label1, label_);
         label_new__(label2_1, label2_);
         label_new__(label3_1, label3_);
+        label_new__(label4_1, label4_);
 
         GtkWidget *right1, *right2_1, *left1, *bottom1, *top1, *box1;
         GtkBox *box;
@@ -75,6 +76,7 @@ class label_box___ {
         gtk_box_pack_start (box, label3_1, false, false, paddii_);
         gtk_box_pack_start (box, right1, false, false, paddii_);
         gtk_box_pack_start (box, right2_1, false, false, paddii_);
+        gtk_box_pack_start (box, label4_1, false, false, paddii_);
         gtk_box_pack_start (box_, top1, false, false, paddii_);
         gtk_box_pack_start (box_, box1, true, true, paddii_);
         gtk_box_pack_start (box_, bottom1, false, false, paddii_);
