@@ -14,7 +14,7 @@ ifeq ($d,debug)
 endif
 
 all: dir $(target)
-$(dodir)/main.o: src/main4.cpp ../../pub.h ../../../pub/tag.h ../../../pub/type.h ../../../pub/widget.h /zzzzzzzzzzz/github/zhscript2-rust-sh/webkitx/src/Chan.cpp /zzzzzzzzzzz/github/zhscript2-rust-sh/webkitx/src/Chan.h
+$(dodir)/main.o: src/main4.cpp ../../pub.h ../../../pub/tag.h ../../../pub/type.h ../../../pub/widget.h 
 	$(gxx) -o $@ $(cflags) $< `pkg-config --cflags $(pkname)`
 $(dodir)/tag.o: ../../../pub/tag.cpp ../../../pub/tag.h ../../../pub/type.h
 	$(gxx) -o $@ $(cflags) $< `pkg-config --cflags gtk+-3.0`
