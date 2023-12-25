@@ -1,5 +1,6 @@
 #include "pub2.h"
 #include "xianchang.h"
+#include "screenshot.h"
 #include "event.h"
 #include "window.h"
 
@@ -293,6 +294,7 @@ int window___::for__(GtkWidget *nb1_, plugin::view___*& view_, args___ p, size_t
 					case 'N':
 						switch(tag[1]) {
 							case '|': vert2 = true; break;
+							case '0': padding = 0;
 							default: nb_pos = tag[1]; break;
 						}
 						break;
@@ -531,6 +533,8 @@ int window___::for__(args___ p, size_t& from, bool restart, rust_add___ add, voi
 		{"-标题", "t", 1},
 		{"-置顶", "T1", 0},
 		{"-撤置顶", "T", 0},
+		{"-置底", "B1", 0},
+		{"-撤置底", "B", 0},
 		{"-总可见", "D1", 0},
 		{"-撤总可见", "D", 0},
 		{"-宽高", "s", 2},
@@ -542,13 +546,14 @@ int window___::for__(args___ p, size_t& from, bool restart, rust_add___ add, voi
 		{"-最小化", "I1", 0},
 		{"-撤最小化", "I", 0},
 		{"-全屏", "F1", 0},
-		{"-激活", "P", 0},
 		{"-撤全屏", "F", 0},
+		{"-激活", "P", 0},
 		{"-得移动", "=m", 0},
 		{"-得宽高", "=s", 0},
 		{"-是最大化", "=a", 0},
 		{"-是激活", "=A", 0},
 		{"-是全屏", "=f", 0},
+		{"-截图", "S", 1},
 		{"-图标", "i", 1},
 		{"-无修饰", "!d", 0},
 		{"-有修饰", "!d1", 0},
@@ -558,6 +563,7 @@ int window___::for__(args___ p, size_t& from, bool restart, rust_add___ add, voi
 		{"-修饰2", "(", 0},
 		{"-修饰3", "(", 0},
 		{"-修饰4", "(", 0},
+		{"-无焦", "!f", 0},
 		{"-类名", "C", 2},
 		{"-自绘", "a", 0},
 		{"-按键", "ek", 1},
@@ -577,6 +583,7 @@ int window___::for__(args___ p, size_t& from, bool restart, rust_add___ add, voi
 			break; }
 		case 't': gtk_window_set_title (hr2__(), p[i].c_str()); break;
 		case 'T': gtk_window_set_keep_above (hr2__(), tag[1]); break;
+		case 'B': gtk_window_set_keep_below (hr2__(), tag[1]); break;
 		case 'D':
 			if(tag[1]) gtk_window_stick(hr2__());
 			else     gtk_window_unstick(hr2__());
@@ -609,6 +616,8 @@ int window___::for__(args___ p, size_t& from, bool restart, rust_add___ add, voi
 						h += std::stoi(h2);
 				}
 			}
+			if(w <= 0 || h <= 0)
+				break;
 			switch(tag[1]) {
 			default:  gtk_window_resize(hr2__(), w, h); break;
 			case 'd': gtk_window_set_default_size(hr2__(), w, h); break;
@@ -654,6 +663,7 @@ int window___::for__(args___ p, size_t& from, bool restart, rust_add___ add, voi
 				default:  break;
 			}
 			break;
+		case 'S': if(screenshot__(hr__(), p[i].c_str())) add_i(1); break;
 		case 'i': {
 			vec___ p2;
 			pub_->eval__(p[i].c_str(), &p2);
@@ -667,6 +677,9 @@ int window___::for__(args___ p, size_t& from, bool restart, rust_add___ add, voi
 			switch(tag[1]) {
 			case 'd':
 				gtk_window_set_decorated(hr2__(), tag[2] == '@' ? !(gtk_window_get_decorated(hr2__())) : tag[2]);
+				break;
+			case 'f':
+				gtk_window_set_accept_focus(hr2__(), false);
 				break;
 			}
 			break;
@@ -746,9 +759,11 @@ int window___::for2__(plugin::view___* view, args___ p, size_t& from, int fn2_re
 		{"-签", "l", 1},
 		{"-签前", "l2", 1},
 		{"-签后", "l3", 1},
+		{"-签副", "l4", 1},
 		{"-签提示", "T", 1},
 		{"-签前提示", "T2", 1},
 		{"-签后提示", "T3", 1},
+		{"-签副提示", "T4", 1},
 		{"-加钮", "b+", 1},
 		{"-追钮", "b++", 1},
 		{"-加钮-", "b|", 0},
@@ -763,6 +778,7 @@ int window___::for2__(plugin::view___* view, args___ p, size_t& from, int fn2_re
 			switch(tag[1]) {
 				case '2': l = label_box_->label2_; break;
 				case '3': l = label_box_->label3_; break;
+				case '4': l = label_box_->label4_; break;
 				default:  l = label_box_->label_; break;
 			}
 			if(!tag[1]) {
