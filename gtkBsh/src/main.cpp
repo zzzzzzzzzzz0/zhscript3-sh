@@ -215,9 +215,9 @@ class main___ : public main_plugin___ {
 		if(v) std__(v, a);
 		return fanqiechaodan2__(v, code_.code_, a, ret, env);
 	}
-	int fanqiechaodan4__(plugin::view___* v, args___ p, rets___ ret = nullptr, void* env = nullptr) {
+	/*int fanqiechaodan4__(plugin::view___* v, args___ p, rets___ ret = nullptr, void* env = nullptr) {
 		return fanqiechaodan2__(v, code_.code_, p, ret, env);
-	}
+	}*/
 	void std__(plugin::view___* v, vec___& a) {
 		/*a.insert(a.begin() + 1, v->has_name_ ? v->name__() : "");
 		a.insert(a.begin() + 2, v->plugin_id__());*/
@@ -257,7 +257,7 @@ class main___ : public main_plugin___ {
 	std::vector<plugin___*> plugins_;
 	bool is_quit_ = false;
 
-	static int fanqiechaodan__(plugin::view___* view_, const char* s, rets___ ret, rust_add___ add, void* env, argc___ argc, argv___ argv, void* ptr) {
+	static int fanqiechaodan__(plugin::view___* by, const char* s, rets___ ret, rust_add___ add, void* env, argc___ argc, argv___ argv, void* ptr) {
 		static main___* thiz = nullptr;
 		if(ptr)
 			thiz = (main___*)ptr;
@@ -272,6 +272,7 @@ class main___ : public main_plugin___ {
 			if(ret2 != 0)
 				return ret2;
 		}
+		plugin::view___* view_ = by;
 		window___* window = view_ ? (window___*)view_->window_ : (!thiz->windows_.empty() ? thiz->windows_[0] : nullptr);
 		GtkWidget* nb1_ = view_ ? view_->nb1_ : nullptr;
 		bool is1 = false, dunhao = false;
@@ -286,12 +287,16 @@ class main___ : public main_plugin___ {
 			return false;
 		};
 		ret2 = thiz->clpars__({
-			{"-id", "ji", 1},
+			{"-id",  "ji ", 1},
 			{"-id2", "ji2", 1, "后继也改"},
-			{"-页", "j", 1},
+			{"-页",  "j  ", 1},
 			{"-页2", "j 2", 1, "后继也改"},
 			{"-簿", "b", 1},
 			{"-窗", "w", 1},
+			{"-储",     "v  ", 2},
+			{"-窗储",   "vw ", 2},
+			{"-得储",   "v =", 1},
+			{"-得窗储", "vw=", 1},
 			{"-被动者", "s", 3},
 			{"-命令被动者", "sc", 2},
 			{"-停止被动者", "sx", 1},
@@ -325,7 +330,7 @@ class main___ : public main_plugin___ {
 				if(!view)
 					throw "页无觅 " + p[i];
 				do {
-					ret2 = thiz->for__(view, p, from, add, env);
+					ret2 = thiz->for__(view, p, from, by, add, env);
 					if(ret2 != 0) {
 						fn2_ret2 = pub::clpars_ret_;
 						return;
@@ -371,7 +376,7 @@ class main___ : public main_plugin___ {
 				if(!nb1_)
 					throw "簿无觅 " + p[i];
 				do {
-					ret2 = thiz->for__(view_, p, from, add, env);
+					ret2 = thiz->for__(view_, p, from, by, add, env);
 					if(ret2 != 0) {
 						fn2_ret2 = pub::clpars_ret_;
 						return;
@@ -389,6 +394,33 @@ class main___ : public main_plugin___ {
 				if(!window)
 					throw "窗无觅 " + p[i];
 				break;
+			case 'v': {
+				std::string name = "储-" + p[i];
+				switch(tag[2]) {
+				case '=': {
+					auto fn = [&](auto* w) {
+						thiz->add__((char*)w->var__(name.c_str()), dunhao, add, env);
+					};
+					switch(tag[1]) {
+					case 'w': fn(window); break;
+					default: fn(view_); break;
+					}
+					break; }
+				default: {
+					auto& s = p[i + 1];
+					auto fn = [&](auto* w) {
+						char* s2 = new char[s.length() + 1];
+						s.copy(s2, s.length());
+						s2[s.length()] = 0;
+						w->var__(name.c_str(), s2);
+					};
+					switch(tag[1]) {
+					case 'w': fn(window); break;
+					default: fn(view_); break;
+					}
+					break; }
+				}
+				break; }
 			case 's': {
 				slave___* slave;
 				switch(tag[1]) {
@@ -431,7 +463,7 @@ class main___ : public main_plugin___ {
 			}
 		}
 		ret2 = thiz->for__(window, nb1_, view_, p, from, 0, true, false, is1, add, env); if(ret2 != 0) return ret2;
-		ret2 = thiz->for__(view_, p, from, add, env); if(ret2 != 0) return ret2;
+		ret2 = thiz->for__(view_, p, from, by, add, env); if(ret2 != 0) return ret2;
 		if(view_) {
 			ret2 = view_->for__(p, from, add, env); if(ret2 != 0) return ret2;
 		}
@@ -713,7 +745,7 @@ class main___ : public main_plugin___ {
 			g_free((void*)s1);
 		}
 	}
-	int for__(plugin::view___* view, args___ p, size_t& from, rust_add___ add, void* env) {
+	int for__(plugin::view___* view, args___ p, size_t& from, plugin::view___* by, rust_add___ add, void* env) {
 		bool dunhao = false;
 		auto add_u = [&](size_t i) {
 			add__(std::to_string(i).c_str(), dunhao, add, env);
@@ -741,9 +773,11 @@ class main___ : public main_plugin___ {
 			{"-得签", "=l", 0},
 			{"-得签前", "=l2", 0},
 			{"-得签后", "=l3", 0},
+			{"-得签副", "=l4", 0},
 			{"-得签提示" , "=l t", 0},
 			{"-得签前提示", "=l2t", 0},
 			{"-得签后提示", "=l3t", 0},
+			{"-得签副提示", "=l4t", 0},
 			{"-得页宽高", "=S", 0},
 			{"-在簿", "=b", 0},
 			{"-得可关闭", "=x", 0},
@@ -805,6 +839,7 @@ class main___ : public main_plugin___ {
 									switch(tag[2]) {
 										case '2': l = label_box->label2_; break;
 										case '3': l = label_box->label3_; break;
+										case '4': l = label_box->label4_; break;
 										default: l = label_box->label_; break;
 									}
 									switch(tag[3]) {
@@ -872,10 +907,10 @@ class main___ : public main_plugin___ {
 					}
 					break;
 				case 'x':
-					switch(tag[1]) {
-						case '2': g_idle_add(idle_close__, view); break;
-						default: idle_close__(view); break;
-					}
+					if(tag[1] == '2' /*|| view == by*/)
+						g_idle_add(idle_close__, view);
+					else
+						idle_close__(view);
 					break;
 				}
 				break;
@@ -899,35 +934,6 @@ main (int    argc,
 	{
 		argv1.push_back(argv[0]);
 		std::string soname = "l4.so";
-		do {
-			std::string s = argv1[0], s2;
-			auto e__ = [&](const char* x) {
-				s2 = x;
-				if(m.exist_f__(s + s2)) {
-					src = s + s2;
-					return true;
-				}
-				return false;
-			};
-			if(e__(".zhscript")) break;
-			if(e__(".zs")) break;
-			s2[0] = '_';
-			for(int i = 0; i < 4; i++) {
-				if(m.ends_with(s, s2)) {
-					s = s.substr(0, s.size() - s2.size());
-					fs::path p = s;
-					p.replace_extension(".zs");
-					src = p;
-
-					char* s2 = new char[src.size() + 1];
-					s2[src.size()] = 0;
-					src.copy(s2, src.size());
-					argv1.push_back(s2);
-					break;
-				}
-				s2 += '-';
-			}
-		} while(false);
 		for(int i = 1; i < argc; i++) {
 			char *s = argv[i];
 			if(m.starts_with(s, "-zhscript-l4")) {
@@ -943,6 +949,52 @@ main (int    argc,
 			}
 			argv1.push_back(s);
 		}
+		vec___ paths;
+		if(!l4_.open__(argv1[0], soname.c_str(), paths)) {
+			std::cerr << l4_.err_ << std::endl;
+			return 254;
+		}
+		if(src.empty()) {
+			std::string s2;
+			bool b = false;
+			for(auto& s : paths) {
+				auto e__ = [&](const char* x) {
+					s2 = x;
+					std::string s3 = s + s2;
+#ifdef _debug_
+					std::cout << s3 << std::endl;
+#endif
+					if(m.exist_f__(s3)) {
+						src = s3;
+						return true;
+					}
+					return false;
+				};
+				if(e__(".zhscript")) break;
+				if(e__(".zs")) break;
+				s2[0] = '_';
+				for(int i = 0; i < 4; i++) {
+					if(m.ends_with(s, s2)) {
+						b = true;
+
+						s = s.substr(0, s.size() - s2.size());
+						fs::path p = s;
+						p.replace_extension(".zhscript");
+						if(!m.exist_f__(p))
+							p.replace_extension(".zs");
+						src = p;
+
+						char* s2 = new char[src.size() + 1];
+						s2[src.size()] = 0;
+						src.copy(s2, src.size());
+						argv1.insert(argv1.begin() + 1, s2);
+						break;
+					}
+					s2 += '-';
+				}
+				if(b) break;
+			}
+		}
 		for(size_t i = 0; i < argv1.size(); i++) {
 			char *s = argv1[i];
 			if(s[0] == '-' && s[1] == '-' && s[2] >= 'a' && s[2] <= 'z' || i == 0) {
@@ -953,10 +1005,6 @@ main (int    argc,
 				src = s;
 				continue;
 			}
-		}
-		if(!l4_.open__(argv1[0], soname.c_str())) {
-			std::cerr << l4_.err_ << std::endl;
-			return 254;
 		}
 	}
 	l4_.path2_(src.c_str());
