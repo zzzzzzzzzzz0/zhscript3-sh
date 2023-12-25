@@ -69,12 +69,9 @@ class l4___ : public dl___ {
 	using true___ = bool(*)(const char*);
 	true___ true_ = nullptr;
 
-	bool open__(const char* arg0, const char* soname) {
+	bool open__(const char* arg0, const char* soname, vec___& paths2) {
 		fs::path path1 = arg0;
 		vec___ paths;
-		auto paths_add = [&](const fs::path& path) {
-			paths.push_back(path);
-		};
 		auto absymlnk = [](const fs::path& path) {
 			fs::path path2 = fs::read_symlink(path);
 			if(path2.is_relative())
@@ -82,15 +79,15 @@ class l4___ : public dl___ {
 			return path2;
 		};
 		for(;;) {
-			paths_add(path1);
+			paths.push_back(path1);
+			paths2.push_back(path1);
 			if(!fs::exists(path_)) {
 				path_ = path1;
 				path_.replace_filename(soname);
 				fs::path path2 = path_;
 				for(;fs::is_symlink(path2);) {
-					//std::cout << path2 << std::endl;
 					path2 = absymlnk(path2);
-					paths_add(path2);
+					paths.push_back(path2);
 				}
 			}
 			if(!fs::is_symlink(path1)) break;
@@ -108,7 +105,7 @@ class l4___ : public dl___ {
 		//if(err__()) return false;
 		path2_ = (path2___)sym__("c_path__");
 		if(err__()) return false;
-		for(auto i : paths)
+		for(auto& i : paths)
 			path2_(i.c_str());
 		return true;
 	}
