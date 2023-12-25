@@ -113,8 +113,8 @@ class window___ : public widget___ {
 
 				std::string bname;
 				w->pub_->name__(self, bname);
-				vec___ args = {"切换", std::to_string(page_num), std::to_string(v->id_), bname};
-				w->pub_->fanqiechaodan4__(v, args);
+				vec___ args = {"切换", std::to_string(page_num), bname};
+				w->pub_->fanqiechaodan3__(v, args);
 			}
 	}
 
@@ -205,7 +205,7 @@ class window___ : public widget___ {
 	static void close__(plugin::view___* v, bool and_vs2) {
 		window___* w = (window___*)(v->window_);
 		page_vs___ &vs = w->views_.a_, *vs2 = page_vs2__(v);
-		for(auto& v2 : *vs2) {
+		if(vs2) for(auto& v2 : *vs2) {
 			if(!v2->can_close__())
 				return;
 		}
@@ -224,7 +224,7 @@ class window___ : public widget___ {
 		w->on_close__(v, 32 + 16 + 1 + (and_vs2 ? 2 : 0));
 		bool can_rm = true;
 		if(!and_vs2)
-			for(auto& v2 : *vs2) {
+			if(vs2) for(auto& v2 : *vs2) {
 				if(v2->yuxiangrousi__()) {
 					can_rm = false;
 					break;
