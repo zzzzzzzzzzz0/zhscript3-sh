@@ -6,7 +6,7 @@ static plugin::pub___* pub_ = nullptr;
 
 static std::string zs_("zhscript");
 
-#include "/zzzzzzzzzzz/github/zhscript2-rust-sh/webkitx/src/Chan.cpp"
+#include "../../../../../zhscript2-rust-sh/webkitx/src/Chan.cpp"
 class Chanx_ : public Chan_ {
 	std::string h_ = "cb_send_request__";
 	void get__(std::string& line) {
@@ -305,19 +305,22 @@ class view___ : public plugin::view___ {
 			{"-插脚2", "j2", 2, "代码获取返回值"},
 			{"-插脚3", "=3", 1},
 			{"-得选择", "X", 0},
+			{"-得行列", "=pl", 0},
+			{"-页得id", "=i", 1},
+			{"-辑令", "e", 1},
+			{"-辑令2", "e2", 2, "有参数那种"},
 			{"-剪切", "ex", 0},
 			{"-复制", "ec", 0},
 			{"-粘贴", "ev", 0},
-			{"-撤销", "eu", 0},
-			{"-重做", "er", 0},
-			{"辑令", "e", 1},
-			{"辑令2", "e2", 2, "有参数那种"},
-			{"-得行列", "=pl", 0},
-			{"-页得id", "=i", 1},
+			{"-撤销2", "eu", 0},
+			{"-重做2", "er", 0},
+			{"-撤销", "<", 0},
+			{"-重做", ">", 0},
 			{"-刷新", "r", 0},
 			{"-网址", "u", 1},
 			{"-搜", "S", 2},
 			{"-调试器", "I", 0},
+			{"-调试器在", "I?", 0},
 			{"-探目标", "T", 1},
 		}, args, from, [&](const std::string& tag, size_t i, size_t argc, int& ret2) {
 			switch(tag[0]) {
@@ -391,6 +394,8 @@ class view___ : public plugin::view___ {
 					break;
 				}
 				break; }
+			case '<': webkit_web_view_go_back(hr2__()); break;
+			case '>': webkit_web_view_go_forward (hr2__()); break;
 			case 'r': webkit_web_view_reload (hr2__()); break;
 			case 'u': load__(args[i]); break;
 			case 'S': {
@@ -420,7 +425,13 @@ class view___ : public plugin::view___ {
 				break; }
 			case 'I': {
 				WebKitWebInspector *wi = webkit_web_view_get_inspector (hr2__());
-				webkit_web_inspector_show(wi);
+				switch(tag[1]) {
+				case '?':
+					if(webkit_web_inspector_is_attached(wi))
+						pub_->add__("1", dunhao, add, env);
+					break;
+				default: webkit_web_inspector_show(wi); break;
+				}
 				break; }
 			case 'T': {
 				bool ins = code_mouse_target_changed_.empty();
