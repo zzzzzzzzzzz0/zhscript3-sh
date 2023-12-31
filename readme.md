@@ -9,6 +9,14 @@
 
 ### 开三工鸟
 
+以下三个可共用文件却在另两个项目，全取太费，各单保留一份又悖念，终只得麻烦行编译者按“途”索骥了
+
+```
+zhscript/gjke4/rust.h
+zhscript2-rust-sh/webkitx/src/Chan.cpp
+zhscript2-rust-sh/webkitx/src/Chan.h
+```
+
 ```bash
 $ apt install g++ make libvte-2.91-dev libgtksourceview-3.0-dev # 或 libwebkit2gtk-4.0-dev 
 $ make -C gtkBsh/
