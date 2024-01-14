@@ -208,6 +208,14 @@
         }
         ,
         {
+            "name": "(gdb) delogo", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "/opt2/opt/delogo/ui.zs", "/_vid/初音未来/1忆江南.flv", "-h2"
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
             "name": "(gdb) ww-map", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
             "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
                 "/zzzzzzzzzzz/sh/ww-map.zs"//, "1"
