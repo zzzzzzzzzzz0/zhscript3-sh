@@ -555,6 +555,7 @@ int window___::for__(args___ p, size_t& from, bool restart, rust_add___ add, voi
 		{"-是全屏", "=f", 0},
 		{"-截图", "S", 1},
 		{"-图标", "i", 1},
+		{"-不在任务栏", "!t1", 0},
 		{"-无修饰", "!d", 0},
 		{"-有修饰", "!d1", 0},
 		{"-有无修饰", "!d@", 0},
@@ -669,14 +670,17 @@ int window___::for__(args___ p, size_t& from, bool restart, rust_add___ add, voi
 			pub_->eval__(p[i].c_str(), &p2);
 			if(p2.size() > 0) {
 				GdkPixbuf* pb = pixbuf__(p2, 0);
-				gtk_window_set_icon_name(hr2__(), p2[0].c_str());
 				gtk_window_set_icon(hr2__(), pb);
+				g_object_unref(pb);
 			}
 			break; }
 		case '!':
 			switch(tag[1]) {
+			case 't':
+				gtk_window_set_skip_taskbar_hint(hr2__(), tag[2] == '@' ? !gtk_window_get_skip_taskbar_hint(hr2__()) : tag[2]);
+				break;
 			case 'd':
-				gtk_window_set_decorated(hr2__(), tag[2] == '@' ? !(gtk_window_get_decorated(hr2__())) : tag[2]);
+				gtk_window_set_decorated(hr2__(), tag[2] == '@' ? !gtk_window_get_decorated(hr2__()) : tag[2]);
 				break;
 			case 'f':
 				gtk_window_set_accept_focus(hr2__(), false);
