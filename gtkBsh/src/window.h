@@ -119,7 +119,7 @@ class window___ : public widget___ {
 	}
 
 	static gboolean delete_event__(GtkWidget *widget, GdkEvent *event, window___* thiz) {
-		vec___ args = {"窗将关", thiz->has_name_ ? thiz->name__() : ""}, ret;
+		vec___ args = {"窗将关", thiz->name__()}, ret;
 		thiz->pub_->fanqiechaodan3__(nullptr, args, &ret);
 		return bool__(ret);
 	}
@@ -184,8 +184,7 @@ class window___ : public widget___ {
 		}
 	}
 	bool on_destroy__() {
-		vec___ args = {"窗关闭", has_name_ ? name__() : ""};
-		pub_->main_eval__(args);
+		pub_->main_eval__({"窗关闭", name__()});
 		if(main_) {
 			pub_->quit__();
 			return true;

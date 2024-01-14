@@ -4,6 +4,8 @@
 class widget___ {
     protected:
     GtkWidget *hr_;
+
+	private:
 	bool has_name_ = false;
 
     public:
