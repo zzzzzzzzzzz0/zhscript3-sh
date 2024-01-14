@@ -53,7 +53,7 @@ class code___ {
                 fn(args);
             else {
                 args.push_back(std::to_string(v->id_));
-                args.push_back(v->has_name_ ? v->name__() : "");
+                args.push_back(v->name__());
             }
             pub->fanqiechaodan2__(v, code_new_, args);
         }

@@ -5,8 +5,7 @@ class button___ {
 	static void clicked__(GtkButton *button, button___* thiz) {
 		vec___ p {thiz->name_};
 		plugin::view___* v = thiz->v_;
-		if(v->has_name_)
-			p.push_back(v->name__());
+		p.push_back(v->name__());
 		thiz->pub_->fanqiechaodan2__(v, thiz->code_.empty() ? thiz->name_ : thiz->code_, p);
 	}
 

@@ -4,6 +4,7 @@
 class widget___ {
     protected:
     GtkWidget *hr_;
+	bool has_name_ = false;
 
     public:
     widget___(GtkWidget* hr = nullptr) : hr_(hr) {}
@@ -12,12 +13,16 @@ class widget___ {
  	virtual int scroll__() {return 0;}
 	GtkContainer* to_cntr__() {return GTK_CONTAINER(hr_);}
 
-	bool has_name_ = false;
 	void name__(const char* name) {
 		gtk_widget_set_name(hr_, name);
 		has_name_ = true;
 	}
-	const char* name__() {return name__(hr_);}
+	const char* name__() {
+		if(!has_name_)
+			return "";
+		const char* name = name__(hr_);
+		return name ? name : "";
+	}
 	static const char* name__(GtkWidget* hr) {return gtk_widget_get_name(hr);}
 
 	void this__() {var__(hr_, "对", this);}
