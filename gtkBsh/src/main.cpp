@@ -1,7 +1,24 @@
 #include "window.h"
 #include "pub2.h"
-#include "slave.h"
 #include <gdk/gdkx.h>
+
+#include "slave.h"
+class slave___ : public pub::slave___ {
+	std::string code_;
+	plugin::pub___* pub_;
+
+public:
+	slave___(plugin::pub___* pub) : pub_(pub) {}
+	int init__(args___ p, size_t i) {
+		code_ = p[i++];
+		return pub::slave___::init__(p, i, pub::thread__(code_.c_str()));
+	}
+
+	void z__(const char *s) {
+		vec___ args{s};
+		pub_->eval__(code_.c_str(), args);
+	}
+};
 
 template<typename T>
 T try__(std::function<T()> f1, T f2, std::function<void(const std::string&)> f3) {
@@ -221,7 +238,7 @@ class main___ : public main_plugin___ {
 	void std__(plugin::view___* v, vec___& a) {
 		/*a.insert(a.begin() + 1, v->has_name_ ? v->name__() : "");
 		a.insert(a.begin() + 2, v->plugin_id__());*/
-		a.push_back(v->has_name_ && v->name__() ? v->name__() : "");
+		a.push_back(v->name__());
 		a.push_back(std::to_string(v->id_));
 		a.push_back(v->plugin_id__());
 	}
@@ -391,6 +408,7 @@ class main___ : public main_plugin___ {
 						window = w;
 						break;
 					}
+				if(test_2(window, fn2_ret2)) return;
 				if(!window)
 					throw "窗无觅 " + p[i];
 				break;
@@ -431,10 +449,11 @@ class main___ : public main_plugin___ {
 				case 'x':
 					slave = (slave___*)std::stoul(p[i]);
 					slave->stop__();
+					delete slave;
 					break;
 				default:
 					slave = new slave___(thiz);
-					int err = slave->init__(p, i, g_main_context_default());
+					int err = slave->init__(p, i);
 					if(err) {
 						delete slave;
 						throw "错误" + std::to_string(err);
@@ -624,12 +643,7 @@ class main___ : public main_plugin___ {
 			for__(window, nullptr, nullptr, p, from, 1, false, true, false, nullptr, nullptr);
 			window->show__();
 
-			vec___ p2;
-			{
-				vec___ args = {"窗初始", wname};
-				args.push_back(std::to_string(GDK_WINDOW_XID(window->hr3__())));
-				main_eval__(args, &p2);
-			}
+			main_eval__({"窗初始", window->name__(), std::to_string(GDK_WINDOW_XID(window->hr3__()))});
 		}
 	}
 	int for__(args___ p, size_t& from) {
@@ -819,7 +833,7 @@ class main___ : public main_plugin___ {
 							case 'p': add__(view->plugin_id__(), dunhao, add, env); break;
 							case 'i': add_u(view->id_); break;
 							case 'u': add_u(view->upid_); break;
-							case 'n': add__(view->has_name_ ? view->name__() : "", dunhao, add, env); break;
+							case 'n': add__(view->name__(), dunhao, add, env); break;
 							case '1': add__(view->arg1_.c_str(), dunhao, add, env); break;
 							case '2': add__(view->arg2_.c_str(), dunhao, add, env); break;
 							case '4': add__(view->attach_.c_str(), dunhao, add, env); break;
@@ -857,7 +871,7 @@ class main___ : public main_plugin___ {
 							break;
 							case 'w': {
 								window___* wi = (window___*)view->window_;
-								add__(wi->has_name_ ? wi->name__() : "", dunhao, add, env);
+								add__(wi->name__(), dunhao, add, env);
 								break; }
 							case '+': add_i(view->is_die_); break;
 							case 'X': get_sel__(nullptr, dunhao, add, env); break;

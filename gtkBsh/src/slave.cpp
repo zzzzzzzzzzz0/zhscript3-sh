@@ -4,15 +4,19 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 
+namespace pub {
+
 static gboolean cb__(gpointer data) {
 	GIOChannel *ioc = (GIOChannel *)data;
 	slave___* thiz = (slave___*)ioc->reserved2;
 	for(;;) {
 		gchar *s = NULL;
 		gsize l = 0;
+		if(thiz->is_stop__())
+			return FALSE;
 		g_io_channel_read_line(ioc, &s, &l, NULL, NULL);
 		if(!s)
-			break;
+			return TRUE;
 		while(l > 0) {
 			gchar c = s[--l];
 			if(c == '\r' || c == '\n') {
@@ -20,25 +24,19 @@ static gboolean cb__(gpointer data) {
 			} else
 				break;
 		}
-		vec___ args{s};
-		thiz->pub_->eval__(thiz->code_.c_str(), args);
+		thiz->z__(s);
 		g_free(s);
 	}
-	return TRUE;
 }
 
-int slave___::init__(args___ args, size_t from, GMainContext *mc) {
-	code_ = args[from++];
-
+int slave___::init__(const std::vector<std::string>& args, size_t from, GMainContext *mc) {
 	if(socketpair(AF_UNIX, SOCK_STREAM, 0, sv_) == -1)
 		return 1;
-	if(!code_.empty()) {
-		ioc_ = g_io_channel_unix_new(sv_[0]);
-		ios_ = g_io_create_watch(ioc_, G_IO_IN);
-		ioc_->reserved2 = this;
-		g_source_set_callback(ios_, cb__, ioc_, NULL);
-		g_source_attach(ios_, mc);
-	}
+	ioc_ = g_io_channel_unix_new(sv_[0]);
+	ios_ = g_io_create_watch(ioc_, G_IO_IN);
+	ioc_->reserved2 = this;
+	g_source_set_callback(ios_, cb__, ioc_, NULL);
+	g_source_attach(ios_, mc);
 
 	pid_t pid = fork();
 	if (pid == -1)
@@ -90,6 +88,7 @@ int slave___::init__(args___ args, size_t from, GMainContext *mc) {
 			return 10;
 	}
 	pid_ = pid;
+	stop_ = false;
 
 	close(sv_[1]);
 	sv_[1] = -1;
@@ -104,9 +103,10 @@ int slave___::init__(args___ args, size_t from, GMainContext *mc) {
 }
 
 void slave___::stop__() {
-	if(pid_ == -1)
+	if(is_stop__())
 		return;
-	if(!code_.empty()) {
+	stop_ = true;
+	if(ioc_) {
 		g_source_unref(ios_);
 		g_io_channel_shutdown(ioc_, TRUE, NULL);
 		g_io_channel_unref(ioc_);
@@ -120,8 +120,31 @@ void slave___::stop__() {
 }
 
 void slave___::send__(const std::string& s) {
-	if(pid_ == -1)
+	if(is_stop__())
 		return;
 	if(write(sv_[0], s.c_str(), s.size()) == -1)
 		return;
+}
+
+static gpointer cb2__(gpointer data) {
+	GMainContext *mc = (GMainContext *)data;
+
+	g_main_context_push_thread_default (mc);
+
+	GMainLoop *ml = g_main_loop_new (mc, FALSE);
+	g_main_loop_run (ml);
+	g_main_loop_unref (ml);
+
+	g_main_context_pop_thread_default (mc);
+	g_main_context_unref (mc);
+
+	return NULL;
+}
+
+GMainContext *thread__(const char *name) {
+	GMainContext *mc = g_main_context_new ();
+	g_thread_new (name, cb2__, g_main_context_ref (mc));
+	return mc;
+}
+
 }
