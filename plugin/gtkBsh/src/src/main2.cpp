@@ -165,6 +165,8 @@ class view___ : public plugin::view___ {
 			{"-重做", "r", 0},
 			{"-得位置", "=p", 0},
 			{"-得行列", "=pl", 0},
+			{"-内容", " -", 1},
+			{"-得内容", " =", 0},
 			{"-清除", " ", 0},
 			{"-搜", "S", 2},
 			{"-缩进用空格", "I1", 0},
@@ -238,7 +240,21 @@ class view___ : public plugin::view___ {
 					break; }
 				}
 				break;
-			case ' ': gtk_text_buffer_set_text(buf2__(), "", 0); break;
+			case ' ':
+				switch(tag[1]) {
+				case '=': {
+					char* text = text__(false);
+					pub_->add__(text, dunhao, add, env);
+					g_free (text);
+					break; }
+				case '-':
+					gtk_text_buffer_set_text(buf2__(), args[i].c_str(), args[i].size());
+					break;
+				default:
+					gtk_text_buffer_set_text(buf2__(), "", 0);
+					break;
+				}
+				break;
 			case 'S': {
 				const std::string &s = args[i];
 				if(s.empty()) {
