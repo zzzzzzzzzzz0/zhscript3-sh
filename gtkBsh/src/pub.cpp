@@ -37,7 +37,7 @@ void clpars2__(std::string& s, std::vector<char*>& args2) {
         if(i2 != std::string::npos) {
             if(!b) {
                 s = s2.substr(0, i2);
-	            b = true;
+                b = true;
             } else {
                 s3 = s2.substr(0, i2);
             }
@@ -63,14 +63,6 @@ void clpars2__(std::string& s, std::vector<char*>& args2) {
                 s2 = s2.substr(i3 + 1);
             }
             b3 = true;
-/*#ifdef _debug_
-            std::cout << "[" << c << "]" 
-            << std::to_string(i21)
-            << "," << std::to_string(i22)
-            << "," << std::to_string(i23) 
-            << "\t" << std::to_string(i2) 
-            << "|" << s2 << std::endl;
-#endif*/
         } else {
             b2 = true;
             if(b) {
@@ -79,16 +71,13 @@ void clpars2__(std::string& s, std::vector<char*>& args2) {
             }
         }
         if(b3) {
-/*#ifdef _debug_
-            std::cout << s3 << std::endl;
-#endif*/
-			if(s3 == "--。") {}
-			else {
-		        size_t end = s3.size();
-		        char* s4 = new char[end + 1];
-		        s3.copy(s4, end);
-		        s4[end] = 0;
-		        args2.push_back(s4);
+            if(s3 == "--。") {}
+            else {
+                size_t end = s3.size();
+                char* s4 = new char[end + 1];
+                s3.copy(s4, end);
+                s4[end] = 0;
+                args2.push_back(s4);
             }
         }
     }
@@ -104,8 +93,15 @@ void label_new__(GtkWidget *&label1, GtkLabel*& label) {
 }
 
 static GdkPixbuf* pixbuf_2__(args___ p, size_t from) {
-    return gtk_icon_theme_load_icon(gtk_icon_theme_get_default(), p[from].c_str(), std::atoi(p[from + 1].c_str()),
-        GTK_ICON_LOOKUP_USE_BUILTIN, nullptr);
+    const std::string& s = p[from];
+    gint i = std::atoi(p[from + 1].c_str());
+    if(s[0] == '/' || s[0] == '.') {
+        GdkPixbuf* pb = gdk_pixbuf_new_from_file(s.c_str(), nullptr);
+        GdkPixbuf* pb2 = gdk_pixbuf_scale_simple(pb, i, i, GDK_INTERP_BILINEAR);
+        g_object_unref(pb);
+        return pb2;
+    }
+    return gtk_icon_theme_load_icon(gtk_icon_theme_get_default(), s.c_str(), i, GTK_ICON_LOOKUP_USE_BUILTIN, nullptr);
 }
 GdkPixbuf* pixbuf__(args___ p, size_t from) {
     switch(p.size() - from) {
@@ -128,7 +124,9 @@ GtkWidget *button_new__(GCallback cb, void* view, GtkBox *box, args___ args, siz
             if(i <= -10) i = -(i + 10);
             img = gtk_image_new_from_icon_name(args[from].c_str(), (GtkIconSize)i);
         } else {
-            img = gtk_image_new_from_pixbuf(pixbuf_2__(args, from));
+            GdkPixbuf* pb = pixbuf_2__(args, from);
+            img = gtk_image_new_from_pixbuf(pb);
+            g_object_unref(pb);
         }
         break; }
     case 1:
@@ -172,7 +170,7 @@ void add__(GtkNotebook *nb, GtkWidget *box1, GtkWidget *label_box1, int posi, bo
 		case after_curr_page_:
 		posi = gtk_notebook_get_current_page (nb) + 1;
 		break;
-        case before_curr_page_:
+		case before_curr_page_:
 		posi = gtk_notebook_get_current_page (nb);
 		break;
 	}
