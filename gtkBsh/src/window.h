@@ -119,9 +119,9 @@ class window___ : public widget___ {
 	}
 
 	static gboolean delete_event__(GtkWidget *widget, GdkEvent *event, window___* thiz) {
-		vec___ args = {"窗将关", thiz->has_name_ ? thiz->name__() : ""};
-		thiz->pub_->fanqiechaodan3__(nullptr, args);
-		return false;
+		vec___ args = {"窗将关", thiz->has_name_ ? thiz->name__() : ""}, ret;
+		thiz->pub_->fanqiechaodan3__(nullptr, args, &ret);
+		return bool__(ret);
 	}
 
 	std::string window_state_event_;
@@ -202,6 +202,9 @@ class window___ : public widget___ {
 
 	static GtkWidget *pack__(plugin::view___*, plugin::view___*, int posi);
 
+	static bool bool__(args___ p2) {
+		return p2.size() == 1 && (p2[0] == "x" || p2[0] == "n");
+	}
 	static void close__(plugin::view___* v, bool and_vs2) {
 		window___* w = (window___*)(v->window_);
 		page_vs___ &vs = w->views_.a_, *vs2 = page_vs2__(v);
@@ -214,7 +217,7 @@ class window___ : public widget___ {
 			vec___ p2;
 			w->pub_->std__(v, args);
 			w->pub_->main_eval__(args, &p2);
-			if(p2.size() == 1 && (p2[0] == "x" || p2[0] == "n"))
+			if(bool__(p2))
 				return;
 			else if(!p2.empty()) {
 				w->pub_->pr__(&p2, args[0]);
