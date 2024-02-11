@@ -71,6 +71,26 @@ class l4___ : public dl___ {
 
 	bool open__(const char* arg0, const char* soname, vec___& paths2) {
 		fs::path path1 = arg0;
+		if(!path1.has_parent_path()) {
+			char* s1 = getenv("PATH");
+			if(s1) {
+				std::string s = s1;
+				size_t i1 = 0;
+				for(size_t i = 0;; i++) {
+					char c = s[i];
+					if(!c || c == ':') {
+						std::string s2 = s.substr(i1, i - i1) + '/' + path1.string();
+						if(fs::exists(s2)) {
+							path1 = s2;
+							break;
+						}
+						if(!c)
+							break;
+						i1 = i + 1;
+					}
+				}
+			}
+		}
 		vec___ paths;
 		auto absymlnk = [](const fs::path& path) {
 			fs::path path2 = fs::read_symlink(path);
