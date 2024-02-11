@@ -23,3 +23,11 @@ void add__(GtkNotebook *nb, GtkWidget *box1, GtkWidget *label_box1 = nullptr, in
 void show_tabs__(GtkNotebook *nb, bool);
 
 extern l4___ l4_;
+
+#ifdef _debug_
+class debug___ {
+    public:
+    void* p_ = nullptr;
+};
+extern debug___ debug_;
+#endif

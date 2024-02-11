@@ -183,3 +183,7 @@ void show_tabs__(GtkNotebook *nb, bool b) {
 }
 
 l4___ l4_;
+
+#ifdef _debug_
+debug___ debug_;
+#endif
