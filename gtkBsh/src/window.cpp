@@ -68,7 +68,7 @@ class event___ : public pub::event___ {
 	gboolean jieshi__(const std::vector<std::string>* p, gboolean ret1) {
 		vec___ arg, ret;
 		if(p)
-			arg = *p; //arg.assign(p->begin(), p->end())
+			arg = *p;
 		pub_->fanqiechaodan2__(v_, code_, arg, &ret);
 		if(ret.size() == 1) {
 			if(ret[0] == "1") return TRUE;
@@ -79,9 +79,9 @@ class event___ : public pub::event___ {
 		return ret1;
 	}
 	main_plugin___* pub_ = nullptr;
-	plugin::view___* v_ = nullptr;
+	view___* v_ = nullptr;
 	public:
-	event___(main_plugin___* pub, plugin::view___* v) : pub_(pub), v_(v) {}
+	event___(main_plugin___* pub, view___* v) : pub_(pub), v_(v) {}
 };
 class tuodong___ : public pub::tuodong___ {
 	GtkWindow* hr2__() {return w_->hr2__();}
@@ -137,8 +137,8 @@ GtkNotebook *nb, GtkWidget *&box1, GtkBox *&box, label_box___ *&label_box) {
 	add__(nb, box1, label_box->box1_, posi, reord);
 }
 
-int window___::for__(GtkWidget *nb1_, plugin::view___*& view_, args___ p, size_t& from,
-		new_view___ new_view, bool no_new, bool nb1_need_new, bool is1, rust_add___ add, void* env) {
+int window___::for__(GtkWidget *nb1_, view___*& view_, args___ p, size_t& from,
+		bool no_new, bool nb1_need_new, bool is1, rust_add___ add, void* env) {
 	if(is1 && !view_ && !views_.a_.empty())
 		view_ = views_.a_[0];
 	if(no_new && !nb1_ && view_)
@@ -168,6 +168,7 @@ int window___::for__(GtkWidget *nb1_, plugin::view___*& view_, args___ p, size_t
 		gtk_box_pack_end(buju_->box_lt_, box_rt1, false, false, paddi_);
 		gtk_box_pack_end(buju_->box_lt_, nb1_, true, true, paddi2_);
 		gtk_container_add(cntr ? cntr : to_cntr__(), box_tp1);
+		gtk_widget_show_all (cntr ? GTK_WIDGET(cntr) : box_tp1);
 	};
 	GtkWidget *box1_ = nullptr;
 	GtkBox *box_ = nullptr;
@@ -180,7 +181,7 @@ int window___::for__(GtkWidget *nb1_, plugin::view___*& view_, args___ p, size_t
 	auto new_page = [&](bool vert, int posi, bool reord, bool padding2, bool vert2, GtkAlign top_align, GtkAlign bottom_align) {
 		new_page__(vert, posi, reord, padding2, vert2, top_align, bottom_align, nb_, box1_, box_, label_box_);
 	};
-	plugin::view___* by_ = view_;
+	view___* by_ = view_;
 
 	bool has_ = false, no_lazy_ = !no_new;
 
@@ -189,6 +190,8 @@ int window___::for__(GtkWidget *nb1_, plugin::view___*& view_, args___ p, size_t
 	int ret2 = pub_->clpars__({
 		{"-新开", "n", 4},
 		{"-新页", "np", 4},
+		{"-存", "Ds", 0},
+		{"-复", "Dr", 0},
 	}, p, from, [&](const std::string& tag, size_t i, size_t argc, int& fn2_ret2) {
 		switch(tag[0]) {
 			case 'n': {
@@ -197,8 +200,9 @@ int window___::for__(GtkWidget *nb1_, plugin::view___*& view_, args___ p, size_t
 				char in_nb2 = 0, nb_pos = 0;
 				std::string name, nb_name, kou_name, attach;
 				char can_close = '\0';
-				bool vert = true, can_close2 = true, padding2 = false, vert2 = false, page_curr2 = false,
-					no_lazy = false, no_focus = false,
+				bool vert = true, can_close2 = true, padding2 = false, vert2 = false,
+					page_curr2 = false, curr2_lazy = false,
+					no_lazy = false, no_focus = false, hulve1qie = false,
 					in_new_buju = false, in_new_page = false, in_new_kou = false, reord = true;
 				switch(tag[1]) {
 					case 'p':
@@ -252,6 +256,7 @@ int window___::for__(GtkWidget *nb1_, plugin::view___*& view_, args___ p, size_t
 					{"-新页", "#p", 0},
 					{"-新区", "#o", 1},
 					{"-切", "T", 0},
+					{"-缓切", "Ti", 0},
 					{"-无焦", "F", 0},
 					{"-页", "j", 1},
 					{"-替", "H", 0},
@@ -263,8 +268,7 @@ int window___::for__(GtkWidget *nb1_, plugin::view___*& view_, args___ p, size_t
 					{"-id", "i", 1},
 					{"-上id", "I", 1},
 					{"-附", "+", 1},
-					{"-存", "Ds", 0},
-					{"-复", "Dr", 0},
+					{"-忽略一切", "1", 0},
 				};
 				ret2 = pub_->clpars1__(tags2, p2, from2, [&](const std::string& tag, size_t i, size_t argc, int& fn2_ret2) {
 					switch(tag[0]) {
@@ -325,7 +329,13 @@ int window___::for__(GtkWidget *nb1_, plugin::view___*& view_, args___ p, size_t
 								break;
 						}
 						break;
-					case 'T': page_curr2 = no_lazy_ = true; break;
+					case 'T':
+						switch(tag[1]) {
+							case 'i': curr2_lazy = true; break;
+							default: no_lazy_ = true; break;
+						}
+						page_curr2 = true;
+						break;
 					case 'F': no_focus = true; break;
 					case 'z': no_lazy_ = no_lazy = !tag[1]; break;
 					case 'j':
@@ -346,16 +356,7 @@ int window___::for__(GtkWidget *nb1_, plugin::view___*& view_, args___ p, size_t
 						by_ = views_.find__([&](auto v) {return v->id_ == id;});
 						break; }
 					case '+': attach = p2[i]; break;
-					case 'D':
-						switch(tag[1]) {
-							case 's':
-							xianchang_.push__(new xianchang::item___{nb1_, nb_, view_, by_});
-							break;
-							case 'r':
-							xianchang_.pop__(nb1_, nb_, view_, by_);
-							break;
-						}
-						break;
+					case '1': hulve1qie = true; break;
 					}
 				}, []() {return pub::clpars_ret_no_;});
 				if(ret2 < 0) {
@@ -413,10 +414,11 @@ int window___::for__(GtkWidget *nb1_, plugin::view___*& view_, args___ p, size_t
 						}
 						GtkContainer* cntr = GTK_CONTAINER(b);
 						new_buju(cntr);
-						//gtk_widget_show_all(box1_);
 					} else if(in_nb2) {
-						if(nb1_need_new)
+						if(nb1_need_new) {
 							new_nb1(true);
+							gtk_widget_show_all (nb1_);
+						}
 						switch(in_nb2) {
 							case '<': gtk_box_pack_start(buju_->box_lt_, nb1_, false, false, padding); break;
 							case '>': gtk_box_pack_start(buju_->box_rt_, nb1_, false, false, padding); break;
@@ -476,24 +478,27 @@ int window___::for__(GtkWidget *nb1_, plugin::view___*& view_, args___ p, size_t
 				} else {
 					if(pluginame.empty())
 						break;
-					view_ = new_view(pluginame, viewopt, viewopt2, page_curr2 | no_lazy);
-					view_->var__("buju_", buju_);
-					if(w != -1 || h != -1) {
-						gtk_widget_set_size_request (view_->hr__(), w, h);
+					if(!no_lazy && !hulve1qie) {
+						gint n = gtk_notebook_get_n_pages(nb_);
+						if(n == 1)
+							no_lazy = true;
 					}
-					if(!name.empty()) {
-						view_->name__(name.c_str());
-					}
+					view_ = new view___(pluginame, viewopt, viewopt2, name, w, h, no_focus);
+					view_->buju_ = buju_;
 					view_->kou_nb1_ = kou_nb1;
 					view_->kou_box1_ = kou_box1;
 					view_->attach_ = attach;
 					if(!no_focus && (page_curr2 | no_lazy))
 						view_->need_focus_ = true;
+					view_->lazy_ = curr2_lazy;
+					view_->hulve1qie_ = hulve1qie;
+					if((page_curr2 && !curr2_lazy) | no_lazy)
+						view_->mk_p__([&](const std::string& s, const std::string& s1, const std::string& s2) {
+							return pub_->new_view__(s, s1, s2);
+						});
 					pack__(view_, box1_, label_box_, nb1_, id,
 						posi != 0 ? by_ : nullptr, can_close, can_close2, page_curr2,
 						w == -1 && h == -1 || in_nb2, padding);
-					if(no_focus)
-						gtk_widget_set_can_focus(view_->hr__(), false);
 				}
 				ret2 = for2__(view_, p2, from2, pub::clpars_throw_);
 				if(ret2 < 0) {
@@ -510,6 +515,16 @@ int window___::for__(GtkWidget *nb1_, plugin::view___*& view_, args___ p, size_t
 				if(!has && !pack_2__(view_))
 					break;
 				break; }
+		case 'D':
+			switch(tag[1]) {
+				case 's':
+				xianchang_.push__(new xianchang::item___{nb1_, nb_, view_, by_});
+				break;
+				case 'r':
+				xianchang_.pop__(nb1_, nb_, view_, by_);
+				break;
+			}
+			break;
 		}
 	});
 	if(ret2 != 0) return ret2;
@@ -754,7 +769,7 @@ int window___::for__(args___ p, size_t& from, bool restart, rust_add___ add, voi
 	return 0;
 }
 
-int window___::for2__(plugin::view___* view, args___ p, size_t& from, int fn2_ret2) {
+int window___::for2__(view___* view, args___ p, size_t& from, int fn2_ret2) {
 	label_box___* label_box_ = (label_box___*)view->label_box_;
 	bool b_ = true, b2_ = false;
 	std::string code_;
@@ -829,34 +844,32 @@ int window___::for2__(plugin::view___* view, args___ p, size_t& from, int fn2_re
 					vec___ p2;
 					size_t from2 = 0;
 					std::string name;
-					switch(tag[1]) {
-					case '+': {
-						pub_->eval__(p[i].c_str(), &p2);
-						pub_->clpars__({
-							{"-顶", "P^", 0},
-							{"-底", "Pv", 0},
-							{"-左", "P<", 0},
-							{"-右", "P>", 0},
-							{"-代码", "c", 1},
-							{"-名", "n", 1},
-						}, p2, from2, [&](const std::string& tag, size_t i, size_t argc, int& fn2_ret2) {
-							switch(tag[0]) {
-							case 'P': pos_ = tag[1]; break;
-							case 'c': code_ = p2[i]; break;
-							case 'n': name = p2[i]; break;
-							}
-						}); //图标是漏下
-						if(!name.empty()) {
-							bool has = false;
-							for(auto i : label_box_->buttons_) {
-								if(i->name_ == name) {
-									has = true;
-									break;
-								}
-							}
-							if(has) break;
+					pub_->eval__(p[i].c_str(), &p2);
+					pub_->clpars__({
+						{"-顶", "P^", 0},
+						{"-底", "Pv", 0},
+						{"-左", "P<", 0},
+						{"-右", "P>", 0},
+						{"-代码", "c", 1},
+						{"-名", "n", 1},
+					}, p2, from2, [&](const std::string& tag, size_t i, size_t argc, int& fn2_ret2) {
+						switch(tag[0]) {
+						case 'P': pos_ = tag[1]; break;
+						case 'c': code_ = p2[i]; break;
+						case 'n': name = p2[i]; break;
 						}
-						break; }
+					}); //图标是漏下
+					if(from2 == p2.size())
+						break;
+					if(!name.empty()) {
+						bool has = false;
+						for(auto i : label_box_->buttons_) {
+							if(i->name_ == name) {
+								has = true;
+								break;
+							}
+						}
+						if(has) break;
 					}
 					button___* btn = new button___(view, pub_);
 					label_box_->buttons_.push_back(btn);
@@ -885,30 +898,32 @@ int window___::for2__(plugin::view___* view, args___ p, size_t& from, int fn2_re
 			break;
 		}
 	});
-	if(ret != 0) return ret; 
-	if(tuodong___::for__(p, from, this, view) != std::string::npos)
-		return 1;
+	if(ret != 0) return ret;
+	plugin::view___* v1 = (plugin::view___*)view->p__();
+	if(v1) {
+		if(tuodong___::for__(p, from, this, v1) != std::string::npos)
+			return 1;
+	}
 	return pub::clpars_ret_1__(fn2_ret2, p, from);
 }
 
-GtkWidget *window___::pack__(plugin::view___* view, plugin::view___* by, int posi) {
+GtkWidget *window___::pack__(plugin::view___* view1, plugin::view___* by1, int posi) {
+	view___* by = (view___*)by1->p_;
+
+	view___* view = by->copy__(view1);
 	window___* thiz = (window___*)by->window_;
 	GtkWidget *box1 /*= by->box1_*/;
 	GtkBox *box;
 	label_box___ *label_box;
 	label_box___ *lb = (label_box___ *)by->label_box_;
 	new_page__(true, posi, true, true, lb->vert_, lb->top_align_, lb->bottom_align_, by->nb__(), box1, box, label_box);
-	thiz->pack__(view, box1, label_box, by->nb1_, 0, by, by->has_close_, true, true, true, 0);
+	thiz->pack__(view, box1, label_box, by->nb1_, 0, by, by->has_close_, true, true, by->expand_, by->padding_);
 	thiz->code_->on_new__(nullptr, view, thiz->pub_);
 	thiz->pack_2__(view);
-	return view->hr__();
+	return view1->hr__();
 }
 
-void window___::on_close__(plugin::view___* v, int c) {
-#ifdef _debug_
-	printf("on_close__%p,%06b\n", v,c);
-	printf("          %s %lu\n", v->plugin_id__(),v->id_);
-#endif
+void window___::on_close__(view___* v, int c) {
 	if(c & 1) {
 		code_->on_del__(v, pub_);
 		v->on_close__();

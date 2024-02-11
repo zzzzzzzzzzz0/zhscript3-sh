@@ -4,18 +4,18 @@ class button___ {
 	private:
 	static void clicked__(GtkButton *button, button___* thiz) {
 		vec___ p {thiz->name_};
-		plugin::view___* v = thiz->v_;
+		view___* v = thiz->v_;
 		p.push_back(v->name__());
 		thiz->pub_->fanqiechaodan2__(v, thiz->code_.empty() ? thiz->name_ : thiz->code_, p);
 	}
 
-	plugin::view___* v_;
-	plugin::pub___* pub_;
+	view___* v_;
+	main_plugin___* pub_;
 
 	public:
 	std::string code_, name_;
 
-	button___(plugin::view___* v, plugin::pub___* pub) : v_(v), pub_(pub) {}
+	button___(view___* v, main_plugin___* pub) : v_(v), pub_(pub) {}
 	void with__(GtkBox *box, args___ p2, size_t from2) {
 		gtk_widget_set_tooltip_markup(button_new__(G_CALLBACK(clicked__), this, box, p2, from2), name_.c_str());
 	}

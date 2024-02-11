@@ -9,10 +9,10 @@ class window___ : public widget___ {
 	code___* code_;
 	bool main_ = false;
 
-	static void cb_close__(GtkButton *button, plugin::view___* v) {close__(v, true);}
-	void on_close__(plugin::view___* v, int c);
+	static void cb_close__(GtkButton *button, view___* v) {close__(v, true);}
+	void on_close__(view___* v, int c);
 
-	void pack__(plugin::view___* view, GtkWidget *box1, label_box___ *label_box, GtkWidget *nb1, size_t id, plugin::view___* by,
+	void pack__(view___* view, GtkWidget *box1, label_box___ *label_box, GtkWidget *nb1, size_t id, view___* by,
 			char can_close, bool can_close2, bool page_curr2, bool expand, int padding) {
 		views_.a_.push_back(view);
 		view->nb1_ = nb1;
@@ -38,7 +38,7 @@ class window___ : public widget___ {
 		page_vs2___ views = page_vs2__(view);
 		if(!views) {
 			views = new page_vs___();
-			var__(box1, "views", views);
+			view->views_ = views;
 		}
 		if(can_close) {
 			if(++label_box->has_close_ == 1) {
@@ -58,8 +58,17 @@ class window___ : public widget___ {
 		}
 		views->push_back(view);
 
+		view->expand_ = expand;
+		view->padding_ = padding;
+		if(view->p__())
+			pack_box__(view);
+		else
+			gtk_widget_show_all (view->box1_);
+		if(page_curr2) view->curr__();
+	}
+	void pack_box__(view___* view) {
 		GtkBox* box = view->box__();
-		switch(view->scroll__()) {
+		switch(view->p__()->scroll__()) {
 			case 1: {
 			GtkWidget *box2_1;
 			GtkBox* box2;
@@ -68,7 +77,7 @@ class window___ : public widget___ {
 			gtk_box_pack_start(box2, view->hr__(), TRUE, TRUE, paddi3_);
 			GtkWidget *sb = gtk_scrollbar_new(GTK_ORIENTATION_VERTICAL, gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(view->hr__())));
 			gtk_box_pack_end(box2, sb, FALSE, FALSE, paddi3_);
-			gtk_box_pack_start(box, box2_1, expand, true, padding);
+			gtk_box_pack_start(box, box2_1, view->expand_, true, view->padding_);
 			break; }
 
 			case 2: {
@@ -76,17 +85,16 @@ class window___ : public widget___ {
 			GtkScrolledWindow *sw = GTK_SCROLLED_WINDOW(sw1);
 			gtk_scrolled_window_set_policy (sw, GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 			gtk_container_add (GTK_CONTAINER(sw1), view->hr__());
-			gtk_box_pack_start(box, sw1, expand, true, padding);
+			gtk_box_pack_start(box, sw1, view->expand_, true, view->padding_);
 			break; }
 
 			default:
-			gtk_box_pack_start(box, view->hr__(), expand, true, padding);
+			gtk_box_pack_start(box, view->hr__(), view->expand_, true, view->padding_);
 			break;
 		}
-		gtk_widget_show_all (box1);
-		if(page_curr2) view->curr__();
+		gtk_widget_show_all (view->box1_);
 	}
-	bool pack_2__(plugin::view___* view) {
+	bool pack_2__(view___* view) {
 		vec___ p3;
 		{
 			vec___ args = {"初始"};
@@ -100,21 +108,47 @@ class window___ : public widget___ {
 		ret2 = view->for__(p3, from3, nullptr, nullptr);
 		if(ret2 != 0)
 			return false;
-		if(from3 < p3.size()) {
-			pub_->pr__(&p3, "未曾处理：");
-		}
+		view->args1_.insert(view->args1_.end(), 
+			std::make_move_iterator(p3.begin() + from3),
+			std::make_move_iterator(p3.end()));
 		return true;
 	}
 
+	class switch_page___ {
+		public:
+		window___* w; view___* v; GtkNotebook* nb; guint page_num;
+	};
+	static gboolean idle_switch_page__(gpointer p) {
+		switch_page___* sp = (switch_page___*)p;
+		sp->w->switch_page2__(sp->v, sp->nb, sp->page_num);
+		delete sp;
+		return G_SOURCE_REMOVE;
+	}
+	void switch_page2__ (view___* v, GtkNotebook* nb, guint page_num) {
+		if(!v->p__()) {
+			v->mk_p__([&](const std::string& s, const std::string& s1, const std::string& s2) {
+				return pub_->new_view__(s, s1, s2);
+			});
+			pack_box__(v);
+		}
+		v->okopen__();
+
+		std::string bname;
+		pub_->name__(nb, bname);
+		vec___ args = {"切换", std::to_string(page_num), bname};
+		pub_->fanqiechaodan3__(v, args);
+	}
 	static void switch_page__ (GtkNotebook* self, GtkWidget* page, guint page_num, window___* w) {
 		for(auto& v : w->views_.a_)
 			if(v->box1_ == page) {
-				v->okopen__();
-
-				std::string bname;
-				w->pub_->name__(self, bname);
-				vec___ args = {"切换", std::to_string(page_num), bname};
-				w->pub_->fanqiechaodan3__(v, args);
+				if(v->hulve1qie_) {
+					v->hulve1qie_ = false;
+					continue;
+				}
+				if(v->lazy_) {
+					g_idle_add(idle_switch_page__, new switch_page___{w, v, self, page_num});
+				} else
+					w->switch_page2__(v, self, page_num);
 			}
 	}
 
@@ -167,9 +201,9 @@ class window___ : public widget___ {
 		GtkWidget *nb1_ = nullptr;
 	};
 	std::vector<buju___*> bujus_;
-	buju___*buju__(plugin::view___*v) {return (buju___*)v->var__("buju_");}
-	static page_vs2___ page_vs2__(plugin::view___* v) {
-		return (page_vs2___)var__(v->box1_, "views");
+	buju___*buju__(view___*v) {return (buju___*)v->buju_;}
+	static page_vs2___ page_vs2__(view___* v) {
+		return (page_vs2___)v->views_;
 	}
 
 	window___(main_plugin___ * pub, code___* code) : pub_(pub), code_(code) {
@@ -193,18 +227,15 @@ class window___ : public widget___ {
 	}
 
 	int for__(args___ p, size_t& from, bool restart, rust_add___ add, void* env);
-
-	using new_view___ = std::function<plugin::view___*(const std::string&, const std::string&, const std::string&, bool)>;
-	int for__(GtkWidget*, plugin::view___*&, args___, size_t&, new_view___, bool, bool, bool, rust_add___, void*);
-
-	int for2__(plugin::view___* view, args___ p, size_t& from, int fn2_ret2 = pub::clpars_ret_no_);
+	int for__(GtkWidget*, view___*&, args___, size_t&, bool, bool, bool, rust_add___, void*);
+	int for2__(view___* view, args___ p, size_t& from, int fn2_ret2 = pub::clpars_ret_no_);
 
 	static GtkWidget *pack__(plugin::view___*, plugin::view___*, int posi);
 
 	static bool bool__(args___ p2) {
 		return p2.size() == 1 && (p2[0] == "x" || p2[0] == "n");
 	}
-	static void close__(plugin::view___* v, bool and_vs2) {
+	static void close__(view___* v, bool and_vs2) {
 		window___* w = (window___*)(v->window_);
 		page_vs___ &vs = w->views_.a_, *vs2 = page_vs2__(v);
 		if(vs2) for(auto& v2 : *vs2) {
@@ -247,7 +278,7 @@ class window___ : public widget___ {
 			gtk_window_close(w->hr2__());
 	}
 
-	void show__() {gtk_widget_show_all (hr_);}
+	void show__() {gtk_widget_show (hr_);}
 	GtkWindow* hr2__() {return GTK_WINDOW (hr_);}
 	GdkWindow *hr3__() {return gtk_widget_get_window(hr_);}
 };

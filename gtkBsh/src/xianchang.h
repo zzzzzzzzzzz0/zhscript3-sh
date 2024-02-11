@@ -1,11 +1,11 @@
 #pragma once
-#include "../../plugin/pub.h"
+#include "view.h"
 
 namespace xianchang {
     class item___ {
         public:
 		GtkWidget *nb1_; GtkNotebook *nb_;
-		plugin::view___ *view_, *by_;
+		view___ *view_, *by_;
     };
 
     class list___ {
@@ -20,7 +20,7 @@ namespace xianchang {
         void push__(item___* i) {
             a_.push_back(i);
         }
-        void pop__(GtkWidget *&nb1_, GtkNotebook *&nb_, plugin::view___ *&view_, plugin::view___ *&by_) {
+        void pop__(GtkWidget *&nb1_, GtkNotebook *&nb_, view___ *&view_, view___ *&by_) {
             size_t n = a_.size();
             if(n > 0) {
                 item___* d = a_[--n];

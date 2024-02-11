@@ -30,16 +30,13 @@ class view___ : public plugin::view___ {
 		size_t i = s.find(tag);
 		if(i != std::string::npos)
 			s = s.substr(i + tag.length());
-		vec___ p {"标题", s, thiz->is_curr__() ? "1" : ""};
-		pub_->fanqiechaodan3__(thiz, p);
+		vec___ p {"标题", s};
+		pub_->fanqiechaodan3_ic__(thiz, p);
 	}
 
 	bool exited_ = false;
 	gulong child_exited_ = 0;
 	static void child_exited__(VteTerminal* vte, int code, view___* thiz) {
-#ifdef _debug_
-		printf("child_exited__,,%p pid_%d is_quit_%d\n", thiz, thiz->pid_, pub_->is_quit__());
-#endif
 		if(thiz->nok__())
 			return;
 		vec___ p {"内退",
@@ -90,6 +87,7 @@ class view___ : public plugin::view___ {
 		vte_terminal_feed_child(hr2__(), cmd1.c_str(), cmd1.length());
 	}
 
+	std::string arg2_, arg1_;
 	int for1__(vec___& args, size_t& from) {
 		pub_->eval__(arg2_.c_str(), &args);
 		return pub_->clpars__({
@@ -242,7 +240,7 @@ class view___ : public plugin::view___ {
 					break;
 				}
 				break;
-			case 'r': okopen__(); break;
+			case 'r': open__(arg1_, arg2_); break;
 			}
 		});
 		if(ret2 != 0) return ret2;
@@ -255,8 +253,9 @@ class view___ : public plugin::view___ {
 		return TRUE;
 	}
 
-	view___(const std::string& arg1, const std::string& arg2) : plugin::view___(arg1, arg2) {
+	view___(const std::string& arg2) {
 		hr_ = vte_terminal_new();
+		arg2_ = arg2;
 		vec___ args;
 		size_t from = 0;
 		for1__(args, from);
@@ -266,7 +265,7 @@ class view___ : public plugin::view___ {
  	int scroll__() {return 1;}
 	bool focus2__() {return true;}
 	void on_close__();
-	bool can_close__() {return ok1__();}
+	//bool can_close__() {return ok1__();}
 	bool yuxiangrousi__() {return true;}
 	const char* plugin_id__();
 };
@@ -304,7 +303,7 @@ class plugin___ : public plugin::base___ {
 	}
 
 	public:
-	plugin::view___* new__(const std::string& arg1, const std::string& arg2, bool);
+	plugin::view___* new__(const std::string& arg1, const std::string& arg2);
 	const char* id__() {return "终端";}
 
 	int for__(args___ args, size_t& from, rust_add___ add, void* env) {
@@ -376,9 +375,6 @@ void view___::open__(const std::string& arg1, const std::string& arg2) {
 				size_t i = cmd.find(' ');
 				std::string cmd1 = "/bin/" + (i == std::string::npos ? cmd : cmd.substr(0, i));
 				auto exist = [&]() {
-#ifdef _debug_
-					printf("vte:open__ %s|\n", cmd1.c_str());
-#endif
 					if(pub_->exist_f__(cmd1)) {
 						cmd = cmd1;
 						return true;
@@ -424,23 +420,18 @@ void view___::open__(const std::string& arg1, const std::string& arg2) {
 		return;
 	}
 	pub2_.menu__(this);
-	open_ = true;
 }
 void view___::on_close__() {
 	exited_ = true;
-#ifdef _debug_
-	printf("vte:on_close__  %p exited_%d\n", this, this->exited_);
-#endif
-	//g_signal_handler_disconnect(hr2__(), child_exited_);
 	std::vector<view___*> & vs = pub2_.views_;
 	if(vs.size() > 0)
 		vs.erase(std::find(vs.begin(), vs.end(), this));
 }
 const char* view___::plugin_id__() {return pub2_.id__();}
 
-plugin::view___* plugin___::new__(const std::string& arg1, const std::string& arg2, bool open) {
-	view___* v = new view___(arg1, arg2);
-	if(open) v->open__(arg1, arg2);
+plugin::view___* plugin___::new__(const std::string& arg1, const std::string& arg2) {
+	view___* v = new view___(arg2);
+	v->open__(arg1, arg2);
 	return v;
 }
 

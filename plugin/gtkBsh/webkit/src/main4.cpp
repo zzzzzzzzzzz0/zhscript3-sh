@@ -121,8 +121,8 @@ class view___ : public plugin::view___ {
 #ifdef _debug_
 		printf("cb_title__ %s %s %s\n", pspec->_nick, pspec->_blurb, pspec->name);
 #endif
-		vec___ p {"标题", webkit_web_view_get_title(webView), thiz->is_curr__() ? "1" : ""};
-		pub_->fanqiechaodan3__(thiz, p);
+		vec___ p {"标题", webkit_web_view_get_title(webView)};
+		pub_->fanqiechaodan3_ic__(thiz, p);
 	}
 
 	std::string code_mouse_target_changed_;
@@ -293,10 +293,7 @@ class view___ : public plugin::view___ {
 
 	public:
 	const char* path__() {
-		const char* uri = webkit_web_view_get_uri(hr2__());
-		if(uri)
-			arg1_ = uri;
-		return arg1_.c_str();
+		return webkit_web_view_get_uri(hr2__());
 	}
 	int for__(args___ args, size_t& from, rust_add___ add, void* env) {
 		bool dunhao = false;
@@ -445,10 +442,9 @@ class view___ : public plugin::view___ {
 		return for2__(args, from, pub::clpars_ret_no_);
 	}
 
-	view___(WebKitWebView *rv, const std::string& arg1, const std::string& arg2) : plugin::view___(arg1, arg2) {
+	view___(WebKitWebView *rv, const std::string& arg1, const std::string& arg2) {
 		if(rv) {
 			hr_ = webkit_web_view_new_with_related_view(rv);
-			open_ = true;
 		} else {
 			ctt_ = webkit_web_context_new_ephemeral();
 
@@ -512,9 +508,6 @@ class view___ : public plugin::view___ {
 		webkit_web_view_load_uri(hr2__(), uri.c_str());
 	}
 	void open__(const std::string& uri, const std::string& arg2) {
-		arg1_ = uri;
-		arg2_ = arg2;
-
 		vec___ args;
 		pub_->eval__(arg2.c_str(), &args);
 		size_t from = 0;
@@ -542,16 +535,15 @@ class view___ : public plugin::view___ {
 		}
 
 		load__(uri);
-		open_ = true;
 	}
 	const char* plugin_id__();
 };
 
 class plugin___ : public plugin::base___ {
 	public:
-	plugin::view___* new__(const std::string& arg1, const std::string& arg2, bool open) {
+	plugin::view___* new__(const std::string& arg1, const std::string& arg2) {
 		view___* v = new view___(nullptr, arg1, arg2);
-		if(open) v->open__(arg1, arg2);
+		v->open__(arg1, arg2);
 		return v;
 	}
 	const char* id__() {return "网页";}

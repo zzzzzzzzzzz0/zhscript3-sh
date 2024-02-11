@@ -57,8 +57,9 @@ class view___ : public plugin::view___ {
 		gtk_text_view_scroll_to_iter (hr2__(), ti, 0, false, 0, 0);
 	}
 
+	std::string path_;
 	void openfile__(const std::string& path, bool no_undo = true) {
-		arg1_ = path;
+		path_ = path;
 
 		gchar *contents;
 		gsize length;
@@ -145,7 +146,7 @@ class view___ : public plugin::view___ {
 	}
 
 	public:
-	const char* path__() {return arg1_.c_str();}
+	const char* path__() {return path_.c_str();}
 	int for__(args___ args, size_t& from, rust_add___ add, void* env) {
 		int ret2 = for2__(args, from, pub::clpars_ret_no_);
 		if(ret2 != 0) return ret2;
@@ -296,8 +297,8 @@ class view___ : public plugin::view___ {
 			case 'I':
 				gtk_source_view_set_insert_spaces_instead_of_tabs(hr4__(), tag[1]);
 				break;
-			case 'R': openfile__(arg1_, false); break;
-			case 's': savefile__(tag[1] == '2' ? args[i] : arg1_); break;
+			case 'R': openfile__(path_, false); break;
+			case 's': savefile__(tag[1] == '2' ? args[i] : path_); break;
 			case 'm': {
 				bool ins = modified_changed_.empty();
 				modified_changed_ = args[i];
@@ -308,7 +309,7 @@ class view___ : public plugin::view___ {
 		});
 	}
 
-	view___(const std::string& arg1, const std::string& arg2) : plugin::view___(arg1, arg2) {
+	view___(const std::string& arg1, const std::string& arg2) {
 		buf_ = GTK_SOURCE_BUFFER (gtk_source_buffer_new (NULL));
 		hr_ = gtk_source_view_new_with_buffer(buf_);
 
@@ -325,8 +326,6 @@ class view___ : public plugin::view___ {
 	const char* plugin_id__();
 
 	void open__(const std::string& path, const std::string& arg2) {
-		arg2_ = arg2;
-
 		vec___ args;
 		pub_->eval__(arg2.c_str(), &args);
 		size_t from = 0;
@@ -334,15 +333,14 @@ class view___ : public plugin::view___ {
 		for2__(args, from, pub::clpars_throw_);
 
 		if(!path.empty()) openfile__(path);
-		open_ = true;
 	}
 };
 
 class plugin___ : public plugin::base___ {
 	public:
-	plugin::view___* new__(const std::string& arg1, const std::string& arg2, bool open) {
+	plugin::view___* new__(const std::string& arg1, const std::string& arg2) {
 		view___* v = new view___(arg1, arg2);
-		if(open) v->open__(arg1, arg2);
+		v->open__(arg1, arg2);
 		return v;
 	}
 	const char* id__() {return "源码";}

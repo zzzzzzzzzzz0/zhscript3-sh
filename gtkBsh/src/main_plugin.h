@@ -1,18 +1,24 @@
 #pragma once
-#include "../../plugin/pub.h"
+#include "view.h"
 
 class window___;
 
 class main_plugin___ : public plugin::pub___ {
     public:
-	std::vector<window___*> windows_;
+    std::vector<window___*> windows_;
 
     virtual GtkWidget *window_new__() = 0;
     virtual void quit__() = 0;
     virtual window___* find__(const std::string& name) = 0;
     virtual int goodbye__(args___ p, size_t from) = 0;
 
-	virtual void name__(GtkNotebook*, std::string&) = 0;
+    virtual void name__(GtkNotebook*, std::string&) = 0;
+    virtual plugin::view___* new_view__(const std::string&, const std::string&, const std::string&) = 0;
+
+    virtual int fanqiechaodan__(view___*, const std::string&, rets___ ret = nullptr, argc___ argc = 0, argv___ argv = nullptr, void* env = nullptr) = 0;
+    virtual int fanqiechaodan2__(view___*, const std::string&, args___, rets___ ret = nullptr, void* env = nullptr) = 0;
+    virtual int fanqiechaodan3__(view___*, vec___&, rets___ ret = nullptr, void* env = nullptr) = 0;
+    virtual void std__(view___*, vec___&) = 0;
 };
 
 class code___ {
@@ -46,7 +52,7 @@ class code___ {
         op__(s2, c, s);
     }
 
-    void on_new__(std::function<void(vec___&)> fn, plugin::view___* v, main_plugin___* pub) {
+    void on_new__(std::function<void(vec___&)> fn, view___* v, main_plugin___* pub) {
         if(!code_new_.empty()) {
             vec___ args;
             if(fn)
@@ -59,7 +65,7 @@ class code___ {
         }
     }
 
-    void on_del__(plugin::view___* v, main_plugin___* mp) {
+    void on_del__(view___* v, main_plugin___* mp) {
 		if(!code_del_.empty()) {
 			vec___ args {std::to_string(v->id_),
                 v->is_curr__() ? "1" : "",

@@ -1,7 +1,7 @@
 #include "pub2.h"
 
 void foreach__(const std::string& tag, args___ p, size_t i, rust_add___ add, void* env, bool& dunhao,
-        plugin::view___* view, main_plugin___* mp) {
+        view___* view, main_plugin___* mp) {
     char c = tag[1];
     const std::string& s = p[i + (c >= '0' ? 0 : 1)];
     auto fn = [&](auto& v) {
@@ -63,9 +63,6 @@ static void grp_move__(size_t id, int& i2, GtkNotebook *nb, const std::vector<Gt
         GtkWidget* box1 = a[i3];
         for(auto& v : wi->views_.a_) {
             if(v->box1_ == box1) {
-#ifdef _debug_
-				printf("grp_move__ %d i=%d %d %lu==%lu %lu\n", shangtuo, i3, i2, v->upid_, id, v->id_);
-#endif
                 if(v->upid_ == id) {
                     if(shangtuo) {
                         ++i2;
@@ -77,7 +74,7 @@ static void grp_move__(size_t id, int& i2, GtkNotebook *nb, const std::vector<Gt
         }
     }
 }
-void move__(plugin::view___* view, const std::string& s2, char grp, size_t gid, char op) {
+void move__(view___* view, const std::string& s2, char grp, size_t gid, char op) {
 	size_t id = view->id_;
 	int i1 = view->page_num__();
 	GtkNotebook *nb = view->nb__();

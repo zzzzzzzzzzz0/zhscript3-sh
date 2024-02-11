@@ -7,20 +7,12 @@
 namespace plugin {
 
 class view___ : public widget___ {
-	protected:
-	bool open_ = false;
-
 	public:
-	size_t id_ = 0, upid_ = 0;
-	std::string arg1_, arg2_, attach_;
-	bool is_die_ = false;
+	void *p_;
+
 	virtual const char* path__() = 0;
 
-	view___(const std::string& arg1, const std::string& arg2) : arg1_(arg1),arg2_(arg2) {}
-
 	virtual void open__(const std::string& arg1, const std::string& arg2) = 0;
-	void okopen__() {if(!open_) open__(arg1_, arg2_);}
-	bool is_open__() {return open_;}
 
 	virtual int for__(args___ args, size_t& from, rust_add___ add, void* env) = 0;
 	virtual const char* plugin_id__() = 0;
@@ -28,27 +20,7 @@ class view___ : public widget___ {
 	virtual bool can_close__() {return true;}
 	virtual bool yuxiangrousi__() {return false;}
 
-	GtkWidget *nb1_ = nullptr, *box1_ = nullptr, *kou_nb1_ = nullptr, *kou_box1_ = nullptr;
-	GtkNotebook *nb__() {return GTK_NOTEBOOK(nb1_);}
-	GtkBox* box__() {return GTK_BOX(box1_);}
-	void *window_ = nullptr, *label_box_ = nullptr;
-	char has_close_ = '\0';
-	bool need_focus_ = false;
-
-	int page_num__() {
-		return gtk_notebook_page_num(nb__(), box1_);
-	}
-	void curr__() {
-		okopen__();
-		gtk_notebook_set_current_page (nb__(), page_num__());
-		if(kou_nb1_) {
-			GtkNotebook *nb = GTK_NOTEBOOK(kou_nb1_);
-			gtk_notebook_set_current_page (nb, gtk_notebook_page_num(nb, kou_box1_));
-		}
-	}
-	bool is_curr__() {
-		return gtk_notebook_get_current_page (nb__()) == page_num__();
-	}
+	bool need_focus_;
 	void focus__() {
 		gtk_widget_grab_focus(hr_);
 	}
@@ -80,8 +52,7 @@ class pub___ {
 	virtual int fanqiechaodan__(view___*, const std::string&, rets___ ret = nullptr, argc___ argc = 0, argv___ argv = nullptr, void* env = nullptr) = 0;
 	virtual int fanqiechaodan2__(view___*, const std::string&, args___, rets___ ret = nullptr, void* env = nullptr) = 0;
 	virtual int fanqiechaodan3__(view___*, vec___&, rets___ ret = nullptr, void* env = nullptr) = 0;
-	//virtual int fanqiechaodan4__(view___*, args___, rets___ ret = nullptr, void* env = nullptr) = 0;
-	virtual void std__(view___*, vec___&) = 0;
+	virtual int fanqiechaodan3_ic__(view___*, vec___&, rets___ ret = nullptr, void* env = nullptr) = 0;
 	virtual void add__(const char* s, bool& dunhao, rust_add___ add, void* env) = 0;
 
 	virtual GtkWidget *pack__(plugin::view___*, plugin::view___*, int) = 0;
@@ -103,7 +74,7 @@ class pub___ {
 
 class base___ {
 	public:
-	virtual view___* new__(const std::string& arg1, const std::string& arg2, bool) = 0;
+	virtual view___* new__(const std::string& arg1, const std::string& arg2) = 0;
 	virtual const char* id__() = 0;
 
 	virtual int for__(args___ args, size_t& from, rust_add___ add, void* env) = 0;

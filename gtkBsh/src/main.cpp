@@ -81,7 +81,7 @@ class main___ : public main_plugin___ {
 				v2.insert(v2.end(), v->begin(), v->end());
 			if(!s2.empty())
 				v2.push_back(s2);
-			fanqiechaodan2__(nullptr, coderr, v2);
+			fanqiechaodan2__((view___*)nullptr, coderr, v2);
 			code_.coderr_ = coderr;
 			return;
 		}
@@ -213,31 +213,39 @@ class main___ : public main_plugin___ {
 	}
 
 	int fanqiechaodan__(plugin::view___* view, const std::string& s, rets___ ret = nullptr, argc___ argc = 0, argv___ argv = nullptr, void* env = nullptr) {
+		return fanqiechaodan__(view ? (view___*)view->p_ : nullptr, s, ret, argc, argv, env);
+	}
+	int fanqiechaodan__(view___* view, const std::string& s, rets___ ret = nullptr, argc___ argc = 0, argv___ argv = nullptr, void* env = nullptr) {
 		return try__<int>([&]() {
 			return fanqiechaodan__(view, (jiekou__(view) + s).c_str(), ret, nullptr, env, argc, argv, nullptr);
 		}, 0, [&](const std::string& s) {
 			pr__(nullptr, s);
 		});
 	}
-	std::string jiekou__(plugin::view___* view, const char* name = "") {
+	std::string jiekou__(view___* view, const char* name = "") {
 		return "函数“壳”、“口”、“接口”" + std::string(name) + "以“*" + std::to_string((unsigned long)fanqiechaodan9__) + "”、“-u:" + std::to_string((unsigned long)view) + "-c*-$:A-Z”。";
 	}
 	int fanqiechaodan2__(plugin::view___* view, const std::string& s, args___ p, rets___ ret = nullptr, void* env = nullptr) {
+		return fanqiechaodan2__(view ? (view___*)view->p_ : nullptr, s, p, ret, env);
+	}
+	int fanqiechaodan2__(view___* view, const std::string& s, args___ p, rets___ ret = nullptr, void* env = nullptr) {
 		std::vector<const char*> p2;
 		for (std::string const& i : p)
 			p2.push_back(i.data());
 		return fanqiechaodan__(view, s, ret, p2.size(), p2.data(), env);
 	}
-	int fanqiechaodan3__(plugin::view___* v, vec___& a, rets___ ret = nullptr, void* env = nullptr) {
+	int fanqiechaodan3__(plugin::view___* view, vec___& a, rets___ ret = nullptr, void* env = nullptr) {
+		return fanqiechaodan3__(view ? (view___*)view->p_ : nullptr, a, ret, env);
+	}
+	int fanqiechaodan3__(view___* v, vec___& a, rets___ ret = nullptr, void* env = nullptr) {
 		if(v) std__(v, a);
 		return fanqiechaodan2__(v, code_.code_, a, ret, env);
 	}
-	/*int fanqiechaodan4__(plugin::view___* v, args___ p, rets___ ret = nullptr, void* env = nullptr) {
-		return fanqiechaodan2__(v, code_.code_, p, ret, env);
-	}*/
-	void std__(plugin::view___* v, vec___& a) {
-		/*a.insert(a.begin() + 1, v->has_name_ ? v->name__() : "");
-		a.insert(a.begin() + 2, v->plugin_id__());*/
+	int fanqiechaodan3_ic__(plugin::view___* v, vec___& a, rets___ ret = nullptr, void* env = nullptr) {
+		a.push_back(((view___*)v->p_)->is_curr__() ? "1" : "");
+		return fanqiechaodan3__(v, a, ret, env);
+	}
+	void std__(view___* v, vec___& a) {
 		a.push_back(v->name__());
 		a.push_back(std::to_string(v->id_));
 		a.push_back(v->plugin_id__());
@@ -247,7 +255,7 @@ class main___ : public main_plugin___ {
 	int main_eval__(args___ p, rets___ ret = nullptr, void* env = nullptr) {return eval__(code_.code_.c_str(), p, ret, env);}
 	bool is_focus__(plugin::view___* v) {
 		if(gtk_widget_is_focus(v->hr__())) {
-			window___* w = (window___*)v->window_;
+			window___* w = (window___*)((view___*)v->p_)->window_;
 			//gtk_window_has_toplevel_focus
 			if(gtk_window_is_active(w->hr2__()))
 				return true;
@@ -274,7 +282,7 @@ class main___ : public main_plugin___ {
 	std::vector<plugin___*> plugins_;
 	bool is_quit_ = false;
 
-	static int fanqiechaodan__(plugin::view___* by, const char* s, rets___ ret, rust_add___ add, void* env, argc___ argc, argv___ argv, void* ptr) {
+	static int fanqiechaodan__(view___* by, const char* s, rets___ ret, rust_add___ add, void* env, argc___ argc, argv___ argv, void* ptr) {
 		static main___* thiz = nullptr;
 		if(ptr)
 			thiz = (main___*)ptr;
@@ -289,7 +297,7 @@ class main___ : public main_plugin___ {
 			if(ret2 != 0)
 				return ret2;
 		}
-		plugin::view___* view_ = by;
+		view___* view_ = by;
 		window___* window = view_ ? (window___*)view_->window_ : (!thiz->windows_.empty() ? thiz->windows_[0] : nullptr);
 		GtkWidget* nb1_ = view_ ? view_->nb1_ : nullptr;
 		bool is1 = false, dunhao = false;
@@ -324,7 +332,7 @@ class main___ : public main_plugin___ {
 		}, p, from, [&](const std::string& tag, size_t i, size_t argc, int& fn2_ret2) {
 			switch(tag[0]) {
 			case 'j': {
-				plugin::view___* view = nullptr;
+				view___* view = nullptr;
 				switch(tag[1]) {
 					case 'i': {
 						size_t id = std::stoul(p[i]);
@@ -421,7 +429,7 @@ class main___ : public main_plugin___ {
 					};
 					switch(tag[1]) {
 					case 'w': fn(window); break;
-					default: fn(view_); break;
+					default: fn(view_->p__()); break;
 					}
 					break; }
 				default: {
@@ -434,7 +442,7 @@ class main___ : public main_plugin___ {
 					};
 					switch(tag[1]) {
 					case 'w': fn(window); break;
-					default: fn(view_); break;
+					default: fn(view_->p__()); break;
 					}
 					break; }
 				}
@@ -494,7 +502,7 @@ class main___ : public main_plugin___ {
 			return 1;
 		return thiz->goodbye__(p, from);
 	}
-	static void fanqiechaodan9__(plugin::view___* v, const char* s, rust_add___ add, void* env, argc___ argc, ...) {
+	static void fanqiechaodan9__(view___* v, const char* s, rust_add___ add, void* env, argc___ argc, ...) {
 		const char** args = new const char* [argc];
 		{
 			va_list argv;
@@ -516,7 +524,7 @@ class main___ : public main_plugin___ {
 	}
 
 	static gboolean idle_close__(gpointer p) {
-		plugin::view___* v = (plugin::view___*)p;
+		view___* v = (view___*)p;
 		window___::close__(v, true);
 		return G_SOURCE_REMOVE;
 	}
@@ -546,7 +554,7 @@ class main___ : public main_plugin___ {
 			std::string s = R"(
 解释下代码
 	模块“外壳”。
-	赋予“外壳名”、“外壳版本”以“乙壳”、“3.7.31”。
+	赋予“外壳名”、“外壳版本”以“乙壳”、“4.2.11”。
 	)" + jiekou__(nullptr, "、“番茄炒蛋”") + R"(
 上代码)";
 			l4_.eval__(s.c_str());
@@ -631,7 +639,8 @@ class main___ : public main_plugin___ {
 	void add__(args___ p, size_t& from, const std::string& wname) {
 		window___* window = find__(wname);
 		if(window) {
-			gtk_window_present(window->hr2__());
+			if(gtk_window_get_accept_focus(window->hr2__()))
+				gtk_window_present(window->hr2__());
 			for__(window, nullptr, nullptr, p, from, 1, true, false, false, nullptr, nullptr);
 		} else {
 			window = new window___(this, &code_);
@@ -676,7 +685,7 @@ class main___ : public main_plugin___ {
 			}
 		});
 	}
-	int for__(window___* window, GtkWidget *nb1, plugin::view___* view, args___ p, size_t& from, int fn2_ret,
+	int for__(window___* window, GtkWidget *nb1, view___* view, args___ p, size_t& from, int fn2_ret,
 			bool no_newindow, bool nb1_need_new, bool is1, rust_add___ add, void* env) {
 		std::string wname;
 		int ret2;
@@ -704,28 +713,33 @@ class main___ : public main_plugin___ {
 		}
 		if(window) {
 			ret2 = window->for__(p, from, no_newindow, add, env); if(ret2 != 0) return ret2;
-			ret2 = window->for__(nb1, view, p, from, [&](const std::string& pname,
-					const std::string& arg, const std::string& arg2, bool open) {
-				plugin___* pi = nullptr;
-				for(auto& pii : plugins_) {
-					if(pii->hr_->id__() == pname) {
-						pi = pii;
-						break;
-					}
-				}
-				if(!pi)
-					throw "不支持" + pname + "插件";
-				return pi->hr_->new__(arg, arg2, open);
-			}, no_newindow, nb1_need_new, is1, add, env);
+			ret2 = window->for__(nb1, view, p, from, no_newindow, nb1_need_new, is1, add, env);
 			if(ret2 != 0) return ret2;
 		}
 		if(fn2_ret == 1)
 			return goodbye__(p, from);
 		return 0;
 	}
+	plugin::view___* new_view__(const std::string& pname, const std::string& arg, const std::string& arg2) {
+		plugin___* pi = nullptr;
+		for(auto& pii : plugins_) {
+			if(pii->hr_->id__() == pname) {
+				pi = pii;
+				break;
+			}
+		}
+		if(!pi)
+			throw "不支持" + pname + "插件";
+		return pi->hr_->new__(arg, arg2);
+	}
 	int goodbye__(args___ p, size_t from) {
 		if(from < p.size()) {
-			pr__(&p, "未竟 " + std::to_string(from));
+			switch(l4_.erret_.i_) {
+				default:
+				pr__(&p, "未竟 " + std::to_string(from));
+				case 250: case 251: case 252:
+				break;
+			}
 			return 0;
 		}
 		return 1;
@@ -759,7 +773,7 @@ class main___ : public main_plugin___ {
 			g_free((void*)s1);
 		}
 	}
-	int for__(plugin::view___* view, args___ p, size_t& from, plugin::view___* by, rust_add___ add, void* env) {
+	int for__(view___* view, args___ p, size_t& from, view___* by, rust_add___ add, void* env) {
 		bool dunhao = false;
 		auto add_u = [&](size_t i) {
 			add__(std::to_string(i).c_str(), dunhao, add, env);
@@ -805,6 +819,8 @@ class main___ : public main_plugin___ {
 			{"-页换簿", "M", 2},
 			{"-得叠", "=+", 0},
 			{"-得贴板", "=X", 0},
+			{"-隐", "h1", 0},
+			{"-显", "h", 0},
 			{"-遍历", "F", 2, "簿"},
 			{"-遍历转", "F ", 2},
 			{"-遍历2", "F2", 1, "所有"},
@@ -884,7 +900,7 @@ class main___ : public main_plugin___ {
 			case 'i': add_u(code_.start_i_); break;
 			case 'M': {
 				const std::string& name = p[i], bname = p[i + 1];
-				plugin::view___* v;
+				view___* v;
 				for(auto& w : windows_)
 					if((v = w->views_.find__([&](auto v) {return v->name__() == name;})))
 						break;
@@ -920,6 +936,12 @@ class main___ : public main_plugin___ {
 						break;
 					}
 					break;
+				case 'h':
+					if(tag[1])
+						gtk_widget_hide(view->hr__());
+					else
+						gtk_widget_show(view->hr__());
+					break;
 				case 'x':
 					if(tag[1] == '2' /*|| view == by*/)
 						g_idle_add(idle_close__, view);
@@ -932,7 +954,7 @@ class main___ : public main_plugin___ {
 		});
 		if(ret2 != 0) return ret2;
 		if(view) {
-			ret2 = view->for__(p, from, add, env); if(ret2 != 0) return ret2;
+			view->for__(p, from, add, env); if(ret2 != 0) return ret2;
 		}
 		return 0;
 	}
@@ -975,9 +997,6 @@ main (int    argc,
 				auto e__ = [&](const char* x) {
 					s2 = x;
 					std::string s3 = s + s2;
-#ifdef _debug_
-					std::cout << s3 << std::endl;
-#endif
 					if(m.exist_f__(s3)) {
 						src = s3;
 						return true;
