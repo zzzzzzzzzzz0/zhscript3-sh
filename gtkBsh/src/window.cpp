@@ -495,7 +495,11 @@ int window___::for__(GtkWidget *nb1_, view___*& view_, args___ p, size_t& from,
 					if((page_curr2 && !curr2_lazy) | no_lazy)
 						view_->mk_p__([&](const std::string& s, const std::string& s1, const std::string& s2) {
 							return pub_->new_view__(s, s1, s2);
-						});
+						},  [&](args___ a, size_t& l) {
+							return for2_2__(view_, a, l);
+						}, [&](args___ a, size_t l) {
+						return pub_->goodbye__(a, l);
+					});
 					pack__(view_, box1_, label_box_, nb1_, id,
 						posi != 0 ? by_ : nullptr, can_close, can_close2, page_curr2,
 						w == -1 && h == -1 || in_nb2, padding);
@@ -769,6 +773,19 @@ int window___::for__(args___ p, size_t& from, bool restart, rust_add___ add, voi
 	return 0;
 }
 
+int window___::for2_2__(view___* view, args___ p, size_t& from) {
+	return pub_->clpars__({
+		{"-字体", "f", 1},
+	}, p, from, [&](const std::string& tag, size_t i, size_t argc, int& ret2) {
+		switch(tag[0]) {
+		case 'f': {
+			PangoFontDescription *font_desc = pango_font_description_from_string (p[i].c_str());
+			gtk_widget_modify_font (view->hr__(), font_desc);
+			pango_font_description_free (font_desc);
+			break; }
+		}
+	});
+}
 int window___::for2__(view___* view, args___ p, size_t& from, int fn2_ret2) {
 	label_box___* label_box_ = (label_box___*)view->label_box_;
 	bool b_ = true, b2_ = false;
@@ -787,7 +804,6 @@ int window___::for2__(view___* view, args___ p, size_t& from, int fn2_ret2) {
 		{"-追钮", "b++", 1},
 		{"-加钮-", "b|", 0},
 		{"-叠", "+", 1},
-		{"-字体", "f", 1},
 		{"-按键", "ek", 1},
 	}, p, from, [&](const std::string& tag, size_t i, size_t argc, int& ret2) {
 		switch(tag[0]) {
@@ -883,11 +899,6 @@ int window___::for2__(view___* view, args___ p, size_t& from, int fn2_ret2) {
 		case '+':
 			view->is_die_ = l4_.true_(p[i].c_str());
 			break;
-		case 'f': {
-			PangoFontDescription *font_desc = pango_font_description_from_string (p[i].c_str());
-			gtk_widget_modify_font (view->hr__(), font_desc);
-			pango_font_description_free (font_desc);
-			break; }
 		case 'e':
 			switch(tag[1]) {
 				case 'k': {
@@ -901,6 +912,7 @@ int window___::for2__(view___* view, args___ p, size_t& from, int fn2_ret2) {
 	if(ret != 0) return ret;
 	plugin::view___* v1 = (plugin::view___*)view->p__();
 	if(v1) {
+		ret = for2_2__(view, p, from); if(ret != 0) return ret;
 		if(tuodong___::for__(p, from, this, v1) != std::string::npos)
 			return 1;
 	}

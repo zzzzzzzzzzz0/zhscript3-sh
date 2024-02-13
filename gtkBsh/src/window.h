@@ -128,6 +128,10 @@ class window___ : public widget___ {
 		if(!v->p__()) {
 			v->mk_p__([&](const std::string& s, const std::string& s1, const std::string& s2) {
 				return pub_->new_view__(s, s1, s2);
+			}, [&](args___ a, size_t& l) {
+				return for2_2__(v, a, l);
+			}, [&](args___ a, size_t l) {
+				return pub_->goodbye__(a, l);
 			});
 			pack_box__(v);
 		}
@@ -146,6 +150,7 @@ class window___ : public widget___ {
 					continue;
 				}
 				if(v->lazy_) {
+					v->lazy_ = false;
 					g_idle_add(idle_switch_page__, new switch_page___{w, v, self, page_num});
 				} else
 					w->switch_page2__(v, self, page_num);
@@ -185,6 +190,8 @@ class window___ : public widget___ {
 		thiz->pub_->fanqiechaodan2__(nullptr, thiz->window_state_event_, args);
 		return false;
 	}
+
+	int for2_2__(view___* view, args___ p, size_t& from);
 
 	public:
 	views___ views_;

@@ -31,8 +31,10 @@ class view___ {
         return v;
     }
 
-	using new_view___ = std::function<plugin::view___*(const std::string&, const std::string&, const std::string&)>;
-    void mk_p__(new_view___ new_view) {
+    void mk_p__(
+    std::function<plugin::view___*(const std::string&, const std::string&, const std::string&)> new_view,
+    std::function<int (args___, size_t&)> for2_2,
+    std::function<int (args___, size_t)> goodbye) {
         p_ = new_view(pluginame_, arg1_, arg2_);
         if(!p_)
             return;
@@ -47,7 +49,10 @@ class view___ {
             gtk_widget_set_can_focus(p_->hr__(), false);
         if(!args1_.empty()) {
             size_t from = 0;
-            int ret2 = p_->for__(args1_, from, nullptr, nullptr);
+            for2_2(args1_, from);
+            p_->for__(args1_, from, nullptr, nullptr);
+            goodbye(args1_, from);
+            args1_.clear();
         }
         open_ = true;
     }
