@@ -17,7 +17,6 @@ class view___ : public plugin::view___ {
 	static gboolean idle_oft__(gpointer p) {
 		view___* v = (view___*)p;
 		GtkTextIter ti;
-		//gtk_text_buffer_get_end_iter(v->buf2__(), &ti);
 		gtk_text_buffer_get_iter_at_mark (v->buf2__(), &ti, gtk_text_buffer_get_insert (v->buf2__()));
 		if(v->line_ > no_set_) {
 			gtk_text_iter_set_line (&ti, v->line_);
@@ -26,6 +25,7 @@ class view___ : public plugin::view___ {
 		}
 		else if(v->line_oft_ > no_set_) {
 			if(v->line_oft_ < 0) {
+				gtk_text_buffer_get_end_iter(v->buf2__(), &ti);
 				int i = gtk_text_iter_get_offset (&ti);
 				v->line_oft_ += i + 1;
 			}
