@@ -7,6 +7,7 @@ class view___ : public plugin::view___ {
 	GtkSourceBuffer *buf_;
 
 	std::string modified_changed_;
+	gulong id_modified_changed_ = 0;
 	static void cb_modified_changed__ (GtkTextBuffer *textbuffer, view___* thiz) {
 		vec___ p {gtk_text_buffer_get_modified(textbuffer) ? "*" : ""};
 		pub_->fanqiechaodan2__(thiz, thiz->modified_changed_, p);
@@ -299,12 +300,11 @@ class view___ : public plugin::view___ {
 				break;
 			case 'R': openfile__(path_, false); break;
 			case 's': savefile__(tag[1] == '2' ? args[i] : path_); break;
-			case 'm': {
-				bool ins = modified_changed_.empty();
+			case 'm':
 				modified_changed_ = args[i];
-				if(ins)
-					g_signal_connect(buf2__(), "modified-changed", G_CALLBACK(cb_modified_changed__), this);
-				break; }
+				if(!id_modified_changed_)
+					id_modified_changed_ = g_signal_connect(buf2__(), "modified-changed", G_CALLBACK(cb_modified_changed__), this);
+				break;
 			}
 		});
 	}
