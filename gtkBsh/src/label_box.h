@@ -37,6 +37,7 @@ class label_box___ {
 	int has_close_ = 0;
     GtkAlign top_align_, bottom_align_;
     bool vert_;
+	void *views_ = nullptr;
 
     std::vector<button___*> buttons_;
 

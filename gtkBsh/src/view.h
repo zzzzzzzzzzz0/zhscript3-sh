@@ -69,7 +69,7 @@ class view___ {
 
     void open__(const std::string& arg1, const std::string& arg2) {
         if(p_) {
-            p_->open__(arg1_, arg2_);
+            p_->open__(arg1, arg2);
             open_ = true;
         }
     }
@@ -86,8 +86,10 @@ class view___ {
         return p_ ? p_->plugin_id__() : pluginame_.c_str();
     }
     void on_close__() {
-        if(p_)
+        if(p_) {
             p_->on_close__();
+            p_ = nullptr;
+        }
     }
     bool can_close__() {
         return p_ ? p_->can_close__() : true;
@@ -99,7 +101,7 @@ class view___ {
 	GtkWidget *nb1_ = nullptr, *box1_ = nullptr, *kou_nb1_ = nullptr, *kou_box1_ = nullptr;
 	GtkNotebook *nb__() {return GTK_NOTEBOOK(nb1_);}
 	GtkBox* box__() {return GTK_BOX(box1_);}
-	void *window_ = nullptr, *label_box_ = nullptr, *buju_ = nullptr, *views_ = nullptr;
+	void *window_ = nullptr, *label_box_ = nullptr, *buju_ = nullptr;
 	char has_close_ = '\0';
 	bool need_focus_ = false, lazy_ = false, hulve1qie_ = false, expand_;
     int padding_;

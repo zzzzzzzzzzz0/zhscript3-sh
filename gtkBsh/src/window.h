@@ -38,7 +38,7 @@ class window___ : public widget___ {
 		page_vs2___ views = page_vs2__(view);
 		if(!views) {
 			views = new page_vs___();
-			view->views_ = views;
+			((label_box___*)view->label_box_)->views_ = views;
 		}
 		if(can_close) {
 			if(++label_box->has_close_ == 1) {
@@ -210,7 +210,7 @@ class window___ : public widget___ {
 	std::vector<buju___*> bujus_;
 	buju___*buju__(view___*v) {return (buju___*)v->buju_;}
 	static page_vs2___ page_vs2__(view___* v) {
-		return (page_vs2___)v->views_;
+		return (page_vs2___)((label_box___*)v->label_box_)->views_;
 	}
 
 	window___(main_plugin___ * pub, code___* code) : pub_(pub), code_(code) {
