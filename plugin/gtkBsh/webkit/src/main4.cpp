@@ -246,14 +246,47 @@ class view___ : public plugin::view___ {
 					return true;
 				bool good;
 				if(s == zs_)
-					good = ret.size() == 1 || ret.size() == 2 && ret[1].empty();
+					good = true;
 				else {
 					if(ret.size() == 1 && ret[0].empty())
 						return true;
 					good = false;
 				}
 				if(good) {
-					webkit_script_dialog_prompt_set_text(dialog, ret[0].c_str());
+					std::string s1;
+					auto add = [&](std::string &s2) {
+						if(s2 == "undefined" || s2 == "null" || s2 == "true" || s2 == "false")
+							s1 += s2;
+						else {
+							s1 += '"';
+							for(size_t i = 0; i < s2.length(); i++) {
+								char c = s2[i];
+								switch(c) {
+									case '"': case '\\': case '\n': case '\r':
+									s1 += '\\';
+									switch(c) {
+										case '\n': c = 'n'; break;
+										case '\r': c = 'r'; break;
+									}
+									break;
+								}
+								s1 += c;
+							}
+							s1 += '"';
+						}
+					};
+					if(ret.size() == 1)
+						add(ret[0]);
+					else {
+						s1 += '[';
+						for(size_t i = 0; i < ret.size(); i++) {
+							if(i > 0)
+								s1 += ',';
+							add(ret[i]);
+						}
+						s1 += ']';
+					}
+					webkit_script_dialog_prompt_set_text(dialog, s1.c_str());
 				} else
 					pub_->pr__(&ret, "不能处理：");
 				return true;
