@@ -100,11 +100,15 @@ class view___ : public plugin::view___ {
 	}
 	int for2__(args___ args, size_t& from, int fn2_ret2) {
 		return pub_->clpars__({
+			{"-缩放", "S", 1},
 			{"-行数", "l", 1},
 			{"-背景色", "Cb", 1},
 			{"-前景色", "Cf", 1},
 		}, args, from, [&](const std::string& tag, size_t i, size_t argc, int& ret2) {
 			switch(tag[0]) {
+				case 'S':
+				vte_terminal_set_font_scale(hr2__(), std::stod(args[i]));
+				break;
 				case 'l':
 				vte_terminal_set_scrollback_lines(hr2__(), std::stoi(args[i]));
 				break;

@@ -301,10 +301,14 @@ class view___ : public plugin::view___ {
 
 	int for2__(args___ args, size_t& from, int fn2_ret2) {
 		return pub_->clpars__({
+			{"-缩放", "z", 1},
 			{"-背景色", "B", 1},
 			{"-光标行列", "pl", 2},
 		}, args, from, [&](const std::string& tag, size_t i, size_t argc, int& ret2) {
 			switch(tag[0]) {
+			case 'z':
+				webkit_web_view_set_zoom_level(hr2__(), std::stod(args[i]));
+				break;
 			case 'B': {
 				GdkRGBA bc;
 				const std::string& s = args[i];
