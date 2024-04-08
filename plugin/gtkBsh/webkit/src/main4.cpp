@@ -125,6 +125,15 @@ class view___ : public plugin::view___ {
 		pub_->fanqiechaodan3_ic__(thiz, p);
 	}
 
+	static void std__(std::string& s) {
+		std::string s2 = "<meta charset=";
+		if(s.find(s2) == std::string::npos)
+			s = s2 + "utf-8 />" + s;
+		s2 = "function z$(";
+		if(s.find(s2) == std::string::npos)
+			s = "<script>" + s2 + "s){prompt('zhscript-v',s);}function z$1(s){return eval(prompt('zhscript',s));}</script>" + s;
+	}
+
 	std::string code_mouse_target_changed_;
 	static void cb_mouse_target_changed__(WebKitWebView *webView, WebKitHitTestResult *hitTestResult, guint mouseModifiers, view___* thiz) {
 		//auto s = [](const char* s) {return s ? s : "NULL";};
@@ -231,6 +240,7 @@ class view___ : public plugin::view___ {
 				out(ret[0], true, ret.size() > 2 ? ret[2].c_str() : nullptr);
 				break;
 			}
+			std__(ret[0]);
 			out(ret[0], false, ret.size() > 1 && !ret[1].empty() ? ret[1].c_str() : "text/html");
 		} while(false);
 	}
