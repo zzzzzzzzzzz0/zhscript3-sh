@@ -257,7 +257,7 @@ class main___ : public main_plugin___ {
 		if(gtk_widget_is_focus(v->hr__())) {
 			window___* w = (window___*)((view___*)v->p_)->window_;
 			//gtk_window_has_toplevel_focus
-			if(gtk_window_is_active(w->hr2__()))
+			if(w->is_act__())
 				return true;
 		}
 		return false;
@@ -622,7 +622,7 @@ class main___ : public main_plugin___ {
 	unsigned act_ = 0;
 	void act__() {
 		if(++act_ > 1)
-			gtk_window_present(windows_[0]->hr2__());
+			windows_[0]->act__();
 		if(!ret_.empty()) {
 			add__(ret_, ret_from_, "");
 			ret_.clear();
@@ -640,7 +640,7 @@ class main___ : public main_plugin___ {
 		window___* window = find__(wname);
 		if(window) {
 			if(gtk_window_get_accept_focus(window->hr2__()))
-				gtk_window_present(window->hr2__());
+				window->act__();
 			for__(window, nullptr, nullptr, p, from, 1, true, false, false, nullptr, nullptr);
 		} else {
 			window = new window___(this, &code_);
@@ -922,7 +922,11 @@ class main___ : public main_plugin___ {
 					return;
 				}
 				switch(tag[0]) {
-				case 'T': view->curr__(); break;
+				case 'T': {
+					window___* w = (window___*)view->window_;
+					if(!w->is_act__()) w->act__();
+					view->curr__();
+					break; }
 				case 'f': view->focus__(); break;
 				case 'N': show_tabs__(view->nb__(), tag[1]); break;
 				case 'u': view->upid_ = std::stoul(p[i]); break;
