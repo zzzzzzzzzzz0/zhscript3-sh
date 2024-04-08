@@ -285,6 +285,9 @@ class window___ : public widget___ {
 			gtk_window_close(w->hr2__());
 	}
 
+	void act__() {gtk_window_present(hr2__());}
+	bool is_act__() {return gtk_window_is_active(hr2__());}
+
 	void show__() {gtk_widget_show (hr_);}
 	GtkWindow* hr2__() {return GTK_WINDOW (hr_);}
 	GdkWindow *hr3__() {return gtk_widget_get_window(hr_);}

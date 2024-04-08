@@ -659,7 +659,7 @@ int window___::for__(args___ p, size_t& from, bool restart, rust_add___ add, voi
 			default: gtk_window_unfullscreen(hr2__()); break;
 			}
 			break;
-		case 'P': gtk_window_present(hr2__()); break;
+		case 'P': act__(); break;
 		case '=':
 			switch(tag[1]) {
 				case 'm': {
@@ -673,7 +673,7 @@ int window___::for__(args___ p, size_t& from, bool restart, rust_add___ add, voi
 					add_i2(w2, h);
 					break; }
 				case 'a': add_i(gtk_window_is_maximized(hr2__())); break;
-				case 'A': add_i(gtk_window_is_active(hr2__())); break;
+				case 'A': add_i(is_act__()); break;
 				case 'f': {
 					int sw, sh, w, h;
 					scrn_w_h__(sw, sh);
