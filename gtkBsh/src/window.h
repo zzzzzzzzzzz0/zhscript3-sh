@@ -164,30 +164,33 @@ class window___ : public widget___ {
 	}
 
 	std::string window_state_event_;
+	bool is_icon_ = false;
 	static gboolean window_state_event__(GtkWidget *widget, GdkEventWindowState *event, window___* thiz) {
-		vec___ args;
-		auto fn = [&](GdkWindowState ws) {
-			std::string s;
-			if((ws & GDK_WINDOW_STATE_ICONIFIED))
-				s += "最小化";
-			if((ws & GDK_WINDOW_STATE_MAXIMIZED))
-				s += "最大化";
-			if((ws & GDK_WINDOW_STATE_STICKY))
-				s += "总可见";
-			if((ws & GDK_WINDOW_STATE_FULLSCREEN))
-				s += "全屏";
-			if((ws & GDK_WINDOW_STATE_ABOVE))
-				s += "置顶";
-			if((ws & GDK_WINDOW_STATE_BELOW))
-				s += "置底";
-			if((ws & GDK_WINDOW_STATE_FOCUSED))
-				s += "焦点";
-			args.push_back(s);
-			//args.push_back(std::to_string(ws));
-		};
-		fn(event->new_window_state);
-		fn(event->changed_mask);
-		thiz->pub_->fanqiechaodan2__(nullptr, thiz->window_state_event_, args);
+		thiz->is_icon_ = (event->new_window_state & GDK_WINDOW_STATE_ICONIFIED);
+		if(!thiz->window_state_event_.empty()) {
+			vec___ args;
+			auto fn = [&](GdkWindowState ws) {
+				std::string s;
+				if((ws & GDK_WINDOW_STATE_ICONIFIED))
+					s += "最小化";
+				if((ws & GDK_WINDOW_STATE_MAXIMIZED))
+					s += "最大化";
+				if((ws & GDK_WINDOW_STATE_STICKY))
+					s += "总可见";
+				if((ws & GDK_WINDOW_STATE_FULLSCREEN))
+					s += "全屏";
+				if((ws & GDK_WINDOW_STATE_ABOVE))
+					s += "置顶";
+				if((ws & GDK_WINDOW_STATE_BELOW))
+					s += "置底";
+				if((ws & GDK_WINDOW_STATE_FOCUSED))
+					s += "焦点";
+				args.push_back(s);
+			};
+			fn(event->new_window_state);
+			fn(event->changed_mask);
+			thiz->pub_->fanqiechaodan2__(nullptr, thiz->window_state_event_, args);
+		}
 		return false;
 	}
 
@@ -216,6 +219,7 @@ class window___ : public widget___ {
 	window___(main_plugin___ * pub, code___* code) : pub_(pub), code_(code) {
 		hr_ = pub->window_new__();
 		g_signal_connect(hr_, "delete-event", G_CALLBACK(delete_event__), this);
+		g_signal_connect(hr_, "window-state-event", G_CALLBACK(window_state_event__), this);
 	}
 	~window___() {
 		for(auto& i : views_.a_)

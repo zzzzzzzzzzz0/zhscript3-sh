@@ -570,6 +570,7 @@ int window___::for__(args___ p, size_t& from, bool restart, rust_add___ add, voi
 		{"-得移动", "=m", 0},
 		{"-得宽高", "=s", 0},
 		{"-是最大化", "=a", 0},
+		{"-是最小化", "=i", 0},
 		{"-是激活", "=A", 0},
 		{"-是全屏", "=f", 0},
 		{"-截图", "S", 1},
@@ -673,6 +674,7 @@ int window___::for__(args___ p, size_t& from, bool restart, rust_add___ add, voi
 					add_i2(w2, h);
 					break; }
 				case 'a': add_i(gtk_window_is_maximized(hr2__())); break;
+				case 'i': add_i(is_icon_); break;
 				case 'A': add_i(is_act__()); break;
 				case 'f': {
 					int sw, sh, w, h;
@@ -749,12 +751,7 @@ int window___::for__(args___ p, size_t& from, bool restart, rust_add___ add, voi
 					event___* e = new event___(pub_, nullptr);
 					e->conn__(hr__(), p[i - 1], p[i]);
 					break; }
-				case 's': {
-					bool ins = window_state_event_.empty();
-					window_state_event_ = p[i];
-					if(ins)
-						g_signal_connect(hr_, "window-state-event", G_CALLBACK(window_state_event__), this);
-					break; }
+				case 's': window_state_event_ = p[i]; break;
 			}
 			break;
 		case 'M': main_ = true; break;
