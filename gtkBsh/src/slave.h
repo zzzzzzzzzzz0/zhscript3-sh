@@ -14,7 +14,7 @@ class slave___ {
 public:
 	virtual void z__(const char *s) {}
 
-	int init__(const std::vector<std::string>& args, size_t from, GMainContext *mc);
+	int init__(const std::vector<std::string>& args, size_t from, const std::vector<std::string>& envs, GMainContext *mc);
 	void stop__();
 	bool is_stop__() {return stop_;}
 	void send__(const std::string& s);

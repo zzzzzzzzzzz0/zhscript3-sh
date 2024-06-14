@@ -29,7 +29,7 @@ static gboolean cb__(gpointer data) {
 	}
 }
 
-int slave___::init__(const std::vector<std::string>& args, size_t from, GMainContext *mc) {
+int slave___::init__(const std::vector<std::string>& args, size_t from, const std::vector<std::string>& envs, GMainContext *mc) {
 	if(socketpair(AF_UNIX, SOCK_STREAM, 0, sv_) == -1)
 		return 1;
 	ioc_ = g_io_channel_unix_new(sv_[0]);
@@ -79,13 +79,22 @@ int slave___::init__(const std::vector<std::string>& args, size_t from, GMainCon
 		if(setpgid(0, 0) == -1)
 			return 9;
 
-		const char* argv[32];
+		const char* argv[1024];
 		size_t i = 0, max = args.size() - from;
 		for(; i < max;)
 			argv[i++] = args[from + i].c_str();
 		argv[i++] = NULL;
-		if(execvp(argv[0], (char* const*)argv) == -1)
-			return 10;
+		if(!envs.empty()) {
+			const char* envv[32];
+			for(size_t i = 0; i < envs.size();)
+				envv[i++] = envs[i].c_str();
+			envv[i++] = NULL;
+			if(execvpe(argv[0], (char* const*)argv, (char* const*)envv) == -1)
+				return 10;
+		} else {
+			if(execvp(argv[0], (char* const*)argv) == -1)
+				return 10;
+		}
 	}
 	pid_ = pid;
 	stop_ = false;
