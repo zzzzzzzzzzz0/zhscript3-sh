@@ -19,6 +19,11 @@ class main_plugin___ : public plugin::pub___ {
     virtual int fanqiechaodan2__(view___*, const std::string&, args___, rets___ ret = nullptr, void* env = nullptr) = 0;
     virtual int fanqiechaodan3__(view___*, vec___&, rets___ ret = nullptr, void* env = nullptr) = 0;
     virtual void std__(view___*, vec___&) = 0;
+
+    virtual int for__(args___ p, size_t& from, rust_add___ add, void* env) = 0;
+    virtual int for__(window___* window, GtkWidget *nb1, view___* view, args___ p, size_t& from, int fn2_ret,
+			bool no_newindow, bool nb1_need_new, bool is1, rust_add___ add, void* env) = 0;
+    virtual int for__(view___* view, args___ p, size_t& from, view___* by, rust_add___ add, void* env) = 0;
 };
 
 class code___ {

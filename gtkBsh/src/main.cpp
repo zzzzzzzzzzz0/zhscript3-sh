@@ -1,24 +1,5 @@
-#include "window.h"
-#include "pub2.h"
+#include "fanqiechaodan.h"
 #include <gdk/gdkx.h>
-
-#include "slave.h"
-class slave___ : public pub::slave___ {
-	std::string code_;
-	plugin::pub___* pub_;
-
-public:
-	slave___(plugin::pub___* pub) : pub_(pub) {}
-	int init__(args___ p, size_t i) {
-		code_ = p[i++];
-		return pub::slave___::init__(p, i, pub::thread__(code_.c_str()));
-	}
-
-	void z__(const char *s) {
-		vec___ args{s};
-		pub_->eval__(code_.c_str(), args);
-	}
-};
 
 template<typename T>
 T try__(std::function<T()> f1, T f2, std::function<void(const std::string&)> f3) {
@@ -103,9 +84,6 @@ class main___ : public main_plugin___ {
 					case '\r':
 					case '\t':
 						break;
-					/*case '\n': s2 += "n"; break;
-					case '\r': s2 += "r"; break;
-					case '\t': s2 += "t"; break;*/
 					default:
 						s2 += '\\';
 						s2 += std::to_string(c);
@@ -153,16 +131,10 @@ class main___ : public main_plugin___ {
 		pr__(&v, s, s2);
 	}
 
-	/*void clpars2__(
-		//std::vector<std::string[2]> a,
-		std::string a[][2], size_t len,
-		const std::string& s, clpars2_fn___ fn) {
-	}*/
 	void clpars2_sou__(const std::string& s, fn__s___ fn) {
 		std::string a[][2] = {{"-反向", "f"}, {"-大小写", "i"}};
 		std::string opt = s;
 		for(auto& i : a) {
-		//for(size_t idx = 0; idx < len; idx++) { auto& i = a[idx];
 			auto i2 = opt.find(i[0]);
 			if(i2 != std::string::npos) {
 				opt.replace(i2, i[0].length(), "");
@@ -172,7 +144,6 @@ class main___ : public main_plugin___ {
 		if(!opt.empty()) {
 			opt += " 不支持，仅支持 ";
 			for(auto& i : a) {
-			//for(size_t idx = 0; idx < len; idx++) { auto& i = a[idx];
 				opt += i[0];
 			}
 			throw opt;
@@ -217,7 +188,7 @@ class main___ : public main_plugin___ {
 	}
 	int fanqiechaodan__(view___* view, const std::string& s, rets___ ret = nullptr, argc___ argc = 0, argv___ argv = nullptr, void* env = nullptr) {
 		return try__<int>([&]() {
-			return fanqiechaodan__(view, (jiekou__(view) + s).c_str(), ret, nullptr, env, argc, argv, nullptr);
+			return fanqiechaodan1__(view, (jiekou__(view) + s).c_str(), ret, nullptr, env, argc, argv, nullptr);
 		}, 0, [&](const std::string& s) {
 			pr__(nullptr, s);
 		});
@@ -282,226 +253,6 @@ class main___ : public main_plugin___ {
 	std::vector<plugin___*> plugins_;
 	bool is_quit_ = false;
 
-	static int fanqiechaodan__(view___* by, const char* s, rets___ ret, rust_add___ add, void* env, argc___ argc, argv___ argv, void* ptr) {
-		static main___* thiz = nullptr;
-		if(ptr)
-			thiz = (main___*)ptr;
-		if(!s) return 1;
-		vec___ p;
-		int ret2 = thiz->eval__(s, &p, argc, argv, env);
-		if(ret2 != l4___::eval_ok_)
-			return ret2;
-		size_t from = 0;
-		for(auto& i : thiz->plugins_) {
-			ret2 = i->hr_->for__(p, from, add, env);
-			if(ret2 != 0)
-				return ret2;
-		}
-		view___* view_ = by;
-		window___* window = view_ ? (window___*)view_->window_ : (!thiz->windows_.empty() ? thiz->windows_[0] : nullptr);
-		GtkWidget* nb1_ = view_ ? view_->nb1_ : nullptr;
-		bool is1 = false, dunhao = false;
-		int test_1 = 0;
-		auto test_2 = [&](bool b, int& fn2_ret2) -> bool {
-			if(test_1 && !b) {
-				if(test_1 == '1')
-					thiz->add__("0", dunhao, add, env);
-				fn2_ret2 = pub::clpars_ret_;
-				return true;
-			}
-			return false;
-		};
-		ret2 = thiz->clpars__({
-			{"-id",  "ji ", 1},
-			{"-id2", "ji2", 1, "后继也改"},
-			{"-页",  "j  ", 1},
-			{"-页2", "j 2", 1, "后继也改"},
-			{"-簿", "b", 1},
-			{"-窗", "w", 1},
-			{"-储",     "v  ", 2},
-			{"-窗储",   "vw ", 2},
-			{"-得储",   "v =", 1},
-			{"-得窗储", "vw=", 1},
-			{"-被动者", "s", 3},
-			{"-命令被动者", "sc", 2},
-			{"-停止被动者", "sx", 1},
-			{"-单", "1", 0},
-			{"-试", "t1", 0, "有错不报而回0"},
-			{"-勉", "t2", 0, "有错算了"},
-			{"-等待", "W", 1},
-		}, p, from, [&](const std::string& tag, size_t i, size_t argc, int& fn2_ret2) {
-			switch(tag[0]) {
-			case 'j': {
-				view___* view = nullptr;
-				switch(tag[1]) {
-					case 'i': {
-						size_t id = std::stoul(p[i]);
-						for(auto& w : thiz->windows_)
-							if((view = w->views_.find__([&](auto v) {return v->id_ == id;})))
-								goto bj;
-						break; }
-					default: {
-						const std::string& name = p[i];
-						for(auto& w : thiz->windows_)
-							if((view = w->views_.find__([&](auto v) {
-								const char* name2 = v->name__();
-								return name2 && name2 == name;
-							})))
-								goto bj;
-						break; }
-				}
-				bj:
-				if(test_2(view, fn2_ret2)) return;
-				if(!view)
-					throw "页无觅 " + p[i];
-				do {
-					ret2 = thiz->for__(view, p, from, by, add, env);
-					if(ret2 != 0) {
-						fn2_ret2 = pub::clpars_ret_;
-						return;
-					}
-					view->for__(p, from, add, env);
-					switch(tag[2]) {
-						case '2':
-						view_ = view;
-						nb1_ = view_->nb1_;
-						break;
-					}
-				} while(false);
-				break; }
-			case 'b': {
-				nb1_ = nullptr;
-				view_ = nullptr;
-				for(auto& w : thiz->windows_)
-				for(auto& nb1 : w->notebooks_) {
-					const char* name = gtk_widget_get_name(nb1);
-					if(name && name == p[i]) {
-						nb1_ = nb1;
-						for(auto& v : w->views_.a_) {
-							if(v->nb1_ == nb1 && v->is_curr__()) {
-								view_ = v;
-								if(v->yuxiangrousi__())
-									break;
-							}
-							if(v->kou_nb1_ == nb1 && is_curr__(GTK_NOTEBOOK(v->kou_nb1_), v->kou_box1_)) {
-								for(auto& v2 : w->views_.a_) {
-									if(v2->nb1_ == v->nb1_ && v2->is_curr__()) {
-										view_ = v2;
-										if(v2->yuxiangrousi__())
-											goto b;
-									}
-								}
-							}
-						}
-						b:
-						break;
-					}
-				}
-				if(test_2(nb1_, fn2_ret2)) return;
-				if(!nb1_)
-					throw "簿无觅 " + p[i];
-				do {
-					ret2 = thiz->for__(view_, p, from, by, add, env);
-					if(ret2 != 0) {
-						fn2_ret2 = pub::clpars_ret_;
-						return;
-					}
-					if(view_) view_->for__(p, from, add, env);
-				} while(false);
-				break; }
-			case 'w':
-				window = nullptr;
-				for(auto& w : thiz->windows_)
-					if(w->name__() == p[i]) {
-						window = w;
-						break;
-					}
-				if(test_2(window, fn2_ret2)) return;
-				if(!window)
-					throw "窗无觅 " + p[i];
-				break;
-			case 'v': {
-				std::string name = "储-" + p[i];
-				switch(tag[2]) {
-				case '=': {
-					auto fn = [&](auto* w) {
-						thiz->add__((char*)w->var__(name.c_str()), dunhao, add, env);
-					};
-					switch(tag[1]) {
-					case 'w': fn(window); break;
-					default: fn(view_->p__()); break;
-					}
-					break; }
-				default: {
-					auto& s = p[i + 1];
-					auto fn = [&](auto* w) {
-						char* s2 = new char[s.length() + 1];
-						s.copy(s2, s.length());
-						s2[s.length()] = 0;
-						w->var__(name.c_str(), s2);
-					};
-					switch(tag[1]) {
-					case 'w': fn(window); break;
-					default: fn(view_->p__()); break;
-					}
-					break; }
-				}
-				break; }
-			case 's': {
-				slave___* slave;
-				switch(tag[1]) {
-				case 'c':
-					slave = (slave___*)std::stoul(p[i + 1]);
-					slave->send__(p[i]);
-					break;
-				case 'x':
-					slave = (slave___*)std::stoul(p[i]);
-					slave->stop__();
-					delete slave;
-					break;
-				default:
-					slave = new slave___(thiz);
-					int err = slave->init__(p, i);
-					if(err) {
-						delete slave;
-						throw "错误" + std::to_string(err);
-					} else
-						thiz->add__(std::to_string((unsigned long)slave).c_str(), dunhao, add, env);
-					from = p.size();
-					break;
-				}
-				break; }
-			case '1':
-				is1 = true;
-				view_ = nullptr;
-				break;
-			case 't': test_1 = tag[1]; break;
-			case 'W':
-				for(int i2 = std::stoi(p[i]); i2 > 0; i2--)
-					thiz->not_block__();
-				break;
-			}
-		});
-		if(ret2 != 0) return ret2;
-		if(window) {
-			ret2 = window->for__(p, from, false, add, env); if(ret2 != 0) return ret2;
-			if(view_) {
-				ret2 = window->for2__(view_, p, from); if(ret2 != 0) return ret2;
-			}
-		}
-		ret2 = thiz->for__(window, nb1_, view_, p, from, 0, true, false, is1, add, env); if(ret2 != 0) return ret2;
-		ret2 = thiz->for__(view_, p, from, by, add, env); if(ret2 != 0) return ret2;
-		if(view_) {
-			ret2 = view_->for__(p, from, add, env); if(ret2 != 0) return ret2;
-		}
-		if(ret) {
-			ret->insert(ret->end(), p.begin() + from, p.end());
-			return 1;
-		}
-		if(test_1 == '2')
-			return 1;
-		return thiz->goodbye__(p, from);
-	}
 	static void fanqiechaodan9__(view___* v, const char* s, rust_add___ add, void* env, argc___ argc, ...) {
 		const char** args = new const char* [argc];
 		{
@@ -512,7 +263,7 @@ class main___ : public main_plugin___ {
 			}
 			va_end(argv);
 		}
-		fanqiechaodan__(v, s, nullptr, add, env, argc, args, nullptr);
+		fanqiechaodan1__(v, s, nullptr, add, env, argc, args, nullptr);
 		delete args;
 	}
 
@@ -549,12 +300,12 @@ class main___ : public main_plugin___ {
 	}
 
 	void init__() {
-		fanqiechaodan__(nullptr, nullptr, nullptr, nullptr, nullptr, 0, nullptr, this);
+		fanqiechaodan1__(nullptr, nullptr, nullptr, nullptr, nullptr, 0, nullptr, this);
 		{
 			std::string s = R"(
 解释下代码
 	模块“外壳”。
-	赋予“外壳名”、“外壳版本”以“乙壳”、“4.4.16”。
+	赋予“外壳名”、“外壳版本”以“乙壳”、“4.6.14”。
 	)" + jiekou__(nullptr, "、“番茄炒蛋”") + R"(
 上代码)";
 			l4_.eval__(s.c_str());
@@ -580,7 +331,6 @@ class main___ : public main_plugin___ {
 					p->perr__();
 					return 254;
 				}
-				//printf("%s %s\n", p->id_(), i.path().c_str());
 				plugins_.push_back(p); 
 			}
 		}
@@ -684,6 +434,14 @@ class main___ : public main_plugin___ {
 				break; }
 			}
 		});
+	}
+	int for__(args___ p, size_t& from, rust_add___ add, void* env) {
+		for(auto& i : plugins_) {
+			int ret2 = i->hr_->for__(p, from, add, env);
+			if(ret2 != 0)
+				return ret2;
+		}
+		return 0;
 	}
 	int for__(window___* window, GtkWidget *nb1, view___* view, args___ p, size_t& from, int fn2_ret,
 			bool no_newindow, bool nb1_need_new, bool is1, rust_add___ add, void* env) {

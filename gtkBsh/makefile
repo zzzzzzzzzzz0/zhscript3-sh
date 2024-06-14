@@ -20,7 +20,9 @@ ifeq ($(std),c++17)
 endif
 
 all: dir $(target)
-$(dodir)/main.o: src/main.cpp src/window.h src/main_plugin.h ../plugin/pub.h ../pub/tag.h ../pub/type.h ../pub/widget.h src/pub.h ../pub/l4.h ../pub/fs.h src/label_box.h src/views.h src/view.h src/pub2.h src/slave.cpp src/slave.h
+$(dodir)/main.o: src/main.cpp src/fanqiechaodan.h src/window.h src/main_plugin.h ../plugin/pub.h ../pub/tag.h ../pub/type.h ../pub/widget.h src/pub.h ../pub/l4.h ../pub/fs.h src/label_box.h src/views.h src/view.h src/pub2.h
+	$(gxx) -o $@ $(cflags) $<
+$(dodir)/fanqiechaodan.o: src/fanqiechaodan.cpp src/fanqiechaodan.h src/window.h src/main_plugin.h ../plugin/pub.h ../pub/tag.h ../pub/type.h ../pub/widget.h src/pub.h ../pub/l4.h ../pub/fs.h src/label_box.h src/views.h src/view.h src/pub2.h src/slave.cpp src/slave.h
 	$(gxx) -o $@ $(cflags) $<
 $(dodir)/pub.o: src/pub.cpp src/pub.h ../pub/tag.h ../pub/type.h ../pub/l4.h ../pub/fs.h
 	$(gxx) -o $@ $(cflags) $<
@@ -32,7 +34,7 @@ $(dodir)/window.o: src/window.cpp src/pub2.h src/main_plugin.h ../plugin/pub.h .
 	$(gxx) -o $@ $(cflags) $<
 $(dodir)/tag.o: ../pub/tag.cpp ../pub/tag.h ../pub/type.h
 	$(gxx) -o $@ $(cflags) $<
-$(target): $(dodir)/main.o $(dodir)/pub.o $(dodir)/pub2.o $(dodir)/slave.o $(dodir)/window.o $(dodir)/tag.o
+$(target): $(dodir)/main.o $(dodir)/fanqiechaodan.o $(dodir)/pub.o $(dodir)/pub2.o $(dodir)/slave.o $(dodir)/window.o $(dodir)/tag.o
 	$(gxx) -o $@ $^ $(lflags)
 dir:
 	@mkdir -p $(dodir)
