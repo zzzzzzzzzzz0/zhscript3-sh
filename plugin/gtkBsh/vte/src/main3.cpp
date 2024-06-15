@@ -4,12 +4,12 @@ static plugin::pub___* pub_ = nullptr;
 
 class view___ : public plugin::view___ {
 	private:
-	GPid pid_ = 0;
-	std::string ps1_, wd_;
+	std::string pid_, ps1_, wd_;
 
 	static void cb_spawn__(VteTerminal *terminal, GPid pid, GError *error, gpointer user_data) {
 		view___* thiz = (view___*)user_data;
-		thiz->pid_ = pid;
+		if(pid > 0)
+			thiz->pid_ = std::to_string(pid);
 		if(thiz->nok__())
 			return;
 		if(thiz->need_focus_) thiz->focus__();
@@ -22,7 +22,7 @@ class view___ : public plugin::view___ {
 			thiz->ins__(thiz->ins_);
 			thiz->ins_.clear();
 		}
-		vec___ p {"页初始", std::to_string(pid)};
+		vec___ p {"页初始", thiz->pid_};
 		pub_->fanqiechaodan3__(thiz, p);
 	}
 	static void window_title_changed__(VteTerminal* vte, view___* thiz) {
@@ -44,6 +44,7 @@ class view___ : public plugin::view___ {
 			std::to_string(code / 256),
 			std::to_string(code % 256)};
 		pub_->fanqiechaodan3__(thiz, p);
+		thiz->pid_.clear();
 	}
 
 	bool contents_changed_ = false;
@@ -77,7 +78,7 @@ class view___ : public plugin::view___ {
 		}
 	}
 
-	bool ok1__() {return pid_ > 0;}
+	bool ok1__() {return !pid_.empty();}
 	bool nok__() {
 		return !ok1__() || exited_ || pub_->is_quit__();
 	}
@@ -129,7 +130,7 @@ class view___ : public plugin::view___ {
 	public:
 	const char* path__() {
 		if(ok1__()) {
-			pub_->read_symlink("/proc/" + std::to_string(pid_) + "/cwd", wd_);
+			pub_->read_symlink("/proc/" + pid_ + "/cwd", wd_);
 		}
 		return wd_.c_str();
 	}
@@ -144,6 +145,7 @@ class view___ : public plugin::view___ {
 			{"-粘贴", "v", 0},
 			{"-清除", "R", 0},
 			{"-搜", "S", 2},
+			{"-得pid", "p", 0},
 			{"-内容变", "$c", 1},
 			{"-内容变2", "$c2", 1},
 			{"-刷新", "r", 0},
@@ -230,6 +232,7 @@ class view___ : public plugin::view___ {
 				if(add)
 					pub_->add__(b ? "1" : "0", dunhao, add, env);
 				break; }
+			case 'p': pub_->add__(pid_.c_str(), dunhao, add, env); break;
 			case '$':
 				switch(tag[1]) {
 					case 'c':
