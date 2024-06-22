@@ -282,7 +282,7 @@ class main___ : public main_plugin___ {
 
 	public:
 	vec___ ret_;
-	size_t ret_from_ = 0;
+	size_t ret_from_;
 	~main___() {
 		if(app_)
 			g_object_unref (app_);
@@ -371,14 +371,17 @@ class main___ : public main_plugin___ {
 	private:
 	unsigned act_ = 0;
 	void act__() {
-		if(++act_ > 1)
-			windows_[0]->act__();
 		if(!ret_.empty()) {
 			add__(ret_, ret_from_, "");
 			ret_.clear();
 		}
 	}
 	static void activate__(GtkApplication* app, main___* m) {
+		if(++m->act_ > 1) {
+			m->windows_[0]->act__();
+			return;
+		}
+		m->ret_from_ = 0;
 		m->for__(m->ret_, m->ret_from_);
 		vec___ ret;
 		m->main_eval__({"壳初始"}, &ret);
