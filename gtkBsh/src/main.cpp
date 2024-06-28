@@ -371,23 +371,25 @@ class main___ : public main_plugin___ {
 	private:
 	unsigned act_ = 0;
 	void act__() {
+		vec___ ret;
+		if(act_ < 9999)
+			++act_;
+		if(act_ > 1) {
+			main_eval__({"壳激活", std::to_string(act_)}, &ret);
+			if(!window___::bool__(ret))
+				windows_[0]->act__();
+			return;
+		}
+		ret_from_ = 0;
+		for__(ret_, ret_from_);
+		main_eval__({"壳初始"}, &ret);
+		ret_.insert(ret_.begin() + ret_from_, ret.begin(), ret.end());
 		if(!ret_.empty()) {
 			add__(ret_, ret_from_, "");
 			ret_.clear();
 		}
 	}
-	static void activate__(GtkApplication* app, main___* m) {
-		if(++m->act_ > 1) {
-			m->windows_[0]->act__();
-			return;
-		}
-		m->ret_from_ = 0;
-		m->for__(m->ret_, m->ret_from_);
-		vec___ ret;
-		m->main_eval__({"壳初始"}, &ret);
-		m->ret_.insert(m->ret_.begin() + m->ret_from_, ret.begin(), ret.end());
-		m->act__();
-	}
+	static void activate__(GtkApplication* app, main___* m) {m->act__();}
 
 	void add__(args___ p, size_t& from, const std::string& wname) {
 		window___* window = find__(wname);
