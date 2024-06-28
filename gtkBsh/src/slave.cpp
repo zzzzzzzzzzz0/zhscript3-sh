@@ -85,8 +85,8 @@ int slave___::init__(const std::vector<std::string>& args, size_t from, const st
 			argv[i++] = args[from + i].c_str();
 		argv[i++] = NULL;
 		if(!envs.empty()) {
-			const char* envv[32];
-			for(size_t i = 0; i < envs.size();)
+			const char* envv[128];
+			for(i = 0; i < envs.size();)
 				envv[i++] = envs[i].c_str();
 			envv[i++] = NULL;
 			if(execvpe(argv[0], (char* const*)argv, (char* const*)envv) == -1)
