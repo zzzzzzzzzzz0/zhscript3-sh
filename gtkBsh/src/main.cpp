@@ -305,15 +305,15 @@ class main___ : public main_plugin___ {
 			std::string s = R"(
 解释下代码
 	模块“外壳”。
-	赋予“外壳名”、“外壳版本”以“乙壳”、“4.6.14”。
+	赋予“外壳名”、“外壳版本”以“乙壳”、“4.7.10”。
 	)" + jiekou__(nullptr, "、“番茄炒蛋”") + R"(
 上代码)";
 			l4_.eval__(s.c_str());
 		}
 	}
 	void init__(const std::string& appid) {
-		app_ = gtk_application_new (appid.empty() ? nullptr : appid.c_str(), G_APPLICATION_FLAGS_NONE);
-		g_signal_connect (app_, "activate", G_CALLBACK (activate__), this);
+		app_ = gtk_application_new (appid.empty() ? nullptr : appid.c_str(), G_APPLICATION_HANDLES_COMMAND_LINE);
+		g_signal_connect (app_, "command-line", G_CALLBACK (activate__), this);
 	}
 	int run__(int argc2, char **argv2) {
 		{
@@ -375,7 +375,12 @@ class main___ : public main_plugin___ {
 		if(act_ < 9999)
 			++act_;
 		if(act_ > 1) {
-			main_eval__({"壳激活", std::to_string(act_)}, &ret);
+			vec___ args = {"壳激活", std::to_string(act_)};
+			args.insert(args.end(),
+				std::make_move_iterator(ret_.begin()),
+				std::make_move_iterator(ret_.end()));
+			ret_.clear();
+			main_eval__(args, &ret);
 			if(!window___::bool__(ret))
 				windows_[0]->act__();
 			return;
@@ -389,7 +394,16 @@ class main___ : public main_plugin___ {
 			ret_.clear();
 		}
 	}
-	static void activate__(GtkApplication* app, main___* m) {m->act__();}
+	static void activate__(GtkApplication* app, GApplicationCommandLine *cmdline, main___* m) {
+		if(m->act_) {
+			gint argc;
+			gchar **argv = g_application_command_line_get_arguments (cmdline, &argc);
+			for (int i = 1; i < argc; i++)
+				m->ret_.push_back(argv[i]);
+			g_strfreev (argv);
+		}
+		m->act__();
+	}
 
 	void add__(args___ p, size_t& from, const std::string& wname) {
 		window___* window = find__(wname);
@@ -737,20 +751,32 @@ main (int    argc,
 	{
 		argv1.push_back(argv[0]);
 		std::string soname = "l4.so";
-		for(int i = 1; i < argc; i++) {
-			char *s = argv[i];
+		{
+			std::vector<char *> argv3;
+			for(int i = 1; i < argc; i++) {
+				char *s = argv[i];
+				if(m.ends_with(s, "--。")) {
+					clpars2__(s, argv3);
+					continue;
+				}
+				if(m.starts_with(s, "-shell-help")) {
+					argv1.push_back("-zhscript-src-is-code");
+					src = "-help";
+					argv1.push_back("-help");
+					continue;
+				}
+				argv1.push_back(s);
+			}
+			for(size_t i = 0; i < argv3.size(); i++)
+				argv1.push_back(argv3[i]);
+		}
+		for(size_t i = 1; i < argv1.size(); i++) {
+			char *s = argv1[i];
 			if(m.starts_with(s, "-zhscript-l4")) {
 				soname = s + 10;
-				clpars2__(soname, argv2);
-				continue;
+				argv1.erase(argv1.begin() + i);
+				break;
 			}
-			if(m.starts_with(s, "-shell-help")) {
-				argv1.push_back("-zhscript-src-is-code");
-				src = "-help";
-				argv1.push_back("-help");
-				continue;
-			}
-			argv1.push_back(s);
 		}
 		vec___ paths;
 		if(!l4_.open__(argv1[0], soname.c_str(), paths)) {
@@ -784,10 +810,7 @@ main (int    argc,
 							p.replace_extension(".zs");
 						src = p;
 
-						char* s2 = new char[src.size() + 1];
-						s2[src.size()] = 0;
-						src.copy(s2, src.size());
-						argv1.insert(argv1.begin() + 1, s2);
+						argv1.insert(argv1.begin() + 1, new__(src));
 						break;
 					}
 					s2 += '-';
@@ -795,15 +818,12 @@ main (int    argc,
 				if(b) break;
 			}
 		}
-		for(size_t i = 0; i < argv1.size(); i++) {
+		if(src.empty())
+		for(size_t i = 1; i < argv1.size(); i++) {
 			char *s = argv1[i];
-			if(s[0] == '-' && s[1] == '-' && s[2] >= 'a' && s[2] <= 'z' || i == 0) {
-				argv2.push_back(s);
-				continue;
-			}
-			if(src.empty() && s[0] != '-') {
+			if(s[0] != '-') {
 				src = s;
-				continue;
+				break;
 			}
 		}
 	}
@@ -816,6 +836,12 @@ main (int    argc,
 		l4_.eval__(s.c_str());
 	}
 	m.init__();
+#ifdef _debug_
+	for(int i = 0; i < argc; i++)
+		printf("%d) %s\n", i, argv[i]);
+	for(size_t i = 0; i < argv1.size(); i++)
+		printf("%lu) %s\n", i, argv1[i]);
+#endif
 	if(!l4_.eval__(src.c_str(), true, argv1.size(), argv1.data(), 1, nullptr, &m.ret_)) {
 		if(l4_.erret_.is_quit_)
 			m.pr__(nullptr, l4_.erret_.s_);
@@ -823,12 +849,31 @@ main (int    argc,
 			m.pr__(&m.ret_, l4_.erret_.s_ + l4_.erret_.s2_);
 		return l4_.erret_.i_;
 	}
+	{
+		vec___ ret;
+		m.eval__("循环【‘参数数目【顶】’】【号】、‘参数‘号’【顶】’", &ret);
+		argv2.push_back(argv[0]);
+		for(size_t i2 = 1; i2 < ret.size(); i2++) {
+			const std::string& s2 = ret[i2];
+			bool has = false;
+			for(size_t i = 1; i < argv1.size(); i++) {
+				char *s = argv1[i];
+				if(s2 == s) {
+					has = true;
+					argv2.push_back(s);
+					break;
+				}
+			}
+			if(!has)
+				argv2.push_back(new__(s2));
+		}
+	}
 	std::string appid;
 	{
-		vec___ p;
-		m.eval__("如果存在“appid”【顶】那么‘appid【顶】’", &p);
-		if(p.size() == 1)
-			appid = p[0];
+		vec___ ret;
+		m.eval__("如果存在“appid”【顶】那么‘appid【顶】’", &ret);
+		if(ret.size())
+			appid = ret[0];
 	}
 	m.init__(appid);
 	int err = m.run__(argv2.size(), argv2.data());
