@@ -6,8 +6,9 @@
 
 bool starts__(const std::string& s, const std::string& s2);
 bool ends__(const std::string& s, const std::string& s2);
+char* new__(const std::string& s);
 
-void clpars2__(std::string& s, std::vector<char*>& args2);
+void clpars2__(const char* s, std::vector<char*>& args2);
 
 void box_new__(GtkOrientation o, GtkWidget *&box1, GtkBox *&box);
 void label_new__(GtkWidget *&label1, GtkLabel*& label);

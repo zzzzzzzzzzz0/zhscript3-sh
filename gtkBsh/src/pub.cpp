@@ -28,58 +28,50 @@ bool ends__(const std::string& s, const std::string& s2) {
 #endif
 }
 
-void clpars2__(std::string& s, std::vector<char*>& args2) {
+char* new__(const std::string& s) {
+    char* s2 = new char[s.length() + 1];
+    s.copy(s2, s.length());
+    s2[s.length()] = 0;
+    return s2;
+}
+
+void clpars2__(const char* s, std::vector<char*>& args2) {
     char c1 = ' ', c2 = '"', c3 = '\'';
-    char c = c1;
-    std::string s2 = s, s3;
-    for(bool b = false, b2 = false, b3 = false; !b2;) {
-        size_t i2 = s2.find(c);
-        if(i2 != std::string::npos) {
-            if(!b) {
-                s = s2.substr(0, i2);
-                b = true;
-            } else {
-                s3 = s2.substr(0, i2);
-            }
-            s2 = s2.substr(i2 + 1);
-            size_t i21 = s2.find(c1);
-            size_t i22 = s2.find(c2);
-            size_t i23 = s2.find(c3);
-            if(i21 == std::string::npos && i22 == std::string::npos && i23 == std::string::npos) {
-                b2 = true;
-                s3 += s2;
-            } else {
-                c = c1;
-                size_t i3 = i21;
-                if(i22 < i21) {
-                    c = c2;
-                    i3 = i22;
-                }
-                if(i23 < i22 || i23 < i21) {
-                    c = c3;
-                    i3 = i23;
-                }
-                s3 += s2.substr(0, i3);
-                s2 = s2.substr(i3 + 1);
-            }
-            b3 = true;
-        } else {
-            b2 = true;
-            if(b) {
-            	s3 = s2;
-            	b3 = true;
-            }
+    std::string s3;
+    auto clear = [&]() {
+        if(s3.empty())
+            return;
+        if(s3 == "--。") {}
+        else if(starts__(s3, "-zhscript-l4")) {
+            args2.push_back(new__(s3));
         }
-        if(b3) {
-            if(s3 == "--。") {}
-            else {
-                size_t end = s3.size();
-                char* s4 = new char[end + 1];
-                s3.copy(s4, end);
-                s4[end] = 0;
-                args2.push_back(s4);
-            }
+        s3.clear();
+    };
+    for(;; s++) {
+        char c = *s;
+        if(!c) {
+            clear();
+            break;
         }
+        if(c == c1) {
+            clear();
+            continue;
+        }
+        if(c == c2 || c == c3) {
+            char c1 = c;
+            for(;;) {
+                char c4 = *++s;
+                if(!c4) {
+                    clear();
+                    return;
+                }
+                if(c4 == c1)
+                    break;
+                s3 += c4;
+            }
+            continue;
+        }
+        s3 += c;
     }
 }
 
