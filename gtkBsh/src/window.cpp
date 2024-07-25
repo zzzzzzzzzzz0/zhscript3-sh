@@ -8,61 +8,6 @@
 	if(l4_.dbg_bp2_("-o-")) {
 	}
 */
-#ifdef _debug_
-void _1__(const char* c1, GtkWidget *b) {
-	GdkColor c;
-	gdk_color_parse (c1, &c);
-	gtk_widget_modify_bg (b, GTK_STATE_NORMAL, &c);
-}
-void _2__(GtkBox *b) {
-	guint padd = 20;
-	gtk_box_set_spacing(b, padd);
-}
-void _4__(window___::buju___* buju_) {
-	GtkWidget *box_tp1, *box_bm1, *box_lt1, *box_rt1;
-	box_tp1=GTK_WIDGET(buju_->box_tp_);
-	box_bm1=GTK_WIDGET(buju_->box_bm_);
-	box_lt1=GTK_WIDGET(buju_->box_lt_);
-	box_rt1=GTK_WIDGET(buju_->box_rt_);
-	const char *c1, *c2, *c3, *c4;
-	static int _4_i_ = 0;
-	switch(_4_i_++ % 4) {
-		case 0:
-		c1 = "#00f";
-		c2 = "#0f0";
-		c3 = "#ff0";
-		c4 = "#0ff";
-		break;
-		case 1:
-		c1 = "#009";
-		c2 = "#090";
-		c3 = "#990";
-		c4 = "#099";
-		break;
-		case 2:
-		c1 = "#006";
-		c2 = "#060";
-		c3 = "#660";
-		c4 = "#066";
-		break;
-		default:
-		c1 = "#00c";
-		c2 = "#0c0";
-		c3 = "#cc0";
-		c4 = "#0cc";
-		break;
-	}
-	printf("_4_i_%d %s %s %s %s\n", _4_i_, c1, c2, c3, c4);
-	_1__(c1, box_tp1);
-	_1__(c2, box_bm1);
-	_1__(c3, box_lt1);
-	_1__(c4, box_rt1);
-	_2__(buju_->box_tp_);
-	_2__(buju_->box_tp_);
-	_2__(buju_->box_lt_);
-	_2__(buju_->box_lt_);
-}
-#endif
 
 class event___ : public pub::event___ {
 	gboolean jieshi__(const std::vector<std::string>* p, gboolean ret1) {
