@@ -175,10 +175,7 @@ int fanqiechaodan__(view___* by, args___ p, size_t& from, rets___ ret, rust_add_
             default: {
                 auto& s = p[i + 1];
                 auto fn = [&](auto* w) {
-                    char* s2 = new char[s.length() + 1];
-                    s.copy(s2, s.length());
-                    s2[s.length()] = 0;
-                    w->var__(name.c_str(), s2);
+                    w->var__(name.c_str(), new__(s));
                 };
                 switch(tag[1]) {
                 case 'w': fn(window); break;
