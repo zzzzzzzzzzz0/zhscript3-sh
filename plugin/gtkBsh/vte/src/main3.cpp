@@ -279,17 +279,20 @@ class view___ : public plugin::view___ {
 
 class plugin___ : public plugin::base___ {
 	private:
-	GtkWidget* menu_ = nullptr;
+	static GtkWidget *menu_, *menu_item_copy_;
 	std::string menu_item_;
+	static view___* menu_v_;
 	static void menu_item_acti__(GtkWidget *item, plugin___* thiz) {
 		thiz->menu_item_ = gtk_menu_item_get_label(GTK_MENU_ITEM(item));
 		g_idle_add(idle_menu_item__, thiz);
 	}
-	static gint menu_popup__ (GtkWidget *widget, GdkEvent *event) {
+	static gint menu_popup__ (view___* v, GdkEvent *event) {
 		if (event->type == GDK_BUTTON_PRESS) {
 			GdkEventButton *eb = (GdkEventButton *) event;
 			if (eb->button == GDK_BUTTON_SECONDARY) {
-				gtk_menu_popup (GTK_MENU (widget), NULL, NULL, NULL, NULL, eb->button, eb->time);
+				menu_v_ = v;
+				gtk_widget_set_sensitive(menu_item_copy_, vte_terminal_get_has_selection(v->hr2__()));
+				gtk_menu_popup (GTK_MENU (menu_), NULL, NULL, NULL, NULL, eb->button, eb->time);
 				return TRUE;
 			}
 		}
@@ -297,15 +300,10 @@ class plugin___ : public plugin::base___ {
 	}
 	static gboolean idle_menu_item__(gpointer p) {
 		plugin___* thiz = (plugin___*)p;
-		for(auto& v : thiz->views_) {
-			if(pub_->is_focus__(v)) {
-				size_t from = 0;
-				vec___ args;
-				args.push_back(thiz->menu_item_);
-				v->for__(args, from, nullptr, nullptr);
-				break;
-			}
-		}
+		size_t from = 0;
+		vec___ args;
+		args.push_back(thiz->menu_item_);
+		menu_v_->for__(args, from, nullptr, nullptr);
 		return G_SOURCE_REMOVE;
 	}
 
@@ -317,7 +315,6 @@ class plugin___ : public plugin::base___ {
 		return 0;
 	}
 
-	std::vector<view___*> views_;
 	void menu__(view___* v) {
 		if(!menu_) {
 			menu_ = gtk_menu_new();
@@ -327,17 +324,19 @@ class plugin___ : public plugin::base___ {
 				GtkWidget *item = gtk_menu_item_new_with_label(label);
 				g_signal_connect(G_OBJECT(item), "activate", G_CALLBACK (menu_item_acti__), this);
 				gtk_menu_shell_append(menu, item);
+				return item;
 			};
-			add("-复制");
+			menu_item_copy_ = add("-复制");
 			add("-粘贴");
 			gtk_menu_shell_append(menu, gtk_separator_menu_item_new());
 			add("-清除");
 			gtk_widget_show_all(menu_);
 		}
-		g_signal_connect_swapped (v->hr__(), "button_press_event", G_CALLBACK (menu_popup__), menu_);
-		views_.push_back(v);
+		g_signal_connect_swapped (v->hr__(), "button_press_event", G_CALLBACK (menu_popup__), v);
 	}
 };
+GtkWidget *plugin___::menu_ = nullptr, *plugin___::menu_item_copy_ = nullptr;
+view___* plugin___::menu_v_ = nullptr;
 static plugin___ pub2_;
 
 void view___::open__(const std::string& arg1, const std::string& arg2) {
@@ -430,9 +429,6 @@ void view___::open__(const std::string& arg1, const std::string& arg2) {
 }
 void view___::on_close__() {
 	exited_ = true;
-	std::vector<view___*> & vs = pub2_.views_;
-	if(vs.size() > 0)
-		vs.erase(std::find(vs.begin(), vs.end(), this));
 }
 const char* view___::plugin_id__() {return pub2_.id__();}
 
