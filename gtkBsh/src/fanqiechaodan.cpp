@@ -23,13 +23,13 @@ public:
 
 class fanqiechaodan___ {
 public:
-    view___* by; vec___ p; size_t from; rets___ ret; rust_add___* add; void* env; main_plugin___* thiz;
+    view___* by; vec___ p; size_t from; rets___ ret; rust_add___* add; main_plugin___* thiz;
 };
 
 int fanqiechaodan__(view___* by, args___ p, size_t& from, rets___ ret, rust_add___ add, void* env, main_plugin___* thiz);
 static gboolean idle__(gpointer data) {
     fanqiechaodan___* f = (fanqiechaodan___*)data;
-    fanqiechaodan__(f->by, f->p, f->from, f->ret, f->add, f->env, f->thiz);
+    fanqiechaodan__(f->by, f->p, f->from, f->ret, f->add, nullptr, f->thiz);
     return FALSE;
 }
 
@@ -38,7 +38,8 @@ int fanqiechaodan__(view___* by, args___ p, size_t& from, rets___ ret, rust_add_
     view___* view_ = by;
     window___* window = view_ ? (window___*)view_->window_ : (!thiz->windows_.empty() ? thiz->windows_[0] : nullptr);
     GtkWidget* nb1_ = view_ ? view_->nb1_ : nullptr;
-    bool is1 = false, dunhao = false, threads_enter = false;
+    bool is1 = false, dunhao = false;
+    size_t threads_enter = 0;
     int test_1 = 0;
     auto test_2 = [&](bool b, int& fn2_ret2) -> bool {
         if(test_1 && !b) {
@@ -56,6 +57,7 @@ int fanqiechaodan__(view___* by, args___ p, size_t& from, rets___ ret, rust_add_
         {"-页2", "j 2", 1, "后继也改"},
         {"-簿", "b", 1},
         {"-窗", "w", 1},
+        {"-截", "e", 1},
         {"-储",     "v  ", 2},
         {"-窗储",   "vw ", 2},
         {"-得储",   "v =", 1},
@@ -120,14 +122,14 @@ int fanqiechaodan__(view___* by, args___ p, size_t& from, rets___ ret, rust_add_
                     for(auto& v : w->views_.a_) {
                         if(v->nb1_ == nb1 && v->is_curr__()) {
                             view_ = v;
-                            if(v->yuxiangrousi__())
+                            if(gtk_widget_is_focus(v->hr__()))
                                 break;
                         }
                         if(v->kou_nb1_ == nb1 && is_curr__(GTK_NOTEBOOK(v->kou_nb1_), v->kou_box1_)) {
                             for(auto& v2 : w->views_.a_) {
                                 if(v2->nb1_ == v->nb1_ && v2->is_curr__()) {
                                     view_ = v2;
-                                    if(v2->yuxiangrousi__())
+                                    if(gtk_widget_is_focus(v2->hr__()))
                                         goto b;
                                 }
                             }
@@ -159,6 +161,14 @@ int fanqiechaodan__(view___* by, args___ p, size_t& from, rets___ ret, rust_add_
             if(test_2(window, fn2_ret2)) return;
             if(!window)
                 throw "窗无觅 " + p[i];
+            break;
+        case 'e':
+            ret2 = thiz->eval2__(p[i].c_str(), p, i + 1, ret, env);
+            if(ret2 != l4___::eval_ok_) {
+                fn2_ret2 = ret2;
+                return;
+            }
+            from = p.size();
             break;
         case 'v': {
             std::string name = "储-" + p[i];
@@ -209,7 +219,8 @@ int fanqiechaodan__(view___* by, args___ p, size_t& from, rets___ ret, rust_add_
             }
             break; }
         case 'T':
-            threads_enter = true;
+            threads_enter = i + 1;
+            from = p.size();
             break;
         case '1':
             is1 = true;
@@ -222,14 +233,14 @@ int fanqiechaodan__(view___* by, args___ p, size_t& from, rets___ ret, rust_add_
             break;
         }
     });
-    if(ret2 != 0) return ret2;
     if(threads_enter) {
         fanqiechaodan___* f = new fanqiechaodan___ {
-            by, p, from, ret, add, env, thiz
+            by, p, threads_enter, ret, add, thiz
         };
         gdk_threads_add_idle (idle__, f);
         return 1;
     }
+    if(ret2 != 0) return ret2;
     if(window) {
         ret2 = window->for__(p, from, false, add, env); if(ret2 != 0) return ret2;
         if(view_) {
