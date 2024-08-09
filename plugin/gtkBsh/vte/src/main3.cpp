@@ -99,7 +99,7 @@ class view___ : public plugin::view___ {
 			}
 		});
 	}
-	int for2__(args___ args, size_t& from, int fn2_ret2) {
+	int for2__(args___ args, size_t& from) {
 		return pub_->clpars__({
 			{"-缩放", "S", 1},
 			{"-行数", "l", 1},
@@ -124,19 +124,11 @@ class view___ : public plugin::view___ {
 				}
 				break; }
 			}
-		}, [&]() {return fn2_ret2;});
+		});
 	}
-
-	public:
-	const char* path__() {
-		if(ok1__()) {
-			pub_->read_symlink("/proc/" + pid_ + "/cwd", wd_);
-		}
-		return wd_.c_str();
-	}
-	int for__(args___ args, size_t& from, rust_add___ add, void* env) {
+	int for2__(args___ args, size_t& from, rust_add___ add, void* env, int fn2_ret2) {
 		bool dunhao = false;
-		int ret2 = pub_->clpars__({
+		return pub_->clpars__({
 			{"-工作目录", "w", 0},
 			{"-得选择", "X", 0},
 			{"-插入", "i", 1},
@@ -144,6 +136,7 @@ class view___ : public plugin::view___ {
 			{"-复制", "c", 0},
 			{"-粘贴", "v", 0},
 			{"-清除", "R", 0},
+			{"-全选", "a", 0},
 			{"-搜", "S", 2},
 			{"-得pid", "p", 0},
 			{"-内容变", "$c", 1},
@@ -183,6 +176,7 @@ class view___ : public plugin::view___ {
 				break;
 			case 'v': vte_terminal_paste_clipboard(hr2__()); break;
 			case 'R': vte_terminal_reset(hr2__(), true, true); break;
+			case 'a': vte_terminal_select_all(hr2__()); break;
 			case 'S': {
 				const std::string &s = args[i];
 				if(s.empty()) {
@@ -249,9 +243,20 @@ class view___ : public plugin::view___ {
 				break;
 			case 'r': open__(arg1_, arg2_); break;
 			}
-		});
+		}, [&]() {return fn2_ret2;});
+	}
+
+	public:
+	const char* path__() {
+		if(ok1__()) {
+			pub_->read_symlink("/proc/" + pid_ + "/cwd", wd_);
+		}
+		return wd_.c_str();
+	}
+	int for__(args___ args, size_t& from, rust_add___ add, void* env) {
+		int ret2 = for2__(args, from, add, env, pub::clpars_ret_no_);
 		if(ret2 != 0) return ret2;
-		return for2__(args, from, pub::clpars_ret_no_);
+		return for2__(args, from);
 	}
 	static gboolean select__(VteTerminal *terminal, glong column, glong row, gpointer data) {
 #ifdef _debug_
@@ -329,6 +334,8 @@ class plugin___ : public plugin::base___ {
 			menu_item_copy_ = add("-复制");
 			add("-粘贴");
 			gtk_menu_shell_append(menu, gtk_separator_menu_item_new());
+			add("-全选");
+			gtk_menu_shell_append(menu, gtk_separator_menu_item_new());
 			add("-清除");
 			gtk_widget_show_all(menu_);
 		}
@@ -364,7 +371,7 @@ void view___::open__(const std::string& arg1, const std::string& arg2) {
 			case 'p': ps1_ = args[i]; break;
 			}
 		}) == 0) {
-			for2__(args, from, pub::clpars_throw_);
+			for2__(args, from);
 		}
 	}
 
@@ -426,6 +433,8 @@ void view___::open__(const std::string& arg1, const std::string& arg2) {
 		return;
 	}
 	pub2_.menu__(this);
+
+	for2__(args, from, nullptr, nullptr, pub::clpars_throw_);
 }
 void view___::on_close__() {
 	exited_ = true;
