@@ -98,7 +98,16 @@ int window___::for__(GtkWidget *nb1_, view___*& view_, args___ p, size_t& from,
 		gtk_widget_set_can_focus(nb1_, false);
 		g_signal_connect(nb_, "switch-page", G_CALLBACK(switch_page__), this);
 	};
-	buju___* buju_ = view_ ? buju__(view_) : nullptr;
+	buju___* buju_ = nullptr;
+	if(view_)
+		buju_ = buju__(view_);
+	else if(nb1_)
+		for(auto* i : bujus_) {
+			if(i->nb1_ == nb1_) {
+				buju_ = i;
+				break;
+			}
+		};
 	auto new_buju = [&](GtkContainer* cntr) {
 		buju_ = new buju___();
 		bujus_.push_back(buju_);
@@ -108,6 +117,7 @@ int window___::for__(GtkWidget *nb1_, view___*& view_, args___ p, size_t& from,
 		box_new__(GTK_ORIENTATION_HORIZONTAL, box_lt1, buju_->box_lt_);
 		box_new__(GTK_ORIENTATION_HORIZONTAL, box_rt1, buju_->box_rt_);
 		new_nb1(true);
+		buju_->nb1_ = nb1_;
 		gtk_box_pack_end(buju_->box_tp_, box_bm1, false, false, paddi2_);
 		gtk_box_pack_end(buju_->box_tp_, box_lt1, true, true, paddi_);
 		gtk_box_pack_end(buju_->box_lt_, box_rt1, false, false, paddi_);
@@ -443,8 +453,8 @@ int window___::for__(GtkWidget *nb1_, view___*& view_, args___ p, size_t& from,
 						},  [&](args___ a, size_t& l) {
 							return for2_2__(view_, a, l);
 						}, [&](args___ a, size_t l) {
-						return pub_->goodbye__(a, l);
-					});
+							return pub_->goodbye__(a, l);
+						});
 					pack__(view_, box1_, label_box_, nb1_, id,
 						posi != 0 ? by_ : nullptr, can_close, can_close2, page_curr2,
 						w == -1 && h == -1 || in_nb2, padding);
