@@ -176,11 +176,14 @@ class main___ : public main_plugin___ {
 		}
 		return ret3;
 	}
-	int eval__(const char* s, args___ p, rets___ ret = nullptr, void* env = nullptr) {
+	int eval2__(const char* s, args___ p, size_t from, rets___ ret = nullptr, void* env = nullptr) {
 		std::vector<const char*> p2;
-		for (std::string const& i : p)
-			p2.push_back(i.data());
+		for (size_t i = from; i < p.size(); i++)
+			p2.push_back(p[i].data());
 		return eval__(s, ret, p2.size(), p2.data(), env);
+	}
+	int eval__(const char* s, args___ p, rets___ ret = nullptr, void* env = nullptr) {
+		return eval2__(s, p, 0, ret, env);
 	}
 
 	int fanqiechaodan__(plugin::view___* view, const std::string& s, rets___ ret = nullptr, argc___ argc = 0, argv___ argv = nullptr, void* env = nullptr) {

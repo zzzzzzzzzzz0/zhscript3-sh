@@ -15,6 +15,8 @@ class main_plugin___ : public plugin::pub___ {
     virtual void name__(GtkNotebook*, std::string&) = 0;
     virtual plugin::view___* new_view__(const std::string&, const std::string&, const std::string&) = 0;
 
+	virtual int eval2__(const char*, args___, size_t, rets___ ret = nullptr, void* env = nullptr) = 0;
+
     virtual int fanqiechaodan__(view___*, const std::string&, rets___ ret = nullptr, argc___ argc = 0, argv___ argv = nullptr, void* env = nullptr) = 0;
     virtual int fanqiechaodan2__(view___*, const std::string&, args___, rets___ ret = nullptr, void* env = nullptr) = 0;
     virtual int fanqiechaodan3__(view___*, vec___&, rets___ ret = nullptr, void* env = nullptr) = 0;
