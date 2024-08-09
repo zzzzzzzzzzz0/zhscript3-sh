@@ -194,7 +194,7 @@ class view___ : public plugin::view___ {
 	}
 
 	static GtkWidget* cb_create__ (WebKitWebView *web_view, WebKitNavigationAction *navigation_action, view___* by) {
-		return pub_->pack__(new view___(web_view, "", ""), by, after_curr_page_);
+		return pub_->pack__(new view___(web_view), by, after_curr_page_);
 	}
 
 	std::string code_;
@@ -309,7 +309,7 @@ class view___ : public plugin::view___ {
 
 	WebKitWebContext* ctt_ = nullptr;
 
-	int for2__(args___ args, size_t& from, int fn2_ret2) {
+	int for2__(args___ args, size_t& from) {
 		return pub_->clpars__({
 			{"-缩放", "z", 1},
 			{"-背景色", "B", 1},
@@ -335,16 +335,11 @@ class view___ : public plugin::view___ {
 				}
 				break; }
 			}
-		}, [&]() {return fn2_ret2;});
+		});
 	}
-
-	public:
-	const char* path__() {
-		return webkit_web_view_get_uri(hr2__());
-	}
-	int for__(args___ args, size_t& from, rust_add___ add, void* env) {
+	int for2__(args___ args, size_t& from, rust_add___ add, void* env, int fn2_ret2) {
 		bool dunhao = false;
-		int ret2 = pub_->clpars__({
+		return pub_->clpars__({
 			{"-插脚", "j", 1},
 			{"-插脚2", "j2", 2, "代码获取返回值"},
 			{"-插脚3", "=3", 1},
@@ -484,12 +479,20 @@ class view___ : public plugin::view___ {
 					g_signal_connect(hr_, "mouse-target-changed", G_CALLBACK(cb_mouse_target_changed__), this);
 				break; }
 			}
-		});
-		if(ret2 != 0) return ret2;
-		return for2__(args, from, pub::clpars_ret_no_);
+		}, [&]() {return fn2_ret2;});
 	}
 
-	view___(WebKitWebView *rv, const std::string& arg1, const std::string& arg2) {
+	public:
+	const char* path__() {
+		return webkit_web_view_get_uri(hr2__());
+	}
+	int for__(args___ args, size_t& from, rust_add___ add, void* env) {
+		int ret2 = for2__(args, from, add, env, pub::clpars_ret_no_);
+		if(ret2 != 0) return ret2;
+		return for2__(args, from);
+	}
+
+	view___(WebKitWebView *rv) {
 		if(rv) {
 			hr_ = webkit_web_view_new_with_related_view(rv);
 		} else {
@@ -578,10 +581,12 @@ class view___ : public plugin::view___ {
 				break;
 			}
 		}) == 0) {
-			for2__(args, from, pub::clpars_throw_);
+			for2__(args, from);
 		}
 
 		load__(uri);
+
+		for2__(args, from, nullptr, nullptr, pub::clpars_throw_);
 	}
 	const char* plugin_id__();
 };
@@ -589,7 +594,7 @@ class view___ : public plugin::view___ {
 class plugin___ : public plugin::base___ {
 	public:
 	plugin::view___* new__(const std::string& arg1, const std::string& arg2) {
-		view___* v = new view___(nullptr, arg1, arg2);
+		view___* v = new view___(nullptr);
 		v->open__(arg1, arg2);
 		return v;
 	}

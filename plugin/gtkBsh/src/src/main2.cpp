@@ -103,7 +103,7 @@ class view___ : public plugin::view___ {
 		g_free (text);
 	}
 
-	int for2__(args___ args, size_t& from, int fn2_ret2) {
+	int for2__(args___ args, size_t& from) {
 		return pub_->clpars__({
 			{"-光标位置", "p", 1},
 			{"-光标行列", "pl", 2},
@@ -143,14 +143,9 @@ class view___ : public plugin::view___ {
 					break; }
 				case 'E': gtk_text_view_set_editable(hr2__(), tag[1]); break;
 			}
-		}, [&]() {return fn2_ret2;});
+		});
 	}
-
-	public:
-	const char* path__() {return path_.c_str();}
-	int for__(args___ args, size_t& from, rust_add___ add, void* env) {
-		int ret2 = for2__(args, from, pub::clpars_ret_no_);
-		if(ret2 != 0) return ret2;
+	int for2__(args___ args, size_t& from, rust_add___ add, void* env, int fn2_ret2) {
 		bool dunhao = false;
 		auto add_i = [&](int i) {
 			pub_->add__(std::to_string(i).c_str(), dunhao, add, env);
@@ -306,10 +301,18 @@ class view___ : public plugin::view___ {
 					id_modified_changed_ = g_signal_connect(buf2__(), "modified-changed", G_CALLBACK(cb_modified_changed__), this);
 				break;
 			}
-		});
+		}, [&]() {return fn2_ret2;});
 	}
 
-	view___(const std::string& arg1, const std::string& arg2) {
+	public:
+	const char* path__() {return path_.c_str();}
+	int for__(args___ args, size_t& from, rust_add___ add, void* env) {
+		int ret2 = for2__(args, from);
+		if(ret2 != 0) return ret2;
+		return for2__(args, from, add, env, pub::clpars_ret_no_);
+	}
+
+	view___() {
 		buf_ = GTK_SOURCE_BUFFER (gtk_source_buffer_new (NULL));
 		hr_ = gtk_source_view_new_with_buffer(buf_);
 
@@ -330,16 +333,16 @@ class view___ : public plugin::view___ {
 		pub_->eval__(arg2.c_str(), &args);
 		size_t from = 0;
 
-		for2__(args, from, pub::clpars_throw_);
-
+		for2__(args, from);
 		if(!path.empty()) openfile__(path);
+		for2__(args, from, nullptr, nullptr, pub::clpars_throw_);
 	}
 };
 
 class plugin___ : public plugin::base___ {
 	public:
 	plugin::view___* new__(const std::string& arg1, const std::string& arg2) {
-		view___* v = new view___(arg1, arg2);
+		view___* v = new view___();
 		v->open__(arg1, arg2);
 		return v;
 	}
