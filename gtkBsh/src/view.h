@@ -42,9 +42,6 @@ class view___ {
         p_->need_focus_ = need_focus_;
         if(!name_.empty())
             p_->name__(name_.c_str());
-        if(w_ != -1 || h_ != -1) {
-            gtk_widget_set_size_request (p_->hr__(), w_, h_);
-        }
         if(no_focus_)
             gtk_widget_set_can_focus(p_->hr__(), false);
         if(!args1_.empty()) {
@@ -58,6 +55,11 @@ class view___ {
     }
     plugin::view___* p__() {
         return p_;
+    }
+    void set_wh__(GtkWidget *hr = nullptr) {
+        if(w_ != -1 || h_ != -1) {
+            gtk_widget_set_size_request (hr ? hr : p_->hr__(), w_, h_);
+        }
     }
 
     GtkWidget *hr__() {

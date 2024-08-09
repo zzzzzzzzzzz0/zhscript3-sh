@@ -31,8 +31,6 @@ class window___ : public widget___ {
 		}
 		if(by) {
 			view->upid_ = by->id_;
-			/*view->kou_nb1_ = by->kou_nb1_;
-			view->kou_box1_ = by->kou_box1_;*/
 		}
 
 		page_vs2___ views = page_vs2__(view);
@@ -78,6 +76,7 @@ class window___ : public widget___ {
 			GtkWidget *sb = gtk_scrollbar_new(GTK_ORIENTATION_VERTICAL, gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(view->hr__())));
 			gtk_box_pack_end(box2, sb, FALSE, FALSE, paddi3_);
 			gtk_box_pack_start(box, box2_1, view->expand_, true, view->padding_);
+			view->set_wh__();
 			break; }
 
 			case 2: {
@@ -86,10 +85,12 @@ class window___ : public widget___ {
 			gtk_scrolled_window_set_policy (sw, GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 			gtk_container_add (GTK_CONTAINER(sw1), view->hr__());
 			gtk_box_pack_start(box, sw1, view->expand_, true, view->padding_);
+			view->set_wh__(sw1);
 			break; }
 
 			default:
 			gtk_box_pack_start(box, view->hr__(), view->expand_, true, view->padding_);
+			view->set_wh__();
 			break;
 		}
 		gtk_widget_show_all (view->box1_);
