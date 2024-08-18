@@ -5,7 +5,8 @@ class button___ {
 	static void clicked__(GtkButton *button, button___* thiz) {
 		vec___ p {thiz->name_};
 		view___* v = thiz->v_;
-		p.push_back(v->name__());
+        if(v)
+		    p.push_back(v->name__());
 		thiz->pub_->fanqiechaodan2__(v, thiz->code_.empty() ? thiz->name_ : thiz->code_, p);
 	}
 

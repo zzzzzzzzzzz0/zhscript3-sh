@@ -3,134 +3,24 @@
 #include "pub.h"
 #include "label_box.h"
 #include "views.h"
+#include "buju.h"
 
 class window___ : public widget___ {
     private:
 	code___* code_;
 	bool main_ = false;
+	GtkWidget *titlebar_ = nullptr, *titlebar_b_ = nullptr;
+	int titlebar_w_1_, titlebar_w_2_;
 
-	static void cb_close__(GtkButton *button, view___* v) {close__(v, true);}
 	void on_close__(view___* v, int c);
 
-	void pack__(view___* view, GtkWidget *box1, label_box___ *label_box, GtkWidget *nb1, size_t id, view___* by,
-			char can_close, bool can_close2, bool page_curr2, bool expand, int padding) {
-		views_.a_.push_back(view);
-		view->nb1_ = nb1;
-		view->box1_ = box1;
-		view->label_box_ = label_box;
-		view->window_ = this;
-		view->id_ = id;
-		if(!view->id_) {
-			static size_t id = 0;
-			size_t id2 = time(nullptr);
-			if(id < id2)
-				id = id2;
-			else
-				++id;
-			view->id_ = id;
-		}
-		if(by) {
-			view->upid_ = by->id_;
-		}
-
-		page_vs2___ views = page_vs2__(view);
-		if(!views) {
-			views = new page_vs___();
-			((label_box___*)view->label_box_)->views_ = views;
-		}
-		if(can_close) {
-			if(++label_box->has_close_ == 1) {
-				view->has_close_ = can_close;
-				if(can_close2) {
-					GtkBox *box;
-					switch(can_close) {
-						case '^': box = label_box->top_; break;
-						case 'v': box = label_box->bottom_; break;
-						case '<': box = label_box->left_; break;
-						default: box = label_box->right2_; break;
-					}
-					button_new__(G_CALLBACK(cb_close__), view, box,
-						{"gtk-close", std::to_string(GTK_ICON_SIZE_MENU)}, 0, true);
-				}
-			}
-		}
-		views->push_back(view);
-
-		view->expand_ = expand;
-		view->padding_ = padding;
-		if(view->p__())
-			pack_box__(view);
-		else
-			gtk_widget_show_all (view->box1_);
-		if(page_curr2) view->curr__();
-	}
-	void pack_box__(view___* view) {
-		GtkBox* box = view->box__();
-		switch(view->p__()->scroll__()) {
-			case 1: {
-			GtkWidget *box2_1;
-			GtkBox* box2;
-			box_new__(GTK_ORIENTATION_HORIZONTAL, box2_1, box2);
-			gtk_box_set_homogeneous(box2, FALSE);
-			gtk_box_pack_start(box2, view->hr__(), TRUE, TRUE, paddi3_);
-			GtkWidget *sb = gtk_scrollbar_new(GTK_ORIENTATION_VERTICAL, gtk_scrollable_get_vadjustment(GTK_SCROLLABLE(view->hr__())));
-			gtk_box_pack_end(box2, sb, FALSE, FALSE, paddi3_);
-			gtk_box_pack_start(box, box2_1, view->expand_, true, view->padding_);
-			view->set_wh__();
-			break; }
-
-			case 2: {
-			GtkWidget *sw1 = gtk_scrolled_window_new (NULL, NULL);
-			GtkScrolledWindow *sw = GTK_SCROLLED_WINDOW(sw1);
-			gtk_scrolled_window_set_policy (sw, GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-			gtk_container_add (GTK_CONTAINER(sw1), view->hr__());
-			gtk_box_pack_start(box, sw1, view->expand_, true, view->padding_);
-			view->set_wh__(sw1);
-			break; }
-
-			default:
-			gtk_box_pack_start(box, view->hr__(), view->expand_, true, view->padding_);
-			view->set_wh__();
-			break;
-		}
-		gtk_widget_show_all (view->box1_);
-	}
-	bool pack_2__(view___* view) {
-		vec___ p3;
-		{
-			vec___ args = {"初始"};
-			pub_->std__(view, args);
-			pub_->main_eval__(args, &p3);
-		}
-		size_t from3 = 0;
-		int ret2 = for2__(view, p3, from3);
-		if(ret2 != 0)
-			return false;
-		ret2 = view->for__(p3, from3, nullptr, nullptr);
-		if(ret2 != 0)
-			return false;
-		view->args1_.insert(view->args1_.end(), 
-			std::make_move_iterator(p3.begin() + from3),
-			std::make_move_iterator(p3.end()));
-		return true;
-	}
-
-	class switch_page___ {
-		public:
-		window___* w; view___* v; GtkNotebook* nb; guint page_num;
-	};
-	static gboolean idle_switch_page__(gpointer p) {
-		switch_page___* sp = (switch_page___*)p;
-		sp->w->switch_page2__(sp->v, sp->nb, sp->page_num);
-		delete sp;
-		return G_SOURCE_REMOVE;
-	}
+	public:
 	void switch_page2__ (view___* v, GtkNotebook* nb, guint page_num) {
 		if(!v->p__()) {
 			v->mk_p__([&](const std::string& s, const std::string& s1, const std::string& s2) {
 				return pub_->new_view__(s, s1, s2);
 			}, [&](args___ a, size_t& l) {
-				return for2_2__(v, a, l);
+				return buju2_->for2_2__(v, a, l);
 			}, [&](args___ a, size_t l) {
 				return pub_->goodbye__(a, l);
 			});
@@ -143,25 +33,45 @@ class window___ : public widget___ {
 		vec___ args = {"切换", std::to_string(page_num), bname};
 		pub_->fanqiechaodan3__(v, args);
 	}
-	static void switch_page__ (GtkNotebook* self, GtkWidget* page, guint page_num, window___* w) {
-		for(auto& v : w->views_.a_)
-			if(v->box1_ == page) {
-				if(v->hulve1qie_) {
-					v->hulve1qie_ = false;
-					continue;
-				}
-				if(v->lazy_) {
-					v->lazy_ = false;
-					g_idle_add(idle_switch_page__, new switch_page___{w, v, self, page_num});
-				} else
-					w->switch_page2__(v, self, page_num);
-			}
-	}
+	private:
 
 	static gboolean delete_event__(GtkWidget *widget, GdkEvent *event, window___* thiz) {
 		vec___ args = {"窗将关", thiz->name__()}, ret;
 		thiz->pub_->fanqiechaodan3__(nullptr, args, &ret);
 		return bool__(ret);
+	}
+
+	int x_ = -1, y_ = -1, width_ = -1, height_ = -1, border_w_ = 0, border_h_ = 0;
+	std::string state_xy_, state_wh_;
+	static gboolean configure_event__(GtkWidget *widget, GdkEventConfigure *event, window___* win) {
+		int x = event->x, y = event->y;
+		if(win->x_ != x || win->y_ != y) {
+			win->x_ = x;
+			win->y_ = y;
+			int  x2, y2;
+			gtk_window_get_position(GTK_WINDOW(widget), &x2, &y2);
+			win->border_w_ = x - x2;
+			win->border_h_ = y - y2;
+			if(!win->state_xy_.empty())
+				win->pub_->fanqiechaodan2__(nullptr, win->state_xy_, {"移动",
+					std::to_string(x2), std::to_string(y2), std::to_string(x), std::to_string(y), });
+		}
+
+		if(!win->state_wh_.empty() || win->titlebar_b_) {
+			int w = event->width, h = event->height;
+			if(win->width_ != w || win->height_ != h) {
+				win->width_ = w;
+				win->height_ = h;
+				if(!win->state_wh_.empty())
+					win->pub_->fanqiechaodan2__(nullptr, win->state_wh_, {"宽高", std::to_string(w), std::to_string(h)});
+				if(win->titlebar_b_) {
+					int w2, h2;
+					gtk_widget_get_size_request(win->titlebar_, &w2, &h2);
+					gtk_widget_set_size_request(win->titlebar_b_, w * win->titlebar_w_1_ / win->titlebar_w_2_, h2);
+				}
+			}
+		}
+		return false;
 	}
 
 	std::string window_state_event_;
@@ -195,32 +105,26 @@ class window___ : public widget___ {
 		return false;
 	}
 
-	int for2_2__(view___* view, args___ p, size_t& from);
-
 	public:
 	views___ views_;
 	std::vector<GtkWidget*> notebooks_;
 	main_plugin___* pub_;
+	buju2___* buju2_;
 
     GtkWidget* nbfind__(std::function<bool(GtkWidget*)> fn) {
         auto i = std::find_if(notebooks_.begin(), notebooks_.end(), fn);
         return i == notebooks_.end() ? nullptr : *i;
     }
 
-	struct buju___ {
-		GtkBox *box_lt_ = nullptr, *box_rt_ = nullptr, *box_tp_ = nullptr, *box_bm_ = nullptr;
-		GtkWidget *nb1_ = nullptr;
-	};
 	std::vector<buju___*> bujus_;
-	buju___*buju__(view___*v) {return (buju___*)v->buju_;}
-	static page_vs2___ page_vs2__(view___* v) {
-		return (page_vs2___)((label_box___*)v->label_box_)->views_;
-	}
 
 	window___(main_plugin___ * pub, code___* code) : pub_(pub), code_(code) {
 		hr_ = pub->window_new__();
 		g_signal_connect(hr_, "delete-event", G_CALLBACK(delete_event__), this);
+		g_signal_connect(hr_, "configure-event", G_CALLBACK(configure_event__), this);
 		g_signal_connect(hr_, "window-state-event", G_CALLBACK(window_state_event__), this);
+
+		buju2_ = new buju2___(pub, code, &bujus_, &views_, &notebooks_);
 	}
 	~window___() {
 		for(auto& i : views_.a_)
@@ -239,8 +143,13 @@ class window___ : public widget___ {
 	}
 
 	int for__(args___ p, size_t& from, bool restart, rust_add___ add, void* env);
-	int for__(GtkWidget*, view___*&, args___, size_t&, bool, bool, bool, rust_add___, void*);
-	int for2__(view___* view, args___ p, size_t& from, int fn2_ret2 = pub::clpars_ret_no_);
+	int for__(GtkWidget *nb1_, view___*& view_, args___ p, size_t& from,
+			bool no_new, bool nb1_need_new, bool is1, rust_add___ add, void* env) {
+		return buju2_->for__(this, to_cntr__(), nb1_, view_, p, from, no_new, nb1_need_new, is1, add, env);
+	}
+	int for2__(view___* view, args___ p, size_t& from, int fn2_ret2 = pub::clpars_ret_no_) {
+		return buju2_->for2__(this, view, p, from, fn2_ret2);
+	}
 
 	static GtkWidget *pack__(plugin::view___*, plugin::view___*, int posi);
 
