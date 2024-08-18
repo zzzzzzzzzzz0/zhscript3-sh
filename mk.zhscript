@@ -19,6 +19,15 @@
 			a“3.0”。
 		了“-dev”。
 	上代码、r、、
+	mk、下原样
+		运行“sh -c '‘参数0’‘参数0’2.zs -mainn 
+		-ni " 
+			../../zhscript/gjke4/rust.h 
+			../../../../zhscript/gjke4/rust.h 
+			../../../../zhscript2-rust-sh/webkitx/src/Chan.cpp 
+			../../../../zhscript2-rust-sh/webkitx/src/Chan.h " 
+		meld1       ../pub/tag.cpp ${PWD}/gtkBsh 
+		meld2 ../../../pub/tag.cpp ${PWD}/plugin/gtkBsh/*'”。上原样、0、、
 	(d|r)(|x)(|2)、、r、下代码
 		形参起做、作、造、。
 		赋予目录、项以.、

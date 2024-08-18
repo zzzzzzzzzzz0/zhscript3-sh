@@ -24,7 +24,7 @@ ifeq ($(std),c++17)
 endif
 
 all: dir $(target)
-$(dodir)/main.o: src/main2.cpp ../../../pub/fs.h ../../pub.h ../../../pub/tag.h ../../../pub/type.h ../../../pub/widget.h
+$(dodir)/main.o: src/main2.cpp ../../pub.h ../../../pub/tag.h ../../../pub/type.h ../../../pub/widget.h
 	$(gxx) -o $@ $(cflags) $< `pkg-config --cflags $(pkname)`
 $(dodir)/tag.o: ../../../pub/tag.cpp ../../../pub/tag.h ../../../pub/type.h
 	$(gxx) -o $@ $(cflags) $< `pkg-config --cflags gtk+-3.0`

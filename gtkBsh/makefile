@@ -20,21 +20,23 @@ ifeq ($(std),c++17)
 endif
 
 all: dir $(target)
-$(dodir)/main.o: src/main.cpp src/fanqiechaodan.h src/window.h src/main_plugin.h ../plugin/pub.h ../pub/tag.h ../pub/type.h ../pub/widget.h src/pub.h ../pub/l4.h ../pub/fs.h src/label_box.h src/views.h src/view.h src/pub2.h
+$(dodir)/buju.o: src/buju.cpp src/xianchang.h src/view.h ../plugin/pub.h ../pub/tag.h ../pub/type.h ../pub/widget.h src/window.h src/main_plugin.h src/pub.h ../pub/l4.h ../pub/fs.h src/label_box.h src/views.h src/buju.h src/pub3.h src/event.h
 	$(gxx) -o $@ $(cflags) $<
-$(dodir)/fanqiechaodan.o: src/fanqiechaodan.cpp src/fanqiechaodan.h src/window.h src/main_plugin.h ../plugin/pub.h ../pub/tag.h ../pub/type.h ../pub/widget.h src/pub.h ../pub/l4.h ../pub/fs.h src/label_box.h src/views.h src/view.h src/pub2.h src/slave.cpp src/slave.h
+$(dodir)/fanqiechaodan.o: src/fanqiechaodan.cpp src/fanqiechaodan.h src/window.h src/main_plugin.h src/view.h ../plugin/pub.h ../pub/tag.h ../pub/type.h ../pub/widget.h src/pub.h ../pub/l4.h ../pub/fs.h src/label_box.h src/views.h src/buju.h src/pub2.h src/slave.h
+	$(gxx) -o $@ $(cflags) $<
+$(dodir)/main.o: src/main.cpp src/fanqiechaodan.h src/window.h src/main_plugin.h src/view.h ../plugin/pub.h ../pub/tag.h ../pub/type.h ../pub/widget.h src/pub.h ../pub/l4.h ../pub/fs.h src/label_box.h src/views.h src/buju.h src/pub2.h
 	$(gxx) -o $@ $(cflags) $<
 $(dodir)/pub.o: src/pub.cpp src/pub.h ../pub/tag.h ../pub/type.h ../pub/l4.h ../pub/fs.h
 	$(gxx) -o $@ $(cflags) $<
-$(dodir)/pub2.o: src/pub2.cpp src/pub2.h src/main_plugin.h ../plugin/pub.h ../pub/tag.h ../pub/type.h ../pub/widget.h src/window.h src/pub.h ../pub/l4.h ../pub/fs.h src/label_box.h src/views.h src/view.h
+$(dodir)/pub2.o: src/pub2.cpp src/pub2.h src/main_plugin.h src/view.h ../plugin/pub.h ../pub/tag.h ../pub/type.h ../pub/widget.h src/window.h src/pub.h ../pub/l4.h ../pub/fs.h src/label_box.h src/views.h src/buju.h
 	$(gxx) -o $@ $(cflags) $<
-$(dodir)/slave.o: src/slave.cpp src/slave.h ../plugin/pub.h ../pub/tag.h ../pub/type.h ../pub/widget.h
+$(dodir)/slave.o: src/slave.cpp src/slave.h
 	$(gxx) -o $@ $(cflags) $<
-$(dodir)/window.o: src/window.cpp src/pub2.h src/main_plugin.h ../plugin/pub.h ../pub/tag.h ../pub/type.h ../pub/widget.h src/window.h src/pub.h ../pub/l4.h ../pub/fs.h src/label_box.h src/views.h src/view.h src/xianchang.h src/screenshot.h src/event.h
+$(dodir)/window.o: src/window.cpp src/pub2.h src/main_plugin.h src/view.h ../plugin/pub.h ../pub/tag.h ../pub/type.h ../pub/widget.h src/window.h src/pub.h ../pub/l4.h ../pub/fs.h src/label_box.h src/views.h src/buju.h src/xianchang.h src/screenshot.h src/pub3.h src/event.h
 	$(gxx) -o $@ $(cflags) $<
 $(dodir)/tag.o: ../pub/tag.cpp ../pub/tag.h ../pub/type.h
 	$(gxx) -o $@ $(cflags) $<
-$(target): $(dodir)/main.o $(dodir)/fanqiechaodan.o $(dodir)/pub.o $(dodir)/pub2.o $(dodir)/slave.o $(dodir)/window.o $(dodir)/tag.o
+$(target): $(dodir)/buju.o $(dodir)/fanqiechaodan.o $(dodir)/main.o $(dodir)/pub.o $(dodir)/pub2.o $(dodir)/slave.o $(dodir)/window.o $(dodir)/tag.o
 	$(gxx) -o $@ $^ $(lflags)
 dir:
 	@mkdir -p $(dodir)
