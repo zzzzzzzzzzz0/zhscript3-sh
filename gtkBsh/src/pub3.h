@@ -29,7 +29,7 @@ class tuodong___ : public pub::tuodong___ {
 	tuodong___(window___* w) : w_(w) {}
 
     static size_t for__(const std::vector<std::string>& args, size_t& from, window___* w, widget___* p) {
-        const char* ss[] = {"-鼠标拖动", "-鼠标拖动-停", "-鼠标拖动-启", "-鼠标拖动-切停"};
+        const char* ss[] = {"-鼠标拖动", "-鼠标拖动-停", "-鼠标拖动-启", "-鼠标拖动-停启"};
         size_t ret = std::string::npos;
         for(size_t i2 = from; i2 < args.size(); i2++) {
 			auto& s = args[i2];

@@ -53,8 +53,8 @@ class window___ : public widget___ {
 			win->border_w_ = x - x2;
 			win->border_h_ = y - y2;
 			if(!win->state_xy_.empty())
-				win->pub_->fanqiechaodan2__(nullptr, win->state_xy_, {"移动",
-					std::to_string(x2), std::to_string(y2), std::to_string(x), std::to_string(y), });
+				win->pub_->fanqiechaodan2__(nullptr, win->state_xy_, {std::to_string(x2), std::to_string(y2),
+																	  std::to_string(x), std::to_string(y), });
 		}
 
 		if(!win->state_wh_.empty() || win->titlebar_b_) {
@@ -63,7 +63,7 @@ class window___ : public widget___ {
 				win->width_ = w;
 				win->height_ = h;
 				if(!win->state_wh_.empty())
-					win->pub_->fanqiechaodan2__(nullptr, win->state_wh_, {"宽高", std::to_string(w), std::to_string(h)});
+					win->pub_->fanqiechaodan2__(nullptr, win->state_wh_, {std::to_string(w), std::to_string(h)});
 				if(win->titlebar_b_) {
 					int w2, h2;
 					gtk_widget_get_size_request(win->titlebar_, &w2, &h2);

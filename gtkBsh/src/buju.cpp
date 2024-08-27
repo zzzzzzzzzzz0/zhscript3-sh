@@ -198,7 +198,7 @@ int buju2___::for__(void* window, GtkContainer* cntr_, GtkWidget *nb1_, view___*
 				int w = -1, h = -1, posi = append_page_, has_then_break = 1;
 				guint padding = paddi4_;
 				char in_nb2 = 0, nb_pos = 0;
-				std::string name, nb_name, kou_name, attach;
+				std::string name, nb_name, kou_name;
 				char can_close = '\0';
 				bool vert = true, can_close2 = true, padding2 = false, vert2 = false,
 					page_curr2 = false, curr2_lazy = false,
@@ -267,7 +267,6 @@ int buju2___::for__(void* window, GtkContainer* cntr_, GtkWidget *nb1_, view___*
 					{"-懒", "z ", 0},
 					{"-id", "i", 1},
 					{"-上id", "I", 1},
-					{"-附", "+", 1},
 					{"-忽略一切", "1", 0},
 				};
 				ret2 = pub_->clpars1__(tags2, p2, from2, [&](const std::string& tag, size_t i, size_t argc, int& fn2_ret2) {
@@ -355,7 +354,6 @@ int buju2___::for__(void* window, GtkContainer* cntr_, GtkWidget *nb1_, view___*
 						size_t id = std::stoul(p2[i]);
 						by_ = views_->find__([&](auto v) {return v->id_ == id;});
 						break; }
-					case '+': attach = p2[i]; break;
 					case '1': hulve1qie = true; break;
 					}
 				}, []() {return pub::clpars_ret_no_;});
@@ -487,7 +485,6 @@ int buju2___::for__(void* window, GtkContainer* cntr_, GtkWidget *nb1_, view___*
 					view_->buju_ = buju_;
 					view_->kou_nb1_ = kou_nb1;
 					view_->kou_box1_ = kou_box1;
-					view_->attach_ = attach;
 					if(!no_focus && (page_curr2 | no_lazy))
 						view_->need_focus_ = true;
 					view_->lazy_ = curr2_lazy;
@@ -557,6 +554,7 @@ int buju2___::for2__(void* window, view___* view, args___ p, size_t& from, int f
 		{"-追钮", "b++", 1},
 		{"-加钮-", "b|", 0},
 		{"-叠", "+", 1},
+		{"-附", "a", 1},
 		{"-按键", "ek", 1},
 	}, p, from, [&](const std::string& tag, size_t i, size_t argc, int& ret2) {
 		switch(tag[0]) {
@@ -652,6 +650,7 @@ int buju2___::for2__(void* window, view___* view, args___ p, size_t& from, int f
 		case '+':
 			view->is_die_ = l4_.true_(p[i].c_str());
 			break;
+		case 'a': view->attach_ = p[i]; break;
 		case 'e':
 			switch(tag[1]) {
 				case 'k': {
