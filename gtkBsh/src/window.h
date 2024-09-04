@@ -50,8 +50,13 @@ class window___ : public widget___ {
 			win->y_ = y;
 			int  x2, y2;
 			gtk_window_get_position(GTK_WINDOW(widget), &x2, &y2);
+			bool b = win->border_w_ == 0 && win->border_h_ == 0;
 			win->border_w_ = x - x2;
 			win->border_h_ = y - y2;
+			if(b) {
+				vec___ args = {"修饰宽高", std::to_string(win->border_w_), std::to_string(win->border_h_)};
+				win->pub_->fanqiechaodan3__(nullptr, args);
+			}
 			if(!win->state_xy_.empty())
 				win->pub_->fanqiechaodan2__(nullptr, win->state_xy_, {std::to_string(x2), std::to_string(y2),
 																	  std::to_string(x), std::to_string(y), });
