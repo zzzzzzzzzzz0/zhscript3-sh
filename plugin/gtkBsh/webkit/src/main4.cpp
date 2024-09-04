@@ -194,10 +194,10 @@ class view___ : public plugin::view___ {
 	}
 
 	static GtkWidget* cb_create__ (WebKitWebView *web_view, WebKitNavigationAction *navigation_action, view___* by) {
-		return pub_->pack__(new view___(web_view), by, after_curr_page_);
+		return pub_->pack__(new view___(web_view, nullptr), by, after_curr_page_);
 	}
 
-	std::string code_;
+	std::string code_, cookie_;
 	vec___ args_;
 	static void cb_uri_scheme_request__ (WebKitURISchemeRequest *request, gpointer user_data) {
 		auto out = [&](std::string &contents, bool is_file, const char* contype) {
@@ -482,6 +482,26 @@ class view___ : public plugin::view___ {
 		}, [&]() {return fn2_ret2;});
 	}
 
+	void cfg__() {
+		{
+			static std::string webkitx;
+			if(webkitx.empty()) {
+				vec___ ret;
+				pub_->eval__("‘l4.so【顶】’", &ret);
+				pub_->replace_filename(ret[0], "webkitx", webkitx);
+				pub_->eval__(("赋予“webkitx”【外壳】以“" + webkitx + "”。").c_str());
+			}
+			webkit_web_context_set_web_extensions_directory(ctt_, webkitx.c_str());
+		}
+		chan_.init__();
+		webkit_web_context_set_web_extensions_initialization_user_data(ctt_, chan_.gvar__());
+
+		webkit_web_context_register_uri_scheme(ctt_, zs_.c_str(), cb_uri_scheme_request__, this, NULL);
+		WebKitSecurityManager *wksm = webkit_web_context_get_security_manager(ctt_);
+		webkit_security_manager_register_uri_scheme_as_local(wksm, zs_.c_str());
+		webkit_security_manager_register_uri_scheme_as_cors_enabled(wksm, zs_.c_str());
+	}
+
 	public:
 	const char* path__() {
 		return webkit_web_view_get_uri(hr2__());
@@ -492,30 +512,21 @@ class view___ : public plugin::view___ {
 		return for2__(args, from);
 	}
 
-	view___(WebKitWebView *rv) {
+	view___(WebKitWebView *rv, const char* cookie) {
 		if(rv) {
 			hr_ = webkit_web_view_new_with_related_view(rv);
 		} else {
-			ctt_ = webkit_web_context_new_ephemeral();
-
-			{
-				static std::string webkitx;
-				if(webkitx.empty()) {
-					vec___ ret;
-					pub_->eval__("‘l4.so【顶】’", &ret);
-					pub_->replace_filename(ret[0], "webkitx", webkitx);
-					pub_->eval__(("赋予“webkitx”【外壳】以“" + webkitx + "”。").c_str());
+			if(cookie) {
+				ctt_ = webkit_web_context_get_default();
+				static bool cfg = false;
+				if(!cfg) {
+					cfg = true;
+					cfg__();
 				}
-				webkit_web_context_set_web_extensions_directory(ctt_, webkitx.c_str());
+			} else {
+				ctt_ = webkit_web_context_new_ephemeral();
+				cfg__();
 			}
-			chan_.init__();
-			webkit_web_context_set_web_extensions_initialization_user_data(ctt_, chan_.gvar__());
-
-			webkit_web_context_register_uri_scheme(ctt_, zs_.c_str(), cb_uri_scheme_request__, this, NULL);
-			WebKitSecurityManager *wksm = webkit_web_context_get_security_manager(ctt_);
-			webkit_security_manager_register_uri_scheme_as_local(wksm, zs_.c_str());
-			webkit_security_manager_register_uri_scheme_as_cors_enabled(wksm, zs_.c_str());
-
 			hr_ = webkit_web_view_new_with_context(ctt_);
 		}
 
@@ -530,6 +541,31 @@ class view___ : public plugin::view___ {
 		g_signal_connect(hr_, "notify::title", G_CALLBACK(cb_title__), this);
 		g_signal_connect(hr_, "create", G_CALLBACK(cb_create__), this);
 		g_signal_connect(hr_, "load-changed", G_CALLBACK(cb_load_changed__), this);
+
+		if(cookie) {
+			cookie_ = cookie;
+			WebKitCookieManager* cm = webkit_web_context_get_cookie_manager(ctt_);
+			size_t i = cookie_.length();
+			webkit_cookie_manager_set_persistent_storage(cm, cookie_.c_str(),
+					i >= 3
+					&& cookie_[i - 3] == '.'
+					&& cookie_[i - 2] == 'd'
+					&& cookie_[i - 1] == 'b'
+					||
+					i >= 7
+					&& cookie_[i - 7] == '.'
+					&& cookie_[i - 6] == 's'
+					&& cookie_[i - 5] == 'q'
+					&& cookie_[i - 4] == 'l'
+					&& cookie_[i - 3] == 'i'
+					&& cookie_[i - 2] == 't'
+					&& cookie_[i - 1] == 'e'
+					?
+					WEBKIT_COOKIE_PERSISTENT_STORAGE_SQLITE :
+					WEBKIT_COOKIE_PERSISTENT_STORAGE_TEXT);
+			WebKitCookieAcceptPolicy cap = WEBKIT_COOKIE_POLICY_ACCEPT_ALWAYS;
+			webkit_cookie_manager_set_accept_policy(cm, cap);
+		}
 	}
 	WebKitWebView* hr2__() {return WEBKIT_WEB_VIEW(hr_);}
 
@@ -594,8 +630,24 @@ class view___ : public plugin::view___ {
 class plugin___ : public plugin::base___ {
 	public:
 	plugin::view___* new__(const std::string& arg1, const std::string& arg2) {
-		view___* v = new view___(nullptr);
-		v->open__(arg1, arg2);
+		vec___ args;
+		pub_->eval__(arg2.c_str(), &args);
+		size_t from = 0;
+		std::string cookie;
+
+		pub_->clpars__({
+			{"-cookie", "c", 1},
+		}, args, from, [&](const std::string& tag, size_t i, size_t argc, int& ret2) {
+			switch(tag[0]) {
+			case 'c': cookie = args[i]; break;
+			}
+		});
+		std::string arg2a;
+		if(from > 0 && from < args.size())
+			arg2a = arg2.substr(arg2.rfind("、", arg2.find(args[from])) + 3);
+
+		view___* v = new view___(nullptr, cookie.empty() ? nullptr : cookie.c_str());
+		v->open__(arg1, from == 0 ? arg2 : arg2a);
 		return v;
 	}
 	const char* id__() {return "网页";}
