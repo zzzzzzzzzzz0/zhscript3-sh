@@ -81,7 +81,19 @@ class label_box___ {
         gtk_box_pack_start (box_, top1, false, false, paddii_);
         gtk_box_pack_start (box_, box1, true, true, paddii_);
         gtk_box_pack_start (box_, bottom1, false, false, paddii_);
-
-        //gtk_widget_set_can_focus(box1, false);
+        if(vert) {
+            auto neww = []() {
+                return gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+            };
+            auto add2 = [&](GtkBox *b) {
+                gtk_box_pack_start(b, neww(), false, false, 0);
+                gtk_box_pack_end  (b, neww(), false, false, 0);
+            };
+            add2(right_);
+            add2(right2_);
+            add2(left_);
+            add2(top_);
+            add2(bottom_);
+        }
     }
 };
