@@ -308,7 +308,7 @@ class main___ : public main_plugin___ {
 			std::string s = R"(
 解释下代码
 	模块“外壳”。
-	赋予“外壳名”、“外壳版本”以“乙壳”、“4.8.17”。
+	赋予“外壳名”、“外壳版本”以“乙壳”、“4.9.10”。
 	)" + jiekou__(nullptr, "、“番茄炒蛋”") + R"(
 上代码)";
 			l4_.eval__(s.c_str());
@@ -749,7 +749,7 @@ main (int    argc,
       char **argv)
 {
 	main___ m;
-	std::vector<char *> argv2, argv1;
+	std::vector<char *> argv1;
 	std::string src;
 	{
 		argv1.push_back(argv[0]);
@@ -852,6 +852,7 @@ main (int    argc,
 			m.pr__(&m.ret_, l4_.erret_.s_ + l4_.erret_.s2_);
 		return l4_.erret_.i_;
 	}
+	std::vector<char *> argv2;
 	{
 		vec___ ret;
 		m.eval__("循环【‘参数数目【顶】’】【号】、‘参数‘号’【顶】’", &ret);
@@ -874,9 +875,15 @@ main (int    argc,
 	std::string appid;
 	{
 		vec___ ret;
+
 		m.eval__("如果存在“appid”【顶】那么‘appid【顶】’", &ret);
 		if(ret.size())
 			appid = ret[0];
+
+		ret.clear();
+		m.eval__("如果存在“appname”【顶】那么‘appname【顶】’", &ret);
+		if(ret.size())
+			g_set_application_name(ret[0].c_str());
 	}
 	m.init__(appid);
 	int err = m.run__(argv2.size(), argv2.data());
