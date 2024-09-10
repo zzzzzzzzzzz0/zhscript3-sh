@@ -158,6 +158,12 @@ class view___ : public plugin::view___ {
 			pub_->fanqiechaodan2__(thiz, thiz->code_mouse_target_changed_, p);
 		}
 	}
+	void ins_mouse_target_changed__(const std::string& code) {
+		bool ins = code_mouse_target_changed_.empty();
+		code_mouse_target_changed_ = code;
+		if(ins)
+			g_signal_connect(hr_, "mouse-target-changed", G_CALLBACK(cb_mouse_target_changed__), this);
+	}
 
 	static const int no_set_ = -1;
 	int line_ = no_set_, line_oft_ = no_set_;
@@ -194,7 +200,10 @@ class view___ : public plugin::view___ {
 	}
 
 	static GtkWidget* cb_create__ (WebKitWebView *web_view, WebKitNavigationAction *navigation_action, view___* by) {
-		return pub_->pack__(new view___(web_view, nullptr), by, after_curr_page_);
+		view___* view = new view___(web_view, nullptr);
+		if(!by->code_mouse_target_changed_.empty())
+			view->ins_mouse_target_changed__(by->code_mouse_target_changed_);
+		return pub_->pack__(view, by, after_curr_page_);
 	}
 
 	std::string code_, cookie_;
@@ -472,12 +481,9 @@ class view___ : public plugin::view___ {
 				default: webkit_web_inspector_show(wi); break;
 				}
 				break; }
-			case 'T': {
-				bool ins = code_mouse_target_changed_.empty();
-				code_mouse_target_changed_ = args[i];
-				if(ins)
-					g_signal_connect(hr_, "mouse-target-changed", G_CALLBACK(cb_mouse_target_changed__), this);
-				break; }
+			case 'T':
+				ins_mouse_target_changed__(args[i]);
+				break;
 			}
 		}, [&]() {return fn2_ret2;});
 	}
