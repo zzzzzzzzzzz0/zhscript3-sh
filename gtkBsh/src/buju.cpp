@@ -131,12 +131,19 @@ int buju2___::for__(void* window, GtkContainer* cntr_, GtkWidget *nb1_, view___*
 		bool no_new, bool nb1_need_new, bool is1, rust_add___ add, void* env) {
 	if(is1 && !view_ && !views_->a_.empty())
 		view_ = views_->a_[0];
-	if(no_new && !nb1_ && view_)
-		nb1_ = view_->nb1_;
+	if(no_new && !nb1_) {
+		if(view_)
+			nb1_ = view_->nb1_;
+		else if(notebooks_->size()) {
+			nb1_ = (*notebooks_)[0];
+		}
+	}
 	GtkNotebook *nb_ = GTK_NOTEBOOK(nb1_);
 	auto new_nb1 = [&](bool b) {
-		if(b)
+		if(b) {
 			nb1_ = gtk_notebook_new ();
+			notebooks_->push_back(nb1_);
+		}
 		nb_ = GTK_NOTEBOOK(nb1_);
 		gtk_notebook_set_scrollable (nb_, true);
 		gtk_notebook_popup_enable (nb_);
@@ -434,10 +441,8 @@ int buju2___::for__(void* window, GtkContainer* cntr_, GtkWidget *nb1_, view___*
 						kou_box1 = box1_;
 						
 						new_nb1(true);
-						if(!kou_name.empty()) {
+						if(!kou_name.empty())
 							gtk_widget_set_name(nb1_, kou_name.c_str());
-							notebooks_->push_back(nb1_);
-						}
 						gtk_box_pack_start(box_, nb1_, true, true, padding);
 						gtk_widget_show_all(box1_);
 						new_page(vert, posi, reord, padding2, vert2, top_align, bottom_align);
@@ -448,10 +453,8 @@ int buju2___::for__(void* window, GtkContainer* cntr_, GtkWidget *nb1_, view___*
 							args.push_back(kou_name);
 						}, view_, pub_);
 					}
-					if(!nb_name.empty()) {
+					if(!nb_name.empty())
 						gtk_widget_set_name(nb1_, nb_name.c_str());
-						notebooks_->push_back(nb1_);
-					}
 					switch(nb_pos) {
 						case 'l': gtk_notebook_set_tab_pos (nb_, GTK_POS_LEFT); break;
 						case 'r': gtk_notebook_set_tab_pos (nb_, GTK_POS_RIGHT); break;
