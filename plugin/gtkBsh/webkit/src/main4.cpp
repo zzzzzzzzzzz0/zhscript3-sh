@@ -243,6 +243,8 @@ class view___ : public plugin::view___ {
 				g_free(code);
 			}
 			if(ret.size() == 0) {
+				std::string s;
+				out(s, false, "text/html");
 				break;
 			}
 			if(ret.size() > 1 && ret[1] == "本地") {
