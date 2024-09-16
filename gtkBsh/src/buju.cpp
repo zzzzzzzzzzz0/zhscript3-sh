@@ -207,7 +207,7 @@ int buju2___::for__(void* window, GtkContainer* cntr_, GtkWidget *nb1_, view___*
 				char in_nb2 = 0, nb_pos = 0;
 				std::string name, nb_name, kou_name;
 				char can_close = '\0';
-				bool vert = true, can_close2 = true, padding2 = false, vert2 = false,
+				bool vert = true, can_close2 = true, padding2 = false, vert2 = false, expand = false,
 					page_curr2 = false, curr2_lazy = false,
 					no_lazy = false, no_focus = false, hulve1qie = false,
 					in_new_buju = false, in_new_page = false, in_new_kou = false, reord = true;
@@ -230,6 +230,7 @@ int buju2___::for__(void* window, GtkContainer* cntr_, GtkWidget *nb1_, view___*
 				pub::tags___ tags2 = {
 					{"-宽", "w", 1},
 					{"-高", "h", 1},
+					{"-展", "e", 0},
 					{"-隔", "a", 1},
 					{"-横", "-", 0},
 					//{"-竖", "-1", 0},
@@ -280,6 +281,7 @@ int buju2___::for__(void* window, GtkContainer* cntr_, GtkWidget *nb1_, view___*
 					switch(tag[0]) {
 					case 'w': w = std::stoi(p2[i]); break;
 					case 'h': h = std::stoi(p2[i]); break;
+					case 'e': expand = true; break;
 					case 'a': padding = std::stoi(p2[i]); break;
 					case '-': vert = tag[1]; break;
 					case 'L':
@@ -502,7 +504,7 @@ int buju2___::for__(void* window, GtkContainer* cntr_, GtkWidget *nb1_, view___*
 						});
 					pack__(window, view_, box1_, label_box_, nb1_, id,
 						posi != 0 ? by_ : nullptr, can_close, can_close2, page_curr2,
-						w == -1 && h == -1 || in_nb2, padding);
+						w == -1 && h == -1 || expand, padding);
 				}
 				ret2 = for2__(window, view_, p2, from2, pub::clpars_throw_);
 				if(ret2 < 0) {
