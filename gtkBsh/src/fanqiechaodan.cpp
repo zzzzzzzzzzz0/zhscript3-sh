@@ -268,8 +268,11 @@ int fanqiechaodan1__(view___* by, const char* s, rets___ ret, rust_add___ add, v
     if(!s) return 1;
     vec___ p;
     int ret2 = thiz->eval__(s, &p, argc, argv, env);
-    if(ret2 != l4___::eval_ok_)
+    if(ret2 != l4___::eval_ok_) {
+        if(ret)
+            ret->insert(ret->end(), p.begin(), p.end());
         return ret2;
+    }
     size_t from = 0;
     return fanqiechaodan__(by, p, from, ret, add, env, thiz);
 }

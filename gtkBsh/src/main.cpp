@@ -153,7 +153,10 @@ class main___ : public main_plugin___ {
 	int eval__(const char* s, rets___ ret = nullptr, argc___ argc = 0, argv___ argv = nullptr, void* env = nullptr) {
 		int ret3 = l4___::eval_ok_;
 		vec___ ret2;
-		if(!l4_.eval__(s, false, argc, argv, 0, env, &ret2)) {
+		bool ok = l4_.eval__(s, false, argc, argv, 0, env, &ret2);
+		if(ret)
+			ret->insert(ret->end(), ret2.begin(), ret2.end());
+		if(!ok) {
 			switch(l4_.erret_.is_quit_) {
 				case l4___::eval_quit_:
 				if(!l4_.erret_.s_.empty())
@@ -170,9 +173,6 @@ class main___ : public main_plugin___ {
 				pr__(&ret2);
 				return 0;
 			}
-		}
-		if(ret) {
-			ret->insert(ret->end(), ret2.begin(), ret2.end());
 		}
 		return ret3;
 	}
@@ -308,7 +308,7 @@ class main___ : public main_plugin___ {
 			std::string s = R"(
 解释下代码
 	模块“外壳”。
-	赋予“外壳名”、“外壳版本”以“乙壳”、“4.9.10”。
+	赋予“外壳名”、“外壳版本”以“乙壳”、“4.9.29”。
 	)" + jiekou__(nullptr, "、“番茄炒蛋”") + R"(
 上代码)";
 			l4_.eval__(s.c_str());
