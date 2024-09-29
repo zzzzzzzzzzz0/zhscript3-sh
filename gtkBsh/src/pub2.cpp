@@ -37,7 +37,7 @@ void foreach__(const std::string& tag, args___ p, size_t i, rust_add___ add, voi
         default:
         for(auto& w : mp->windows_) {
             for(auto& nb1 : w->notebooks_) {
-                if(p[i] == gtk_widget_get_name(nb1)) {
+                if(p[i] == gtk_widget_get_name(nb1) || p[i].empty()) {
                     GtkNotebook *nb = GTK_NOTEBOOK(nb1);
                     for(int i2 = 0; i2 < gtk_notebook_get_n_pages(nb); i2++) {
                         for(auto& v : w->views_.a_) {
