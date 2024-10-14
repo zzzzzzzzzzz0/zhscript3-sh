@@ -205,7 +205,7 @@ int buju2___::for__(void* window, GtkContainer* cntr_, GtkWidget *nb1_, view___*
 				int w = -1, h = -1, posi = append_page_, has_then_break = 1;
 				guint padding = paddi4_;
 				char in_nb2 = 0, nb_pos = 0;
-				std::string name, nb_name, kou_name;
+				std::string name, nb_name, kou_name, attach;
 				char can_close = '\0';
 				bool vert = true, can_close2 = true, padding2 = false, vert2 = false,
 					page_curr2 = false, curr2_lazy = false,
@@ -274,6 +274,7 @@ int buju2___::for__(void* window, GtkContainer* cntr_, GtkWidget *nb1_, view___*
 					{"-懒", "z ", 0},
 					{"-id", "i", 1},
 					{"-上id", "I", 1},
+					{"-附", "A", 1},
 					{"-忽略一切", "1", 0},
 				};
 				ret2 = pub_->clpars1__(tags2, p2, from2, [&](const std::string& tag, size_t i, size_t argc, int& fn2_ret2) {
@@ -361,6 +362,7 @@ int buju2___::for__(void* window, GtkContainer* cntr_, GtkWidget *nb1_, view___*
 						size_t id = std::stoul(p2[i]);
 						by_ = views_->find__([&](auto v) {return v->id_ == id;});
 						break; }
+					case 'A': attach = p2[i]; break;
 					case '1': hulve1qie = true; break;
 					}
 				}, []() {return pub::clpars_ret_no_;});
@@ -491,6 +493,7 @@ int buju2___::for__(void* window, GtkContainer* cntr_, GtkWidget *nb1_, view___*
 					if(!no_focus && (page_curr2 | no_lazy))
 						view_->need_focus_ = true;
 					view_->lazy_ = curr2_lazy;
+					view_->attach_ = attach;
 					view_->hulve1qie_ = hulve1qie;
 					if((page_curr2 && !curr2_lazy) | no_lazy)
 						view_->mk_p__([&](const std::string& s, const std::string& s1, const std::string& s2) {

@@ -32,18 +32,10 @@ class buju2___ {
 		vec___ p3;
 		{
 			vec___ args = {"初始"};
-			pub_->std__(view, args);
-			pub_->main_eval__(args, &p3);
+			pub_->fanqiechaodan3__(view, args, &p3);
 		}
-		size_t from3 = 0;
-		int ret2 = for2__(window, view, p3, from3);
-		if(ret2 != 0)
-			return false;
-		ret2 = view->for__(p3, from3, nullptr, nullptr);
-		if(ret2 != 0)
-			return false;
 		view->args1_.insert(view->args1_.end(), 
-			std::make_move_iterator(p3.begin() + from3),
+			std::make_move_iterator(p3.begin()),
 			std::make_move_iterator(p3.end()));
 		return true;
 	}
