@@ -13,6 +13,13 @@ class view___ : public plugin::view___ {
 		pub_->fanqiechaodan2__(thiz, thiz->modified_changed_, p);
 	}
 
+	std::string cb_1_;
+	static bool cb_1__(void *_1, void *_2, view___* thiz) {
+		vec___ p;
+		pub_->fanqiechaodan2__(thiz, thiz->cb_1_, p);
+		return false;
+	}
+
 	static const int no_set_ = -1000000;
 	int line_ = no_set_, line_oft_ = no_set_;
 	static gboolean idle_oft__(gpointer p) {
@@ -86,6 +93,7 @@ class view___ : public plugin::view___ {
 			}
 		}
 	}
+	std::string savefiled_;
 	void savefile__(const std::string& filename) {
 		GError *error = NULL;
 		char* text = text__(false);
@@ -101,6 +109,10 @@ class view___ : public plugin::view___ {
 			}
 		});
 		g_free (text);
+		if(!savefiled_.empty()) {
+			vec___ p;
+			pub_->fanqiechaodan2__(this, savefiled_, p);
+		}
 	}
 
 	int for2__(args___ args, size_t& from) {
@@ -172,6 +184,8 @@ class view___ : public plugin::view___ {
 			{"-保存文件", "s", 0},
 			{"-保存文件2", "s2", 1},
 			{"-已修改", "m", 1},
+			{"-点击时", "1", 1},
+			{"-保存后", "V", 1},
 		}, args, from, [&](const std::string& tag, size_t i, size_t argc, int& ret2) {
 			switch(tag[0]) {
 			case 'X': {
@@ -300,6 +314,13 @@ class view___ : public plugin::view___ {
 				if(!id_modified_changed_)
 					id_modified_changed_ = g_signal_connect(buf2__(), "modified-changed", G_CALLBACK(cb_modified_changed__), this);
 				break;
+			case '1': {
+				bool b = cb_1_.empty();
+				if(b)
+					g_signal_connect(hr_, "button-release-event", G_CALLBACK(cb_1__), this);
+				cb_1_ = args[i];
+				break; }
+			case 'V': savefiled_ = args[i]; break;
 			}
 		}, [&]() {return fn2_ret2;});
 	}
