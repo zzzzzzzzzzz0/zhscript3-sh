@@ -320,7 +320,7 @@ class view___ : public plugin::view___ {
 					g_signal_connect(hr_, "button-release-event", G_CALLBACK(cb_1__), this);
 				cb_1_ = args[i];
 				break; }
-			case 'V': savefiled_ = args[i]; break;
+			case 'V': savefiled_ += args[i]; break;
 			}
 		}, [&]() {return fn2_ret2;});
 	}
