@@ -249,6 +249,7 @@ class main___ : public main_plugin___ {
 			w->on_destroy__();
 		g_application_quit(app__());
 	}
+	void close__(plugin::view___* view) {g_idle_add(idle_close__, view->p_);}
 
 	private:
 	GtkApplication *app_ = nullptr;
@@ -566,6 +567,7 @@ class main___ : public main_plugin___ {
 		};
 		int ret2 = clpars__({
 			{"-切", "T", 0},
+			{"-激切", "Ta", 0},
 			{"-焦点", "f", 0},
 			{"-无签", "N", 0},
 			{"-有签", "N1", 0},
@@ -703,8 +705,10 @@ class main___ : public main_plugin___ {
 				}
 				switch(tag[0]) {
 				case 'T': {
-					window___* w = (window___*)view->window_;
-					if(!w->is_act__()) w->act__();
+					if(tag[1] == 'a') {
+						window___* w = (window___*)view->window_;
+						if(!w->is_act__()) w->act__();
+					}
 					view->curr__();
 					break; }
 				case 'f': view->focus__(); break;
