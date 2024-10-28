@@ -114,10 +114,11 @@ int fanqiechaodan__(view___* by, args___ p, size_t& from, rets___ ret, rust_add_
         case 'b': {
             nb1_ = nullptr;
             view_ = nullptr;
+            const std::string& name2 = p[i];
             for(auto& w : thiz->windows_)
             for(auto& nb1 : w->notebooks_) {
                 const char* name = gtk_widget_get_name(nb1);
-                if(name && name == p[i]) {
+                if(name && name == name2 || name2.empty()) {
                     nb1_ = nb1;
                     for(auto& v : w->views_.a_) {
                         if(v->nb1_ == nb1 && v->is_curr__()) {
@@ -141,7 +142,7 @@ int fanqiechaodan__(view___* by, args___ p, size_t& from, rets___ ret, rust_add_
             }
             if(test_2(nb1_, fn2_ret2)) return;
             if(!nb1_)
-                throw "簿无觅 " + p[i];
+                throw "簿无觅 " + name2;
             do {
                 ret2 = thiz->for__(view_, p, from, by, add, env);
                 if(ret2 != 0) {
@@ -151,17 +152,18 @@ int fanqiechaodan__(view___* by, args___ p, size_t& from, rets___ ret, rust_add_
                 if(view_) view_->for__(p, from, add, env);
             } while(false);
             break; }
-        case 'w':
+        case 'w': {
             window = nullptr;
+            const std::string& name2 = p[i];
             for(auto& w : thiz->windows_)
-                if(w->name__() == p[i]) {
+                if(w->name__() == name2 || name2.empty()) {
                     window = w;
                     break;
                 }
             if(test_2(window, fn2_ret2)) return;
             if(!window)
-                throw "窗无觅 " + p[i];
-            break;
+                throw "窗无觅 " + name2;
+            break; }
         case 'e':
             ret2 = thiz->eval2__(p[i].c_str(), p, i + 1, ret, env);
             if(ret2 != l4___::eval_ok_) {
