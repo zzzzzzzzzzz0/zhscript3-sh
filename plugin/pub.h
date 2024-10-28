@@ -60,6 +60,7 @@ class pub___ {
 	virtual bool is_focus__(plugin::view___*) = 0;
 	virtual void not_block__() = 0;
 	virtual bool is_quit__() = 0;
+	virtual void close__(plugin::view___*) = 0;
 	virtual void get_sel__(fn___ f1, bool& dunhao, rust_add___ add, void* env) = 0;
 	virtual bool starts_with(const std::string& s, const std::string& s2) = 0;
 	virtual bool ends_with(const std::string& s, const std::string& s2) = 0;

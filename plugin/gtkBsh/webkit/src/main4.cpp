@@ -205,6 +205,10 @@ class view___ : public plugin::view___ {
 			view->ins_mouse_target_changed__(by->code_mouse_target_changed_);
 		return pub_->pack__(view, by, after_curr_page_);
 	}
+	static gboolean cb_close__(WebKitWebView* webView, view___* thiz) {
+		pub_->close__(thiz);
+		return TRUE;
+	}
 
 	std::string code_, cookie_;
 	vec___ args_;
@@ -548,6 +552,7 @@ class view___ : public plugin::view___ {
 		g_signal_connect(hr_, "script_dialog", G_CALLBACK(cb_script_dialog__), this);
 		g_signal_connect(hr_, "notify::title", G_CALLBACK(cb_title__), this);
 		g_signal_connect(hr_, "create", G_CALLBACK(cb_create__), this);
+		g_signal_connect(hr_, "close", G_CALLBACK(cb_close__), this);
 		g_signal_connect(hr_, "load-changed", G_CALLBACK(cb_load_changed__), this);
 
 		if(cookie) {

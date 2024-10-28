@@ -343,6 +343,14 @@
         }
         ,
         {
+            "name": "(gdb) test webkit-js-close", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
+            "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
+                "/zzzzzzzzzzz4/home/zzzzzzzzzzz/test/rust-zs2/gtkBsh-webkit-js-close.zs"
+            ], "stopAtEntry": false, "cwd": "/tmp", "environment": [], "externalConsole": false, "MIMode": "gdb",
+            "setupCommands": [{"text": "-enable-pretty-printing", "ignoreFailures": true}, {"text": "-gdb-set disassembly-flavor intel", "ignoreFailures": true}]
+        }
+        ,
+        {
             "name": "(gdb) test titlebar1btn", "type": "cppdbg", "request": "launch", "preLaunchTask": "b--gtkBsh",
             "program": "/opt2/debug/zhscript2-rust/gtkBsh", "args": [
                 "/zzzzzzzzzzz4/home/zzzzzzzzzzz/test/rust-zs2/gtkBsh-titlebar2.zs"
