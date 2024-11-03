@@ -234,6 +234,7 @@ int window___::for__(args___ p, size_t& from, bool restart, rust_add___ add, voi
 				pub_->eval__(p[i].c_str(), &p3);
 				pub_->clpars__({
 					{"-加钮", "b", 1},
+					{"-加字钮", "bT", 1},
 				}, p3, from3, [&](const std::string& tag, size_t i, size_t argc, int& fn2_ret2) {
 					switch(tag[0]) {
 					case 'b': {
@@ -272,7 +273,7 @@ int window___::for__(args___ p, size_t& from, bool restart, rust_add___ add, voi
 						}
 						if(btn->name_[0] != '-')
 							btn->code_ = code_;
-						btn->with__(GTK_BOX(box), p2, from2);
+						btn->with__(tag[1], GTK_BOX(box), p2, from2);
 						break; }
 					case 'h': h = std::stoi(p3[i]); break;
 					}

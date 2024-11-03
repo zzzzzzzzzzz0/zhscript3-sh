@@ -12,7 +12,7 @@ void clpars2__(const char* s, std::vector<char*>& args2);
 
 void box_new__(GtkOrientation o, GtkWidget *&box1, GtkBox *&box);
 void label_new__(GtkWidget *&label1, GtkLabel*& label);
-GtkWidget* button_new__(GCallback cb, void* view, GtkBox *box, args___ args, size_t from, bool in_end = false);
+GtkWidget* button_new__(GCallback cb, void* view, GtkBox *box, args___ args, size_t from, bool in_end = false, char typ = 0);
 GdkPixbuf* pixbuf__(args___ p, size_t from);
 
 void scrn_w_h__(int& w, int& h);

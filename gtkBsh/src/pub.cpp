@@ -106,30 +106,44 @@ GdkPixbuf* pixbuf__(args___ p, size_t from) {
     }
 }
 
-GtkWidget *button_new__(GCallback cb, void* view, GtkBox *box, args___ args, size_t from, bool in_end) {
-    GtkWidget* img = nullptr;
-    switch(args.size() - from) {
-    case 2: {
-        int i = std::stoi(args[from + 1]);
-        if(i <= GTK_ICON_SIZE_DIALOG) {
-            //if(i < 0) i = -i;
-            if(i <= -10) i = -(i + 10);
-            img = gtk_image_new_from_icon_name(args[from].c_str(), (GtkIconSize)i);
-        } else {
-            GdkPixbuf* pb = pixbuf_2__(args, from);
-            img = gtk_image_new_from_pixbuf(pb);
-            g_object_unref(pb);
-        }
-        break; }
-    case 1:
-        img = gtk_image_new_from_file(args[from].c_str());
-        break;
-    }
+GtkWidget *button_new__(GCallback cb, void* view, GtkBox *box, args___ args, size_t from, bool in_end, char typ) {
     GtkWidget *btn1 = gtk_button_new();
     GtkButton* btn = GTK_BUTTON(btn1);
-    gtk_button_set_relief(btn, GTK_RELIEF_NONE);
-    if(img)
-        gtk_button_set_image(btn, img);
+    switch(typ) {
+        case 't':
+        break;
+        default:
+        gtk_button_set_relief(btn, GTK_RELIEF_NONE);
+        break;
+    }
+    switch(typ) {
+        case 't':
+        case 'T':
+        gtk_button_set_label(btn, args[from].c_str());
+        break;
+        default: {
+        GtkWidget* img = nullptr;
+        switch(args.size() - from) {
+        case 2: {
+            int i = std::stoi(args[from + 1]);
+            if(i <= GTK_ICON_SIZE_DIALOG) {
+                //if(i < 0) i = -i;
+                if(i <= -10) i = -(i + 10);
+                img = gtk_image_new_from_icon_name(args[from].c_str(), (GtkIconSize)i);
+            } else {
+                GdkPixbuf* pb = pixbuf_2__(args, from);
+                img = gtk_image_new_from_pixbuf(pb);
+                g_object_unref(pb);
+            }
+            break; }
+        case 1:
+            img = gtk_image_new_from_file(args[from].c_str());
+            break;
+        }
+        if(img)
+            gtk_button_set_image(btn, img);
+        break; }
+    }
     g_signal_connect(btn1, "clicked", cb, view);
     if(in_end)
         gtk_box_pack_end (box, btn1, false, false, 0);

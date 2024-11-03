@@ -467,17 +467,6 @@ int buju2___::for__(void* window, GtkContainer* cntr_, GtkWidget *nb1_, view___*
 				}
 				const std::string &viewopt = p[i + 1], &viewopt2 = p[i + 2];
 				if(has) {
-					if(page_curr2) {
-						view_->curr__();
-					}
-					if(has_then_break) {
-						//view_ = nullptr;
-						switch(has_then_break) {
-							case 'n': from = p.size(); break;
-						}
-					} else {
-						view_->open__(viewopt, viewopt2);
-					}
 				} else {
 					if(pluginame.empty())
 						break;
@@ -493,8 +482,22 @@ int buju2___::for__(void* window, GtkContainer* cntr_, GtkWidget *nb1_, view___*
 					if(!no_focus && (page_curr2 | no_lazy))
 						view_->need_focus_ = true;
 					view_->lazy_ = curr2_lazy;
-					view_->attach_ = attach;
 					view_->hulve1qie_ = hulve1qie;
+				}
+				view_->attach_ = attach;
+				if(has) {
+					if(page_curr2) {
+						view_->curr__();
+					}
+					if(has_then_break) {
+						//view_ = nullptr;
+						switch(has_then_break) {
+							case 'n': from = p.size(); break;
+						}
+					} else {
+						view_->open__(viewopt, viewopt2);
+					}
+				} else {
 					if((page_curr2 && !curr2_lazy) | no_lazy)
 						view_->mk_p__([&](const std::string& s, const std::string& s1, const std::string& s2) {
 							return pub_->new_view__(s, s1, s2);
@@ -561,6 +564,8 @@ int buju2___::for2__(void* window, view___* view, args___ p, size_t& from, int f
 		{"-加钮", "b+", 1},
 		{"-追钮", "b++", 1},
 		{"-加钮-", "b|", 0},
+		{"-加文钮", "bt", 1},
+		{"-加字钮", "bT", 1},
 		{"-叠", "+", 1},
 		{"-附", "a", 1},
 		{"-按键", "ek", 1},
@@ -651,7 +656,7 @@ int buju2___::for2__(void* window, view___* view, args___ p, size_t& from, int f
 					btn->name_ = name;
 					if(name[0] != '-')
 						btn->code_ = code_;
-					btn->with__(box(), p2, from2);
+					btn->with__(tag[1], box(), p2, from2);
 					break; }
 			}
 			break; }

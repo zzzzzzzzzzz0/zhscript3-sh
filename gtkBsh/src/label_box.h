@@ -5,8 +5,14 @@ class button___ {
 	static void clicked__(GtkButton *button, button___* thiz) {
 		vec___ p {thiz->name_};
 		view___* v = thiz->v_;
-        if(v)
-		    p.push_back(v->name__());
+		if(v)
+			p.push_back(v->name__());
+		const char* s = gtk_button_get_label(button);
+		if(s) {
+			if(!v)
+				p.push_back("");
+			p.push_back(s);
+		}
 		thiz->pub_->fanqiechaodan2__(v, thiz->code_.empty() ? thiz->name_ : thiz->code_, p);
 	}
 
@@ -17,8 +23,8 @@ class button___ {
 	std::string code_, name_;
 
 	button___(view___* v, main_plugin___* pub) : v_(v), pub_(pub) {}
-	void with__(GtkBox *box, args___ p2, size_t from2) {
-		gtk_widget_set_tooltip_markup(button_new__(G_CALLBACK(clicked__), this, box, p2, from2), name_.c_str());
+	void with__(char typ, GtkBox *box, args___ p2, size_t from2) {
+		gtk_widget_set_tooltip_markup(button_new__(G_CALLBACK(clicked__), this, box, p2, from2, false, typ), name_.c_str());
 	}
 };
 
