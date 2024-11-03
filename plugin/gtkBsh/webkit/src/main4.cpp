@@ -609,6 +609,7 @@ class view___ : public plugin::view___ {
 	void open__(const std::string& uri, const std::string& arg2) {
 		vec___ args;
 		pub_->eval__(arg2.c_str(), &args);
+		args_.clear();
 		size_t from = 0;
 
 		if(pub_->clpars__({
